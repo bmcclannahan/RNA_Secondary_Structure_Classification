@@ -37,6 +37,7 @@ def efficientnet_params(model_name):
       'efficientnet-b5': (1.6, 2.2, 456, 0.4),
       'efficientnet-b6': (1.8, 2.6, 528, 0.5),
       'efficientnet-b7': (2.0, 3.1, 600, 0.5),
+      'rna_classifier' : (1.0, 1.0, 112, 0.2),
   }
   return params_dict[model_name]
 
