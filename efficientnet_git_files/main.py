@@ -37,7 +37,7 @@ from tensorflow.python.estimator import estimator
 print('test3')
 FLAGS = flags.FLAGS
 
-FAKE_DATA_DIR = '/users/b523m844/RNA_Secondary_Structure_Classification/Small_Data_Set'
+FAKE_DATA_DIR = '/users/b523m844/RNA_Secondary_Structure_Classification/Test_Data_Set'
 
 flags.DEFINE_bool(
     'use_tpu', default=False,
