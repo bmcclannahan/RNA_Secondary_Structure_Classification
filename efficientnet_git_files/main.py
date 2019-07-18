@@ -24,7 +24,6 @@ from absl import app
 from absl import flags
 import numpy as np
 import tensorflow as tf
-print('test4')
 
 import efficientnet_builder
 import imagenet_input
@@ -33,11 +32,9 @@ from tensorflow.contrib.tpu.python.tpu import async_checkpoint
 from tensorflow.contrib.training.python.training import evaluation
 from tensorflow.core.protobuf import rewriter_config_pb2
 from tensorflow.python.estimator import estimator
-
-print('test3')
 FLAGS = flags.FLAGS
 
-FAKE_DATA_DIR = '/users/b523m844/RNA_Secondary_Structure_Classification/Test_Data_Set'
+FAKE_DATA_DIR = '/users/b523m844/RNA_Secondary_Structure_Classification/Small_Data_Set'
 
 flags.DEFINE_bool(
     'use_tpu', default=False,
@@ -158,7 +155,7 @@ flags.DEFINE_string(
     'The column name storing TFExamples.')
 
 flags.DEFINE_string(
-    'data_format', default='channels_last',
+    'data_format', default='channels_first',
     help=('A flag to override the data format used in the model. The value'
         ' is either channels_first or channels_last. To run the network on'
         ' CPU or TPU, channels_last should be used. For GPU, channels_first'
@@ -243,7 +240,6 @@ flags.DEFINE_bool(
 # range of [0, 1]
 MEAN_RGB = [0.485 * 255, 0.456 * 255, 0.406 * 255]
 STDDEV_RGB = [0.229 * 255, 0.224 * 255, 0.225 * 255]
-print('test2')
 
 def model_fn(features, labels, mode, params):
     """The model_fn to be used with TPUEstimator.
@@ -549,7 +545,6 @@ def export(est, export_dir, input_image_size=None):
 
 
 def main(unused_argv):
-    print('test1')
     input_image_size = FLAGS.input_image_size
     if not input_image_size:
         if FLAGS.model_name.startswith('efficientnet'):
