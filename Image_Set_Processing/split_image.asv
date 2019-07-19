@@ -1,0 +1,7 @@
+function image = split_image(file_name)
+image = imread(file_name);
+image = imresize(image,[112,112]);
+for i = 1:112
+    for j = i:112
+        image(i,j
+end
