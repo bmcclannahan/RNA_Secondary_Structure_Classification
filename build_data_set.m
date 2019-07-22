@@ -1,6 +1,18 @@
 function build_data_set(folder_name)
 files = dir(folder_name+'*.jpg');
-files = files([1,230,1000,5000,8000,10000,12000,15000,20000]);
+numbers = [1];
+index = 2;
+temp = 1;
+m = 10;
+for i = 1:length(files)
+    if mod(temp,m) == 0
+        numbers(index) = i;
+        index = index+1;
+        m = m+(20*index);
+    end
+    temp = temp+1;
+end
+files = files(numbers);
 for i = 1:length(files)
     file1 = files(i).name;
     file_split1 = split(file1,"_");
