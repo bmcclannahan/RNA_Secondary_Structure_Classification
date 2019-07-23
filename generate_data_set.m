@@ -1,1 +1,1 @@
-manage_directories("Small_Data_Files/","Small_Training_Set/")
+manage_directories("Small_Data_Set/","Small_Training_Set/")
