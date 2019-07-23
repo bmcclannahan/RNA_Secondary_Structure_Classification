@@ -1,5 +1,6 @@
 function build_data_set(folder_name)
 files = dir(folder_name+'*.jpg');
+length(files)
 numbers = [1];
 index = 2;
 temp = 1;
