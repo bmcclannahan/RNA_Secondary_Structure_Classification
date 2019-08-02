@@ -7,4 +7,5 @@
 #SBATCH -J RNA_Training_Set_Creation
 
 module load MATLAB/2019a
+cd ..
 matlab -nodisplay -nosplash -nodesktop -r "run('/users/b523m844/RNA_Secondary_Structure_Classification/generate_data_set.m');exit;"

@@ -17,7 +17,7 @@ print("PyTorch Version: ", torch.__version__)
 print("Torchvision Version: ", torchvision.__version__)
 
 
-data_dir = "./data/RNAA"
+data_dir = "../Small_Training_Set"
 
 model_name = "resnet"
 
