@@ -5,7 +5,7 @@
 #SBATCH --mem=8GB
 #SBATCH -p gpu
 #SBATCH --gres="gpu:k20:1"
-#SBATCH -J Python-Test
+#SBATCH -J RNA-Resnet50
 
 module load Python/3.5.2
 module load slurm-torque/14.11.8
@@ -17,4 +17,4 @@ pyvenv /scratch/b523m844/python352/bin/
 cd /scratch/b523m844/python352/bin/
 source activate
 
-python ~/RNA_Secondary_Structure_Classification/Batch_Scripts/test.py
+python ~/RNA_Secondary_Structure_Classification/Resnet50/resnet.py
