@@ -39,8 +39,8 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
     
 
     for epoch in range(num_epochs):
-        ft = open("/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/resnet/train_result.txt", "a") 
-        fp = open("/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/resnet/test_result.txt","a")
+        ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a") 
+        fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/test_result.txt","a")
         print('Epoch {}/{}'.format(epoch, num_epoch - 1))
         print('-' * 10)
         
