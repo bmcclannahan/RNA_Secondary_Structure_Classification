@@ -17,4 +17,4 @@ pyvenv /scratch/b523m844/python352/bin/
 cd /scratch/b523m844/python352/bin/
 source activate
 
-python ~/RNA_Secondary_Structure_Classification/Resnet50/resnet.py
+python ~/RNA_Secondary_Structure_Classification/Resnet_50/resnet.py
