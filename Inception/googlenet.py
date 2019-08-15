@@ -39,8 +39,8 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
     
 
     for epoch in range(num_epochs):
-        ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a") 
-        fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/test_result.txt","a")
+        ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/train_result.txt", "a") 
+        fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/test_result.txt","a")
         print('Epoch {}/{}'.format(epoch, num_epoch - 1))
         print('-' * 10)
         
@@ -98,7 +98,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
             print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
             per_epoch_model = copy.deepcopy(model.state_dict())
-            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch'+str(epoch)+'.pt')
+            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/chekers/epoch'+str(epoch)+'.pt')
              
             if phase == 'val' and epoch_acc > best_acc:
                   best_acc = epoch_acc
@@ -115,7 +115,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
  
     model.load_state_dict(best_model_wts)
     
-    torch.save(best_model_wts, '/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/checkpoints/weight.pt')
+    torch.save(best_model_wts, '/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/checkpoints/weight.pt')
     return model, val_acc_history
 
 
