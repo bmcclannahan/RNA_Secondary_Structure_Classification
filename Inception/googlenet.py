@@ -19,13 +19,13 @@ print("Torchvision Version: ", torchvision.__version__)
 
 data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Small_Training_Set"
 
-model_name = "resnet"
+model_name = "inception"
 
 num_classes = 2
 
 batch_size = 32
 
-num_epochs  = 500
+num_epochs  = 100
 
 feature_extract = False
 
@@ -133,13 +133,13 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
 
     
      if model_name == "inception":
-        """ Resnet18
+        """ Inception V3
         """
         model_ft = models.inception_v3(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
-        input_size = 224
+        input_size = 112
 
      return model_ft, input_size
 
