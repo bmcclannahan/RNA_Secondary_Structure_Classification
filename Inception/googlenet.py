@@ -65,7 +65,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
                 with torch.set_grad_enabled(phase == 'train'):
                     if is_inception and phase == 'train':
                        outputs, aux_outputs = model(inputs)
-                       loss1 = criterion(outputs, lables)
+                       loss1 = criterion(outputs, labels)
                        loss2 = criterion(aux_outputs, labels)
                        loss = loss1 + 0.4*loss2
                     else:
@@ -199,7 +199,7 @@ exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=70, gamma=0.1)
 
 criterion = nn.CrossEntropyLoss()
 
-model_ft, hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, exp_lr_scheduler, num_epoch=num_epochs, is_inception = False )
+model_ft, hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, exp_lr_scheduler, num_epoch=num_epochs, is_inception = True )
 
 
 
