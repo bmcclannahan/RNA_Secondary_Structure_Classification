@@ -1,6 +1,6 @@
 function build_data_set(folder_location,num_epochs)
 map = build_image_map(folder_location);
-num_keys = length(map.keys);
+num_keys = length(map.keys)
 keys = map.keys;
 for e = 1:num_epochs
     rn = uint16(rand()*num_keys);
