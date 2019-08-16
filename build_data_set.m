@@ -1,45 +1,32 @@
-function build_data_set(folder_name)
-files = dir(folder_name+'*.jpg');
-length(files)
-numbers = [1];
-index = 2;
-temp = 1;
-m = 10;
-for i = 1:length(files)
-    if mod(temp,m) == 0
-        numbers(index) = i;
-        index = index+1;
-        m = m+(20*index);
-    end
-    temp = temp+1;
-end
-files = files(numbers);
-for i = 1:length(files)
-    file1 = files(i).name;
-    file_split1 = split(file1,"_");
-    family_split = split(file_split1(1),'F');
-    number_split = split(file_split1(2),'.');
-    family1 = str2double(char(family_split(2)));
-    number1 = str2double(char(number_split(1)));
-    file_location1 = folder_name + file1;
-    for j = i:length(files)
-        if i ~= j
-            file2 = files(j).name;
-            file_split2 = split(file2,"_");
-            family_split = split(file_split2(1),'F');
-            number_split = split(file_split2(2),'.');
-            family2 = str2double(char(family_split(2)));
-            number2 = str2double(char(number_split(1)));
-            file_location2 = folder_name + file2;
-            file_suffix = 0;
-            if family1 == family2
-                file_suffix = 1;
-            end
-            new_file_name_array = cellstr(["",family1,family2,number1,number2,file_suffix]);
-            new_file_name = "C" + strjoin(new_file_name_array,"_") + ".jpg";
-            final_image = build_image(file_location1,file_location2);
-            imwrite(final_image, new_file_name);
+function build_data_set(folder_location,num_epochs)
+map = build_image_map(folder_location);
+num_keys = length(map.keys);
+keys = map.keys;
+for e = 1:num_epochs
+    rn = uint16(rand()*num_keys);
+    key = cell2mat(keys(rn));
+    family = key(1);
+    rn = uint16(rand()*(length(map(family))-1)+1);
+    family_arr = map(family);
+    file1 = family_arr(rn);
+    previous = [rn,0,0,0,0];
+    for i = 2:5
+        rn = uint16(rand()*length(map(family)));
+        while ismember(rn,previous)
+            rn = uint16(rand()*(length(map(family))-1)+1);
         end
+        previous(i) = rn;
+        save_image(folder_location,file1, family_arr(rn));
     end
-end
+    for i = 1:4
+        rn = uint16(rand()*(length(map(family))-1)+1);
+        while rn == family
+            rn = uint16(rand()*(length(map(family))-1)+1);
+        end
+        key2 = cell2mat(keys(rn));
+        family2 = key2;
+        rn = uint16(rand()*(length(map(family2))-1)+1);
+        family_arr2 = map(family2);
+        save_image(folder_location,file1, family_arr2(rn));
+    end
 end
