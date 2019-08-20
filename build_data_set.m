@@ -19,9 +19,9 @@ for e = 1:num_epochs
         save_image(folder_location,file1, family_arr(rn));
     end
     for i = 1:4
-        rn = uint16(rand()*(length(map(family))-1)+1);
+        rn = uint16(rand()*(num_keys-1)+1);
         while rn == family
-            rn = uint16(rand()*(length(map(family))-1)+1);
+            rn = uint16(rand()*(num_keys-1)+1);
         end
         key2 = cell2mat(keys(rn));
         family2 = key2;
