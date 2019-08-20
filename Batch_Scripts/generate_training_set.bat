@@ -8,4 +8,5 @@
 
 module load MATLAB/2019a
 cd ..
-matlab -nodisplay -nosplash -nodesktop -r "run('/users/b523m844/RNA_Secondary_Structure_Classification/generate_data_set.m');exit;"
+mv *.m /scratch/b523m844/RNA_Secondary_Structure_Classification
+matlab -nodisplay -nosplash -nodesktop -r "run('/scratch/b523m844/RNA_Secondary_Structure_Classification/generate_data_set.m');exit;"
