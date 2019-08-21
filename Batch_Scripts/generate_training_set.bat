@@ -11,3 +11,4 @@ cd /users/b523m844/RNA_Secondary_Structure_Classification/Image_Processing
 cp -rf *.m /scratch/b523m844/RNA_Secondary_Structure_Classification
 cd /scratch/b523m844/RNA_Secondary_Structure_Classification
 matlab -nodisplay -nosplash -nodesktop -r "run('/scratch/b523m844/RNA_Secondary_Structure_Classification/generate_data_set.m');exit;"
+python3 /users/b523m844/RNA_Secondary_Structure_Classification/Image_Processing/split_files.py

@@ -4,7 +4,7 @@ from random import random
 train = .7
 val = .2
 test = .1
-source_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set/"
+source_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/"
 dest_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set/"
 files = glob.glob(source_dir+"*.jpg")
 print("Number of files:", len(files))

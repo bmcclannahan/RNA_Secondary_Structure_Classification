@@ -1,3 +1,3 @@
 data_folder = "Small_Data_Set/";
-training_folder = "Big_Training_Set/";
-manage_directories(data_folder,training_folder);
+num_epochs = 100
+build_data_set(data_set_folder,num_epochs)
