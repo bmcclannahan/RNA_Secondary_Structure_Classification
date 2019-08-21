@@ -9,7 +9,7 @@ dest_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Trainin
 files = glob.glob(source_dir+"*.jpg")
 print("Number of files:", len(files))
 
-for file in files:
+for f in files:
     num = random()
     folder = ''
     if num < val:
@@ -19,4 +19,6 @@ for file in files:
     else:
         folder = 'train/'
     new_dir = dest_dir+folder
-    file_name = file.split('/')[-1]
+    file_name = f.split('/')[-1]
+    new_file = new_dir+file_name
+    os.rename(f,new_file)
