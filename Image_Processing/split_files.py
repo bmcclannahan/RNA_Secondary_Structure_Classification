@@ -6,8 +6,10 @@ val = .2
 test = .1
 source_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set/"
 dest_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set/"
+files = glob.glob(source_dir+"*.jpg")
+print("Number of files:", len(files))
 
-for file in glob.glob(source_dir+"*.jpg"):
+for file in files:
     num = random()
     folder = ''
     if num < val:
