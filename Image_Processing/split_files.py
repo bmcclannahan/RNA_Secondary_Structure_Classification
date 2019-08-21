@@ -12,7 +12,7 @@ for file in glob.glob(source_dir+"*.jpg"):
     folder = ''
     if num < val:
         folder = 'val/'
-    else if (1-num) < test:
+    elif (1-num) < test:
         folder = 'test/'
     else:
         folder = 'train/'
