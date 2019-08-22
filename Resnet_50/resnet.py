@@ -25,7 +25,7 @@ num_classes = 2
 
 batch_size = 32
 
-num_epochs  = 500
+num_epochs  = 250
 
 feature_extract = False
 
