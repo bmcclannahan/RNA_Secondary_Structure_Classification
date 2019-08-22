@@ -95,7 +95,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
                ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
            
 
-            print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+            print('{} Acc: {:.4f}'.format(phase, epoch_acc))
 
             per_epoch_model = copy.deepcopy(model.state_dict())
             torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/vggnet/chekers/epoch'+str(epoch)+'.pt')
