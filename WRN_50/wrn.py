@@ -135,7 +135,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
      if model_name == "wrn":
         """ Wide ResNet 50
         """
-        model_ft = models.wide_resnet50_2(pretrained=use_pretrained)
+        model_ft = models.wide_resnet50(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         input_size = 224
 
