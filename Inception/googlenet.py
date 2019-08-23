@@ -64,10 +64,8 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
                 class_total = list(0. for i in range(2))
                 with torch.set_grad_enabled(phase == 'train'):
                     if is_inception and phase == 'train':
-                       outputs, aux_outputs = model(inputs)
-                       loss1 = criterion(outputs, labels)
-                       loss2 = criterion(aux_outputs, labels)
-                       loss = loss1 + 0.4*loss2
+                       outputs = model(inputs)
+                       loss = criterion(outputs, labels)
                     else:
                        outputs = model(inputs)
                    
