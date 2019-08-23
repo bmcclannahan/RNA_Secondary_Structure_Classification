@@ -135,7 +135,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
      if model_name == "inception":
         """ Inception V3
         """
-        model_ft = models.inception_v3(pretrained=use_pretrained)
+        model_ft = models.googlenet(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
