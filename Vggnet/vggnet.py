@@ -144,7 +144,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
 
 
 
-model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=True)
+model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=False)
 print(model_ft)
                        
 
