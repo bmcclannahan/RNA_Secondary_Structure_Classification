@@ -34,7 +34,7 @@ input_size = 224
 batch_size = 32
 num_classes = 2
 feature_extract = False
-data_dir = "./data/RNAA"
+data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set"
 
 data_transforms = {
      'train': transforms.Compose([
