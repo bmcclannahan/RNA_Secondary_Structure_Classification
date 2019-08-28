@@ -62,7 +62,7 @@ def test_model(model,dataloaders):
     class_correct = list(0. for i in range(2))
     class_total = list(0. for i in range(2))
 
-    for inputs, labels, path in dataloaders['val']:
+    for inputs, labels, path in dataloaders['test']:
         
     
         inputs = inputs.to(device)
