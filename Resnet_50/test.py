@@ -54,9 +54,9 @@ data_transforms = {
 
 print('Initializing dataset and dataloader')
 
-image_datasets = {x: ImageFolderWithPaths(os.path.join(data_dir,x), data_transforms[x]) for x in ['train', 'val']}
+image_datasets = {x: ImageFolderWithPaths(os.path.join(data_dir,x), data_transforms[x]) for x in ['test']}
 
-dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['train', 'val']} 
+dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['test']} 
 
 
 def test_model(model,dataloaders):
