@@ -19,7 +19,7 @@ print("Torchvision Version: ", torchvision.__version__)
 
 data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set"
 
-model_name = "googlenet"
+model_name = "inception"
 
 num_classes = 2
 
@@ -39,8 +39,8 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
     
 
     for epoch in range(num_epochs):
-        ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/googlenet/train_result.txt", "a") 
-        fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/googlenet/test_result.txt","a")
+        ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/train_result.txt", "a") 
+        fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/test_result.txt","a")
         print('Epoch {}/{}'.format(epoch, num_epoch - 1))
         print('-' * 10)
         
@@ -96,7 +96,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
             print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
             per_epoch_model = copy.deepcopy(model.state_dict())
-            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/googlenet/chekers/epoch'+str(epoch)+'.pt')
+            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/chekers/epoch'+str(epoch)+'.pt')
              
             if phase == 'val' and epoch_acc > best_acc:
                   best_acc = epoch_acc
@@ -113,7 +113,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, num_epoch=2
  
     model.load_state_dict(best_model_wts)
     
-    torch.save(best_model_wts, '/scratch/b523m844/RNA_Secondary_Structure_Classification/googlenet/checkpoints/weight.pt')
+    torch.save(best_model_wts, '/scratch/b523m844/RNA_Secondary_Structure_Classification/inception/checkpoints/weight.pt')
     return model, val_acc_history
 
 
@@ -130,10 +130,10 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
      input_size = 0
 
     
-     if model_name == "googlenet":
-        """ Googlenet
+     if model_name == "inception":
+        """ Inception V3
         """
-        model_ft = models.googlenet(pretrained=use_pretrained)
+        model_ft = models.Inception3(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
