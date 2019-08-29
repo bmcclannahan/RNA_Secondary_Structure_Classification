@@ -34,33 +34,28 @@ input_size = 224
 batch_size = 32
 num_classes = 2
 feature_extract = False
-data_dir = "./data/RNAA"
+data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set"
+
+model_name = "wrn"
 
 data_transforms = {
-     'train': transforms.Compose([
+     'test': transforms.Compose([
       transforms.RandomResizedCrop(input_size),
       transforms.RandomHorizontalFlip(),
       transforms.ToTensor(),
       transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-      'val': transforms.Compose([
-      transforms.Resize(input_size),
-      transforms.CenterCrop(input_size),
-      transforms.ToTensor(),
-      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-
-      ])
+    ])
     }
 
 print('Initializing dataset and dataloader')
 
-image_datasets = {x: ImageFolderWithPaths(os.path.join(data_dir,x), data_transforms[x]) for x in ['train', 'val']}
+image_datasets = {x: ImageFolderWithPaths(os.path.join(data_dir,x), data_transforms[x]) for x in ['test']}
 
-dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['train', 'val']} 
+dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['test']} 
 
 
 def test_model(model,dataloaders):
-    best_model_wts = torch.load("./resnet/chekers/epoch100.pt") 
+    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/wrn/chekers/epoch99.pt") 
     model.load_state_dict(best_model_wts)
     model.eval()
     
@@ -69,7 +64,7 @@ def test_model(model,dataloaders):
     class_correct = list(0. for i in range(2))
     class_total = list(0. for i in range(2))
 
-    for inputs, labels, path in dataloaders['val']:
+    for inputs, labels, path in dataloaders['test']:
         
     
         inputs = inputs.to(device)
@@ -113,16 +108,12 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
      model_ft = None
      input_size = 0
 
-     if model_name == "resnet50":
-        model_ft = models.resnet50(pretrained=use_pretrained)
+     if model_name == "wrn":
+        model_ft = models.wide_resnet50_2(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
-        num_ftrs = model_ft.fc.in_features
-        model_ft.fc = nn.Linear(num_ftrs, num_classes)
         input_size = 224
 
      return model_ft, input_size
-
-model_name = "resnet50"
 
 
 def set_parameter_requires_grad(model, feature_extracting):
