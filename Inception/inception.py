@@ -25,7 +25,7 @@ num_classes = 2
 
 batch_size = 32
 
-num_epochs  = 250
+num_epochs  = 100
 
 feature_extract = False
 
@@ -138,6 +138,7 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
         input_size = 224
+        model_ft.aux_logits = False
 
      return model_ft, input_size
 
@@ -195,7 +196,7 @@ optimizer_ft = optim.SGD(params_to_update, lr = 0.01, momentum=0.9)
 exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=70, gamma=0.1)
 
 
-criterion = nn.CrossEntropyLoss()
+criterion = nn.NLLLoss()
 
 model_ft, hist = train_model(model_ft, dataloaders_dict, criterion, optimizer_ft, exp_lr_scheduler, num_epoch=num_epochs, is_inception = True )
 
