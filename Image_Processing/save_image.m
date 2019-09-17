@@ -1,4 +1,4 @@
-function save_image(folder_name,file1, file2)
+function save_image(folder_name,file1, file2, prefix)
 file_split1 = split(file1,"_");
 family_split = split(file_split1(1),'F');
 number_split = split(file_split1(2),'.');
@@ -16,7 +16,7 @@ if family1 == family2
     file_suffix = 1;
 end
 new_file_name_array = cellstr(["",family1,family2,number1,number2,file_suffix]);
-new_file_name = "C" + strjoin(new_file_name_array,"_") + ".jpg";
+new_file_name = prefix + strjoin(new_file_name_array,"_") + ".jpg";
 final_image = build_image(file_location1,file_location2);
 imwrite(final_image, new_file_name);
 end

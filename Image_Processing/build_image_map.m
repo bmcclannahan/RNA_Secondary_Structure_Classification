@@ -1,4 +1,5 @@
 function map = build_image_map(folder_name)
+folder_name
 files = dir(folder_name + "*.jpg")
 map = containers.Map(double(1), [1,2]);
 remove(map,1);
@@ -19,7 +20,7 @@ for i = 1:length(files)
 end
 for i = 1:1099
     if map.isKey(i)
-        if length(map(i)) < 10
+        if length(map(i)) < 5
             remove(map,i);
         end
     end

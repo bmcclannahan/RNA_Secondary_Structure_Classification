@@ -1,4 +1,4 @@
-function build_data_set(folder_location,num_epochs)
+function build_data_set(folder_location,num_epochs,prefix)
 map = build_image_map(folder_location);
 num_keys = length(map.keys)
 keys = map.keys;
@@ -16,7 +16,7 @@ for e = 1:num_epochs
             rn = uint16(rand()*(length(map(family))-1)+1);
         end
         previous(i) = rn;
-        save_image(folder_location,file1, family_arr(rn));
+        save_image(folder_location,file1, family_arr(rn), prefix);
     end
     for i = 1:4
         rn = uint16(rand()*(num_keys-1)+1);
@@ -27,6 +27,7 @@ for e = 1:num_epochs
         family2 = key2;
         rn = uint16(rand()*(length(map(family2))-1)+1);
         family_arr2 = map(family2);
-        save_image(folder_location,file1, family_arr2(rn));
+        save_image(folder_location,file1, family_arr2(rn), prefix);
     end
+end
 end
