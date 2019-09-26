@@ -1,1 +1,1 @@
-bppmToJPEG('/scratch/b523m844/RNA_Secondary_Structure_Classification/RfamBBPM/')
+bppmToJPEG('/RfamBPPM')
