@@ -4,7 +4,7 @@ function A = bppmToJPEG(dirName)
     if 7==exist(dirName,'dir')
 
      %Files=getAllFiles(dirName, '.bppm', true);%%dir(dirName,'*.bppm');
-        files = dir(fullfile(dirName, '*.bppm'));
+        files = dir(dirName + '*.bppm');
 
         L = length(files);
 
