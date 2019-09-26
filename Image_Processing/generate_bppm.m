@@ -1,1 +1,1 @@
-bppmToJPEG('/RfamBPPM')
+bppmToJPEG('/RfamBPPM/')
