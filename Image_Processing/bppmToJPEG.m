@@ -6,21 +6,22 @@ function A = bppmToJPEG(dirName)
      %Files=getAllFiles(dirName, '.bppm', true);%%dir(dirName,'*.bppm');
         files = dir(dirName + '*.bppm');
 
-        L = length(files);
+        L = length(files)
 
         for i=1:L
 
-        file=files(i).name;
+            file=files(i).name;
 
-        filepath = fullfile( dirName, file );
+            filepath = fullfile( dirName, file );
 
-        [pathstr, name, ext] = fileparts(filepath);
+            [pathstr, name, ext] = fileparts(filepath);
 
-        A = dlmread(filepath);
-        normA = A - min(A(:));
-        normA = (normA ./ max(normA(:)));
-        filename = pathstr + '/' + name + '.jpg';
-        imwrite(normA,filename);
+            A = dlmread(filepath);
+            normA = A - min(A(:));
+            normA = (normA ./ max(normA(:)));
+            filename = pathstr + '/' + name + '.jpg';
+            imwrite(normA,filename);
+        end
 
 %     else
 %         error('Error: No .bppm file found at given directory. Please try again...');

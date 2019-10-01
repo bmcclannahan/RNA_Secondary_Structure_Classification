@@ -2,11 +2,9 @@ function build_data_set(folder_location,num_epochs,prefix)
 map = build_image_map(folder_location);
 num_keys = length(map.keys)
 keys = map.keys;
-for e = 1:num_epochs
-    rn = uint16(rand()*(num_keys-1)+1);
-    key = cell2mat(keys(rn));
+for k = 1:num_keys
+    key = cell2mat(keys(k));
     family = key(1);
-    rn = uint16(rand()*(length(map(family))-1)+1);
     family_arr = map(family);
     file1 = family_arr(rn);
     previous = [rn,0,0,0,0];
