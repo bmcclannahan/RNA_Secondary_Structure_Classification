@@ -19,9 +19,8 @@ function A = bppmToJPEG(dirName)
         A = dlmread(filepath);
         normA = A - min(A(:));
         normA = (normA ./ max(normA(:)));
-        imwrite(normA,[pathstr,'\',name,'.jpg']);
-
-        end
+        filename = pathstr + '/' + name + '.jpg';
+        imwrite(normA,filename);
 
 %     else
 %         error('Error: No .bppm file found at given directory. Please try again...');
