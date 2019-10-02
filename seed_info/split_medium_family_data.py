@@ -11,10 +11,6 @@ def copy_files(files,family_dict):
             #print(f, new_file)
             shutil.copyfile(f,new_file)
 
-train = .7
-val = .1
-test = .2
-
 seed_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Medium_families.txt"
 source_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Full_Image_Set/"
 dest_folder = "Medium_Families"
