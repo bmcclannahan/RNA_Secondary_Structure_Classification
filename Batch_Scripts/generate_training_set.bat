@@ -7,13 +7,7 @@
 #SBATCH -J RNA_Training_Set_Creation
 
 module load MATLAB/2019a
-module load Python/3.5.2
-cd /nfs/apps/7/arch/generic/Python/3.5.2/bin
-pyvenv /scratch/b523m844/python352/bin/
-cd /scratch/b523m844/python352/bin/
-source activate
 cd /users/b523m844/RNA_Secondary_Structure_Classification/Image_Processing
 cp -rf *.m /scratch/b523m844/RNA_Secondary_Structure_Classification
 cd /scratch/b523m844/RNA_Secondary_Structure_Classification
 matlab -nodisplay -nosplash -nodesktop -r "run('/scratch/b523m844/RNA_Secondary_Structure_Classification/generate_data_set.m');exit;"
-python3 /users/b523m844/RNA_Secondary_Structure_Classification/Image_Processing/split_files.py
