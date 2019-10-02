@@ -3,6 +3,7 @@ function build_data_set(folder_location,prefix)
     num_keys = length(map.keys)
     keys = map.keys;
     for k = 1:num_keys
+        k
         key = cell2mat(keys(k));
         family = key(1);
         family_arr = map(family);
