@@ -16,16 +16,22 @@ with open(seed_data) as f:
     medium_families = f.readlines()
 medium_families = [x.rstrip() for x in medium_families]
 
+num_med_families = len(medium_families)
+
 for fam in medium_families:
     split = fam.split(",")
     family = int(split[0][2:])
     rand = random()
-    if rand < train:
+    if rand < train and len(train_families) < train*num_med_families:
         train_families.append(family)
-    elif rand < train + val:
+    elif rand < train + val and len(val_families) < val*num_med_families:
         val_families.append(family)
     else:
         test_families.append(family)
+
+print("Number of train families:",len(train_families))
+print("Number of val families:",len(val_families))
+print("Number of test families:",len(test_families))
 
 files = glob.glob(source_dir+"*.jpg")
 
@@ -43,5 +49,5 @@ for f in files:
     if folder != "":
         split.insert(-1,folder)
         new_file = "/".join(split)
-        print(f, new_file)
+        #print(f, new_file)
         #os.rename(f,new_file)
