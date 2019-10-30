@@ -34,21 +34,21 @@ def print_families_by_length(family_dict):
     long_list = []
     long_count = 0
     medium_short_list = []
+    medium_short_count = 0
     for key in family_dict.keys():
         family_length = len(family_dict[key][0])
         if family_length <= 200:
             short_list.append(key)
             short_count += len(family_dict[key])
-        if family_length >= 100 and family_length <= 200:
-            medium_short_list.append(key)
-        if family_length  >= 200 and family_length <= 400:
+        if family_length >= 200 and family_length <= 400:
             medium_list.append(key)
             medium_count += len(family_dict[key])
+        if family_length >= 200 and family_length <= 260:
+            medium_short_list.append(key)
+            medium_short_count += len(family_dict[key])
         if family_length >= 400:
             long_list.append(key)
             long_count += len(family_dict[key])
-    print("Short families:",len(short_list),"Medium families:",len(medium_list),"Large families:",len(long_list),"Medium short families:",len(medium_short_list))
-    print("Short average:",short_count/len(short_list),"Medium average:",medium_count/len(medium_list),"Long average:",long_count/len(long_list))
     print("\n--------List of Short Families--------")
     for family in short_list:
         print(family, end = ', ')
@@ -58,18 +58,25 @@ def print_families_by_length(family_dict):
     print("\n--------List of Long Families--------")
     for family in long_list:
         print(family, end = ', ')
+    print("\n\n--------Family Size Information--------")
+    print("Short families:",len(short_list),"Medium families:",len(medium_list),"Large families:",len(long_list),"Medium short families:",len(medium_short_list))
+    print("Short average:",short_count/len(short_list),"Medium average:",medium_count/len(medium_list),"Long average:",long_count/len(long_list), "Medium short average:",medium_short_count/len(medium_short_list))
+    
 
 def sort_families_by_size(family_string):
     return int(family_string[8:])
     
-def write_family_lengths_to_files(family_dict):
+def write_families_to_files(family_dict):
     short_list = []
+    short_medium_list = []
     medium_list = []
     long_list = []
     for key in family_dict.keys():
         family_length = len(family_dict[key][0])
         if family_length <= 200:
             short_list.append(str(key)+","+str(len(family_dict[key])))
+        if family_length  >= 200 and family_length <= 260:
+            short_medium_list.append(str(key)+","+str(len(family_dict[key])))
         if family_length  >= 200 and family_length <= 400:
             medium_list.append(str(key)+","+str(len(family_dict[key])))
         if family_length >= 400:
@@ -78,16 +85,20 @@ def write_family_lengths_to_files(family_dict):
     short_list.sort(key=sort_families_by_size,reverse=True)
     medium_list.sort(key=sort_families_by_size,reverse=True)
     long_list.sort(key=sort_families_by_size,reverse=True)
+    short_medium_list.sort(key=sort_families_by_size,reverse=True)
 
     short_file = open('Short_families.txt',mode='w')
     medium_file = open('Medium_families.txt',mode='w')
     long_file = open('Long_families.txt',mode='w')
+    short_medium_file = open('Medium_short_families.txt', mode='w')
 
     short_file.write('\n'.join(short_list) + '\n')
+    short_medium_file.write('\n'.join(short_medium_list) + '\n')
     medium_file.write('\n'.join(medium_list) + '\n')
     long_file.write('\n'.join(long_list) + '\n')
 
     short_file.close()
+    short_medium_file.close()
     medium_file.close()
     long_file.close()
 
@@ -96,4 +107,5 @@ with open("Rfam.seed") as f:
 print("Seed file has",len(seed_file), "lines")
 
 family_dict = create_rna_family_dictionary(seed_file)
-write_family_lengths_to_files(family_dict)
+print_families_by_length(family_dict)
+write_families_to_files(family_dict)
