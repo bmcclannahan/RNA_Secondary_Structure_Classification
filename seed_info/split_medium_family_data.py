@@ -11,9 +11,9 @@ def copy_files(files,family_dict,folder):
             #print(f, new_file)
             shutil.copyfile(f,new_file)
 
-train_data = "~/RNA_Secondary_Structure_Classification/seed_info/Train.txt"
-test_data = "~/RNA_Secondary_Structure_Classification/seed_info/Test.txt"
-val_data = "~/RNA_Secondary_Structure_Classification/seed_info/Val.txt"
+train_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Train.txt"
+test_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Test.txt"
+val_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Val.txt"
 source_dir = "/home/b523m844/data/Full_Image_Set/"
 dest_folder = "Medium_Small_Families/"
 
@@ -31,14 +31,14 @@ train_dict = dict()
 test_dict = dict()
 val_dict = dict()
 
-for i in range(len(train_data)):
-    split = train_data[i].split(",")
+for i in range(len(train_families)):
+    split = train_families[i].split(",")
     train_dict[int(split[0][2:])] = split[1]
-for i in range(len(test_data)):
-    split = test_data[i].split(",")
+for i in range(len(test_families)):
+    split = test_families[i].split(",")
     test_dict[int(split[0][2:])] = split[1]
-for i in range(len(val_data)):
-    split = val_data[i].split(",")
+for i in range(len(vaval_familiesl_data)):
+    split = val_families[i].split(",")
     val_dict[int(split[0][2:])] = split[1]
 
 files = glob.glob(source_dir+"*.jpg")
