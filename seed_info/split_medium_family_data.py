@@ -19,13 +19,13 @@ dest_folder = "Medium_Small_Families/"
 
 with open(train_data) as f:
     train_families = f.readlines()
-train_families = [x.rstrip() for x in train_families]
+train_families = [int(x.rstrip()[2:]) for x in train_families]
 with open(test_data) as f:
     test_families = f.readlines()
-test_families = [x.rstrip() for x in test_families]
+test_families = [int(x.rstrip()[2:]) for x in test_families]
 with open(val_data) as f:
     val_families = f.readlines()
-val_families = [x.rstrip() for x in val_families]
+val_families = [int(x.rstrip()[2:]) for x in val_families]
 
 files = glob.glob(source_dir+"*.jpg")
 
