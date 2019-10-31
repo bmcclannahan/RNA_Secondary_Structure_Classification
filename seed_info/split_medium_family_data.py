@@ -8,8 +8,8 @@ def copy_files(files,family_list,folder):
         if family in family_list:
             split.insert(-1,folder)
             new_file = "/".join(split)
-            print(f, new_file)
-            #shutil.copyfile(f,new_file)
+            #print(f, new_file)
+            shutil.copyfile(f,new_file)
 
 train_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Train.txt"
 test_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Test.txt"
