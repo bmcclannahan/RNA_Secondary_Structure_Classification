@@ -32,4 +32,11 @@ for family in families:
 print("Train size:", len(train_list))
 print("Test size:", len(test_list))
 print("Val size:", len(val_list))
-    
+
+train_file = open('Train.txt',mode='w')
+test_file = open('Test.txt',mode='w')
+val_file = open('Val.txt',mode='w')
+
+train_file.write('\n'.join(train_list) + '\n')
+test_file.write('\n'.join(test_list) + '\n')
+val_file.write('\n'.join(val_list) + '\n')
