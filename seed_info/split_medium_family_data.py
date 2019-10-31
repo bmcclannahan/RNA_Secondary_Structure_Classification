@@ -1,15 +1,15 @@
 import os, glob, shutil
 
-def copy_files(files,family_dict,folder):
+def copy_files(files,family_list,folder):
     for f in files:
         split = f.split('/')
         family_name = split[-1][:7]
         family = int(family_name[2:])
-        if family in family_dict.keys():
+        if family in family_list:
             split.insert(-1,folder)
             new_file = "/".join(split)
-            #print(f, new_file)
-            shutil.copyfile(f,new_file)
+            print(f, new_file)
+            #shutil.copyfile(f,new_file)
 
 train_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Train.txt"
 test_data = "/users/b523m844/RNA_Secondary_Structure_Classification/seed_info/Test.txt"
@@ -27,28 +27,14 @@ with open(val_data) as f:
     val_families = f.readlines()
 val_families = [x.rstrip() for x in val_families]
 
-train_dict = dict()
-test_dict = dict()
-val_dict = dict()
-
-for i in range(len(train_families)):
-    split = train_families[i].split(",")
-    train_dict[int(split[0][2:])] = split[1]
-for i in range(len(test_families)):
-    split = test_families[i].split(",")
-    test_dict[int(split[0][2:])] = split[1]
-for i in range(len(vaval_familiesl_data)):
-    split = val_families[i].split(",")
-    val_dict[int(split[0][2:])] = split[1]
-
 files = glob.glob(source_dir+"*.jpg")
 
 print("Number of files:",len(files))
 print("Number of medium small families:",len(train_families)+len(test_families)+len(val_families))
 
-copy_files(files,train_dict,dest_folder+"train")
-copy_files(files,test_dict,dest_folder+"test")
-copy_files(files,val_dict,dest_folder+"val")
+copy_files(files,train_families,dest_folder+"train")
+copy_files(files,test_families,dest_folder+"test")
+copy_files(files,val_families,dest_folder+"val")
 
 
 
