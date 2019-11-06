@@ -1,6 +1,6 @@
 from glob import glob
 
-folder = "/home/b523m844/data/Full_Image_Set/Medium_Small_Families/train/"
+folder = "/home/b523m844/data/Full_Image_Set/Medium_Small_Families/val/"
 
 file_dict = dict()
 
