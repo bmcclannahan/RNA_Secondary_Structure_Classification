@@ -3,11 +3,13 @@
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
-#SBATCH --mem=2GB
+#SBATCH -t 72:00:00
+#SBATCH --mem=16GB
 #SBATCH -J RNA_Training_Set_Creation
 
 module load MATLAB/2019a
+sshfs b523m844@deadpool.ittc.ku.edu:/data/mount_data /scratch/b523m844/RNA_Secondary_Structure_Classification/data
 cd /users/b523m844/RNA_Secondary_Structure_Classification/Image_Processing
-cp -rf *.m /scratch/b523m844/RNA_Secondary_Structure_Classification
-cd /scratch/b523m844/RNA_Secondary_Structure_Classification
-matlab -nodisplay -nosplash -nodesktop -r "run('/scratch/b523m844/RNA_Secondary_Structure_Classification/generate_data_set.m');exit;"
+cp -rf *.m /home/b523m844/data/rna_classification/train
+cd /home/b523m844/data/rna_classification/train
+matlab -nodisplay -nosplash -nodesktop -r "run ('/home/b523m844/data/rna_classification/generate_data_set.m');exit;"

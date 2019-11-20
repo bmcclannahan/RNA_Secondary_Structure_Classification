@@ -17,7 +17,7 @@ print("PyTorch Version: ", torch.__version__)
 print("Torchvision Version: ", torchvision.__version__)
 
 
-data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Full_Image_Set/Medium_Families/"
+data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/data/rna_classification"
 
 model_name = "resnet"
 
@@ -35,13 +35,13 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    best_model_wts = copy.deepcopy(model.state_dict())
    best_acc = 0.0
    curr_loss = 0.0
-   prev_loss = [1.0]*10
+   prev_loss = 10000000000000
    epoch = 0
 
-   while prev_loss[-1] - curr_loss <= 0.001 and prev_loss[0] - curr_loss <= 0.001
+   while curr_loss < prev_loss:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a") 
       fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/test_result.txt","a")
-      print('Epoch {}'.format(epoch)
+      print('Epoch {}'.format(epoch))
       print('-' * 10)
       
       for phase in ['train', 'val']:
@@ -117,8 +117,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 def set_parameter_requires_grad(model, feature_extracting):
    if feature_extracting:
       for param in model.parameters():
-         param.requires_grad = False 
-
+         param.requires_grad = False
 
 
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained = True):
@@ -139,18 +138,19 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained = 
      return model_ft, input_size
 
 def make_weights_for_classes(images):
-   nclasses = 2
-   count = [0] * nclasses                                                      
-    for item in images:                                                         
-        count[item[1]] += 1                                                     
-    weight_per_class = [0.] * nclasses                                      
-    N = float(sum(count))                                                   
-    for i in range(nclasses):                                                   
-        weight_per_class[i] = N/float(count[i])                                 
-    weight = [0] * len(images)                                              
-    for idx, val in enumerate(images):                                          
-        weight[idx] = weight_per_class[val[1]]                                  
-    return weight  
+    nclasses = 2
+    count = [0] * nclasses
+    for item in images:
+        count[item[1]] += 1
+    weight_per_class = [0.] * nclasses
+    class_weight = [.75,.25]
+    N = float(sum(count))
+    for i in range(nclasses):
+        weight_per_class[i] = N*class_weight[i]/float(count[i])
+    weight = [0] * len(images)
+    for idx, val in enumerate(images):
+        weight[idx] = weight_per_class[val[1]]
+    return weight
 
 
 model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=True)
@@ -172,24 +172,27 @@ print(model_ft)
 #       ])
 #     }
 
-print('Initializing dataset and dataloader')
+print('Initializing Dataset')
 
 data_normalization = {
-     'train': transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ]),
-      'val': transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-
-      ])
+     'train': ([transforms.ToTensor(),
+     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])]),
+      'val': ([transforms.ToTensor(),
+     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
     }
 
-image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x)) for data_normalization[x] in ['train', 'val']}
+image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_normalization[x]) for x in ['train', 'val']}
 #image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_transforms[x]) for x in ['train', 'val']}
 
-weights_dict = {x: make_weights_for_classes(image_datasets[x]) for x in ['train', 'val']}
-weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in ['train','val']}
-sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights_dict[x],2) for x in ['train','val']}
+print('Weighting Classes')
 
-dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, sampler=sampler_dict[x], num_workers=4) for x in ['train', 'val']}
+weights_dict = {x: make_weights_for_classes(image_datasets[x].imgs) for x in ['train', 'val']}
+weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in ['train','val']}
+sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=32) for x in ['train','val']}
+
+print('Initializing Dataloader')
+
+dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, sampler=sampler_dict[x], num_workers=4) for x in ['train', 'val']}
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
