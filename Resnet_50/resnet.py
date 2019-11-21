@@ -54,7 +54,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          running_loss = 0.0
          running_corrects = 0
 
-         print(type(dataloaders))
+         print(type(dataloaders['val']))
          for inputs, labels in dataloaders[phase]:
             inputs = inputs.to(device)
             labels = labels.to(device)
