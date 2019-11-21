@@ -121,20 +121,19 @@ def set_parameter_requires_grad(model, feature_extracting):
 
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained = True):
  
-     model_ft = None
-     input_size = 0
+   model_ft = None
+   input_size = 0
 
-    
-     if model_name == "resnet":
-        """ Resnet18
-        """
-        model_ft = models.resnet50(pretrained=use_pretrained)
-        set_parameter_requires_grad(model_ft, feature_extract)
-        num_ftrs = model_ft.fc.in_features
-        model_ft.fc = nn.Linear(num_ftrs, num_classes)
-        input_size = 224
+   if model_name == "resnet":
+      """ Resnet18
+      """
+      model_ft = models.resnet50(pretrained=use_pretrained)
+      set_parameter_requires_grad(model_ft, feature_extract)
+      num_ftrs = model_ft.fc.in_features
+      model_ft.fc = nn.Linear(num_ftrs, num_classes)
+      input_size = 224
 
-     return model_ft, input_size
+   return model_ft, input_size
 
 def make_weights_for_classes(images):
     nclasses = 2
@@ -176,20 +175,20 @@ phases = ['val']#['train','val']
 print('Initializing Dataset')
 
 data_normalization = {
-     'train': ([transforms.ToTensor(),
+     'train': transforms.Compose([transforms.ToTensor(),
      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])]),
-      'val': ([transforms.ToTensor(),
+      'val': transforms.Compose([transforms.ToTensor(),
      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
     }
 
 image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_normalization[x]) for x in phases}
-#image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_transforms[x]) for x in ['train', 'val']}
+#image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_transforms[x]) for x in phases}
 
 print('Weighting Classes')
 
 weights_dict = {x: make_weights_for_classes(image_datasets[x].imgs) for x in phases}
 weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in phases}
-sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=32) for x in phases}
+sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=len(weights_dict[x])) for x in phases}
 
 print('Initializing Dataloader')
 
@@ -209,9 +208,9 @@ if feature_extract:
             params_to_update.append(param)
             print("\t",name)
 else:
-     for name,param in model_ft.named_parameters():
-        if param.requires_grad == True:
-           print("\t",name)
+      for name,param in model_ft.named_parameters():
+         if param.requires_grad == True:
+            print("\t",name)
 
 
 optimizer_ft = optim.SGD(params_to_update, lr = 0.01, momentum=0.9)
