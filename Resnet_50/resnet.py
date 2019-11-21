@@ -34,7 +34,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
  
    best_model_wts = copy.deepcopy(model.state_dict())
    best_acc = 0.0
-   curr_loss = 0.0
+   curr_loss = 100000000000
    prev_loss = 10000000000000
    epoch = 0
 
@@ -54,6 +54,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          running_loss = 0.0
          running_corrects = 0
 
+         print(type(dataloaders))
          for inputs, labels in dataloaders[phase]:
             inputs = inputs.to(device)
             labels = labels.to(device)
@@ -95,9 +96,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             val_acc_history.append(epoch_acc)
 
          if phase == 'train':
-            for i in [9,8,7,6,5,4,3,2,1,]:
-               prev_loss[i] =  prev_loss[i-1]
-            prev_loss[0] = curr_loss
+            prev_loss = curr_loss
             curr_loss = epoch_loss
 
          print()
@@ -105,7 +104,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          ft.close() 
     
    time_elapsed = time.time() - since
-   """print('Training complete in {:.of}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))"""
+   print('Training complete in {:.of}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
    print('Best value Acc: {:4f}'.format(best_acc))
  
    model.load_state_dict(best_model_wts)
@@ -172,6 +171,8 @@ print(model_ft)
 #       ])
 #     }
 
+phases = ['val']#['train','val']
+
 print('Initializing Dataset')
 
 data_normalization = {
@@ -181,18 +182,18 @@ data_normalization = {
      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
     }
 
-image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_normalization[x]) for x in ['train', 'val']}
+image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_normalization[x]) for x in phases}
 #image_datasets = {x: datasets.ImageFolder(os.path.join(data_dir,x), data_transforms[x]) for x in ['train', 'val']}
 
 print('Weighting Classes')
 
-weights_dict = {x: make_weights_for_classes(image_datasets[x].imgs) for x in ['train', 'val']}
-weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in ['train','val']}
-sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=32) for x in ['train','val']}
+weights_dict = {x: make_weights_for_classes(image_datasets[x].imgs) for x in phases}
+weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in phases}
+sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=32) for x in phases}
 
 print('Initializing Dataloader')
 
-dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, sampler=sampler_dict[x], num_workers=4) for x in ['train', 'val']}
+dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, sampler=sampler_dict[x], num_workers=4) for x in phases}
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
