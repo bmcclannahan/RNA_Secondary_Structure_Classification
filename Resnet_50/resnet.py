@@ -170,7 +170,7 @@ print(model_ft)
 #       ])
 #     }
 
-phases = ['val']#['train','val']
+phases = ['train','val']
 
 print('Initializing Dataset')
 
