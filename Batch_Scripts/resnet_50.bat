@@ -17,4 +17,9 @@ pyvenv /scratch/b523m844/python352/bin/
 cd /scratch/b523m844/python352/bin/
 source activate
 
+sshfs b523m844@deadpool.ittc.ku.edu:/data/mount_data /scratch/b523m844/RNA_Secondary_Structure_Classification/data
+
 python ~/RNA_Secondary_Structure_Classification/Resnet_50/resnet.py
+
+cd /scratch/b523m844/RNA_Secondary_Structure_Classification
+fusermount -u data
