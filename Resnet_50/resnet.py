@@ -44,7 +44,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
       print('Epoch {}'.format(epoch))
       print('-' * 10)
       
-      for phase in ['train', 'val']:
+      for phase in ['val']:#['train', 'val']:
          if phase == 'train':
             schedular.step()
             model.train()
