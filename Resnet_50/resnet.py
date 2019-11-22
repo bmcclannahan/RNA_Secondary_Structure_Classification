@@ -43,9 +43,9 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 
    while curr_loss < prev_loss:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a") 
-      fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/test_result.txt","a")
+      fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt","a")
       print('Epoch {}'.format(epoch))
-      print('-' * 10)
+      print('-' * 20)
       
       for phase in ['train', 'val']:
          print(phase)
