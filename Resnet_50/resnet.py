@@ -27,6 +27,8 @@ batch_size = 32
 
 feature_extract = False
 
+phases = ['train','val']
+
 
 def train_model(model, dataloaders, criterion, optimizer, schedular, is_inception=False):
    since = time.time()
@@ -37,6 +39,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    curr_loss = 100000000000
    prev_loss = 10000000000000
    epoch = 0
+   iter_dict = {x: iter(dataloaders[x] for x in phases) }
 
    while curr_loss < prev_loss:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a") 
@@ -45,6 +48,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
       print('-' * 10)
       
       for phase in ['train', 'val']:
+         print(phase)
          if phase == 'train':
             schedular.step()
             model.train()
@@ -54,26 +58,26 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          running_loss = 0.0
          running_corrects = 0
 
-         print(type(dataloaders['val']))
-         for inputs, labels in dataloaders[phase]:
-            inputs = inputs.to(device)
-            labels = labels.to(device)
+         #previous for loop location
+         inputs, labels = next(iter_dict[phase])
+         inputs = inputs.to(device)
+         labels = labels.to(device)
+         
             
-               
-            optimizer.zero_grad()
-            class_correct = list(0. for i in range(2))
-            class_total = list(0. for i in range(2))
-            with torch.set_grad_enabled(phase == 'train'):
-               outputs = model(inputs)
-               
-               loss = criterion(outputs, labels)       
-               _, preds = torch.max(outputs, 1)
-                  
-               if phase == 'train':
-                  loss.backward()
-                  optimizer.step()
-            running_loss += loss.item() * inputs.size(0)
-            running_corrects += torch.sum(preds == labels.data)
+         optimizer.zero_grad()
+         #class_correct = list(0. for i in range(2))
+         #class_total = list(0. for i in range(2))
+         with torch.set_grad_enabled(phase == 'train'):
+            outputs = model(inputs)
+            
+            loss = criterion(outputs, labels)       
+            _, preds = torch.max(outputs, 1)
+            
+            if phase == 'train':
+               loss.backward()
+               optimizer.step()
+         running_loss += loss.item() * inputs.size(0)
+         running_corrects += torch.sum(preds == labels.data)
             
          epoch_loss = running_loss / len(dataloaders[phase].dataset)
             
@@ -169,8 +173,6 @@ print(model_ft)
 
 #       ])
 #     }
-
-phases = ['train','val']
 
 print('Initializing Dataset')
 
