@@ -79,9 +79,9 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          running_loss += loss.item() * inputs.size(0)
          running_corrects += torch.sum(preds == labels.data)
             
-         epoch_loss = running_loss / len(dataloaders[phase].dataset)
+         epoch_loss = running_loss / batch_size
             
-         epoch_acc = running_corrects.double()/len(dataloaders[phase].dataset)
+         epoch_acc = running_corrects.double()/batch_size
          
          if phase == 'val':
             fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
@@ -192,7 +192,7 @@ print('Weighting Classes')
 
 weights_dict = {x: make_weights_for_classes(image_datasets[x].imgs) for x in phases}
 weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in phases}
-sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=len(weights_dict[x])) for x in phases}
+sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=batch_size) for x in phases}
 
 print('Initializing Dataloader')
 
