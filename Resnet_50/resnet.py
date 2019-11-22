@@ -24,6 +24,7 @@ model_name = "resnet"
 num_classes = 2
 
 batch_size = 32
+epoch_size = 640
 
 feature_extract = False
 
@@ -191,7 +192,7 @@ print('Weighting Classes')
 
 weights_dict = {x: make_weights_for_classes(image_datasets[x].imgs) for x in phases}
 weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in phases}
-sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=batch_size) for x in phases}
+sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=epoch_size) for x in phases}
 
 print('Initializing Dataloader')
 
