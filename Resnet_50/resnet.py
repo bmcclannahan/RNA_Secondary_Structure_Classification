@@ -98,7 +98,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             val_acc_history.append(epoch_acc)
 
          if phase == 'train':
-            prev_loss = curr_loss + prev_loss[:9]
+            prev_loss = [curr_loss] + prev_loss[:9]
             curr_loss = epoch_loss
 
       print()
