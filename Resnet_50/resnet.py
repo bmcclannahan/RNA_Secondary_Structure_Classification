@@ -31,16 +31,14 @@ feature_extract = False
 def train_model(model, dataloaders, criterion, optimizer, schedular, is_inception=False):
    since = time.time()
    val_acc_history = []
-
-   phases = ['train','val']
  
    best_model_wts = copy.deepcopy(model.state_dict())
    best_acc = 0.0
-   curr_loss = 100000000000
-   prev_loss = 10000000000000
+   curr_loss = 10
+   prev_loss = [100]*10
    epoch = 0
 
-   while curr_loss < prev_loss:
+   while curr_loss < prev_loss/len(prev_loss):
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
       fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt","a")
       print('Epoch {}'.format(epoch))
@@ -100,12 +98,13 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             val_acc_history.append(epoch_acc)
 
          if phase == 'train':
-            prev_loss = curr_loss
+            prev_loss = curr_loss + prev_loss[:9]
             curr_loss = epoch_loss
 
       print()
       fp.close()
-      ft.close() 
+      ft.close()
+      epoch += 1
     
    time_elapsed = time.time() - since
    print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
