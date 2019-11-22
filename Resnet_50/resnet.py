@@ -27,12 +27,12 @@ batch_size = 32
 
 feature_extract = False
 
-phases = ['train','val']
-
 
 def train_model(model, dataloaders, criterion, optimizer, schedular, is_inception=False):
    since = time.time()
    val_acc_history = []
+
+   phases = ['train','val']
  
    best_model_wts = copy.deepcopy(model.state_dict())
    best_acc = 0.0
@@ -63,7 +63,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          inputs = inputs.to(device)
          labels = labels.to(device)
          
-            
+
          optimizer.zero_grad()
          #class_correct = list(0. for i in range(2))
          #class_total = list(0. for i in range(2))
