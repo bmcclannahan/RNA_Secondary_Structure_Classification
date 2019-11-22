@@ -39,7 +39,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    curr_loss = 100000000000
    prev_loss = 10000000000000
    epoch = 0
-   iter_dict = {x: iter(dataloaders[x]) for x in phases) }
+   iter_dict = {x: iter(dataloaders[x]) for x in phases}
 
    while curr_loss < prev_loss:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a") 
