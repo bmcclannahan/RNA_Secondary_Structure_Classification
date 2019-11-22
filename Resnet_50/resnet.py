@@ -103,9 +103,9 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             prev_loss = curr_loss
             curr_loss = epoch_loss
 
-         print()
-         fp.close()
-         ft.close() 
+      print()
+      fp.close()
+      ft.close() 
     
    time_elapsed = time.time() - since
    print('Training complete in {:.of}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
