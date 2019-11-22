@@ -44,6 +44,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
       fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt","a")
       print('Epoch {}'.format(epoch))
+      print(time.ctime())
       print('-' * 20)
       
       for phase in ['train', 'val']:
@@ -107,7 +108,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
       ft.close() 
     
    time_elapsed = time.time() - since
-   print('Training complete in {:.of}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
+   print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
    print('Best value Acc: {:4f}'.format(best_acc))
  
    model.load_state_dict(best_model_wts)
