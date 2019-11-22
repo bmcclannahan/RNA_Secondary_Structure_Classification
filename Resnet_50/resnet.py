@@ -155,6 +155,8 @@ def make_weights_for_classes(images):
     return weight
 
 
+phases = ['train','val']
+
 model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=True)
 print(model_ft)
 
