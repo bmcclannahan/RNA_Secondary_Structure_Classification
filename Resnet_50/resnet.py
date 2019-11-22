@@ -8,7 +8,7 @@ import numpy as np
 import torchvision
 from torchvision import datasets, models, transforms
 
-
+import statistics
 import matplotlib.pyplot as plt
 import time
 import os
@@ -24,7 +24,7 @@ model_name = "resnet"
 num_classes = 2
 
 batch_size = 32
-epoch_size = 640
+epoch_size = {'train':640, 'val':5000}
 
 feature_extract = False
 
@@ -35,11 +35,11 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
  
    best_model_wts = copy.deepcopy(model.state_dict())
    best_acc = 0.0
-   curr_loss = 10
-   prev_loss = [100]*10
+   curr_loss = 0
+   prev_loss = [0]*10
    epoch = 0
 
-   while curr_loss < sum(prev_loss)/len(prev_loss):
+   while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) < .01:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
       fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt","a")
       print('Epoch {}'.format(epoch))
@@ -106,6 +106,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
       fp.close()
       ft.close()
       epoch += 1
+      print(statistics.stdev([curr_loss]+prev_loss))
     
    time_elapsed = time.time() - since
    print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
@@ -192,7 +193,7 @@ print('Weighting Classes')
 
 weights_dict = {x: make_weights_for_classes(image_datasets[x].imgs) for x in phases}
 weights_dict = {x: torch.DoubleTensor(weights_dict[x]) for x in phases}
-sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=epoch_size) for x in phases}
+sampler_dict = {x: torch.utils.data.sampler.WeightedRandomSampler(weights=weights_dict[x],num_samples=epoch_size[x]) for x in phases}
 
 print('Initializing Dataloader')
 
