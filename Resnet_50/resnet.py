@@ -24,7 +24,7 @@ model_name = "resnet"
 num_classes = 2
 
 batch_size = 32
-epoch_size = {'train':640, 'val':5000}
+epoch_size = {'train':32000, 'val':5000}
 
 feature_extract = False
 
