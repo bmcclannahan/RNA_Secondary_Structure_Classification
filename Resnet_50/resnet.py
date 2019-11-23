@@ -58,25 +58,25 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          running_corrects = 0
 
          #previous for loop location
-         inputs, labels = next(iter(dataloaders[phase]))
-         inputs = inputs.to(device)
-         labels = labels.to(device)
-         
+         for inputs, labels in dataloaders[phase]:
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+            
 
-         optimizer.zero_grad()
-         #class_correct = list(0. for i in range(2))
-         #class_total = list(0. for i in range(2))
-         with torch.set_grad_enabled(phase == 'train'):
-            outputs = model(inputs)
-            
-            loss = criterion(outputs, labels)       
-            _, preds = torch.max(outputs, 1)
-            
-            if phase == 'train':
-               loss.backward()
-               optimizer.step()
-         running_loss += loss.item() * inputs.size(0)
-         running_corrects += torch.sum(preds == labels.data)
+            optimizer.zero_grad()
+            #class_correct = list(0. for i in range(2))
+            #class_total = list(0. for i in range(2))
+            with torch.set_grad_enabled(phase == 'train'):
+               outputs = model(inputs)
+               
+               loss = criterion(outputs, labels)       
+               _, preds = torch.max(outputs, 1)
+               
+               if phase == 'train':
+                  loss.backward()
+                  optimizer.step()
+            running_loss += loss.item() * inputs.size(0)
+            running_corrects += torch.sum(preds == labels.data)
             
          epoch_loss = running_loss / batch_size
             
