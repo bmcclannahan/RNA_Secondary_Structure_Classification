@@ -24,7 +24,7 @@ model_name = "resnet"
 num_classes = 2
 
 batch_size = 32
-epoch_size = {'train':12800, 'val':3200}
+epoch_size = {'train':640, 'val':320}
 
 feature_extract = False
 
@@ -53,54 +53,57 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             model.train()
          else:
             model.eval()
-            
-         running_loss = 0.0
-         running_corrects = 0
+
+         if epoch % 10 == 0:
+            running_loss = 0.0
+            running_corrects = 0
 
          #previous for loop location
-         for inputs, labels in dataloaders[phase]:
-            inputs = inputs.to(device)
-            labels = labels.to(device)
-            
-
-            optimizer.zero_grad()
-            #class_correct = list(0. for i in range(2))
-            #class_total = list(0. for i in range(2))
-            with torch.set_grad_enabled(phase == 'train'):
-               outputs = model(inputs)
-               
-               loss = criterion(outputs, labels)       
-               _, preds = torch.max(outputs, 1)
-               
-               if phase == 'train':
-                  loss.backward()
-                  optimizer.step()
-            running_loss += loss.item() * inputs.size(0)
-            running_corrects += torch.sum(preds == labels.data)
-            
-         epoch_loss = running_loss / batch_size
-            
-         epoch_acc = running_corrects.double()/batch_size
+         inputs, labels = next(iter(dataloaders[phase]))
+         inputs = inputs.to(device)
+         labels = labels.to(device)
          
-         if phase == 'val':
-            fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
-         if phase == 'train':
-            ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
 
-         print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
-
-         per_epoch_model = copy.deepcopy(model.state_dict())
-         torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch'+str(epoch)+'.pt')
+         optimizer.zero_grad()
+         #class_correct = list(0. for i in range(2))
+         #class_total = list(0. for i in range(2))
+         with torch.set_grad_enabled(phase == 'train'):
+            outputs = model(inputs)
             
-         if phase == 'val' and epoch_acc > best_acc:
-            best_acc = epoch_acc
-            best_model_wts = copy.deepcopy(model.state_dict())
-         if phase == 'val':
-            val_acc_history.append(epoch_acc)
+            loss = criterion(outputs, labels)       
+            _, preds = torch.max(outputs, 1)
+            
+            if phase == 'train':
+               loss.backward()
+               optimizer.step()
+         running_loss += loss.item() * inputs.size(0)
+         running_corrects += torch.sum(preds == labels.data)
 
-         if phase == 'train':
-            prev_loss = [curr_loss] + prev_loss[:9]
-            curr_loss = epoch_loss
+          
+         if epoch % 10 == 0:
+            epoch_loss = running_loss / batch_size
+               
+            epoch_acc = running_corrects.double()/batch_size
+         
+            if phase == 'val':
+               fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
+            if phase == 'train':
+               ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
+
+            print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+
+            per_epoch_model = copy.deepcopy(model.state_dict())
+            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch'+str(epoch)+'.pt')
+
+            if phase == 'val' and epoch_acc > best_acc:
+               best_acc = epoch_acc
+               best_model_wts = copy.deepcopy(model.state_dict())
+            if phase == 'val':
+               val_acc_history.append(epoch_acc)
+
+            if phase == 'train':
+               prev_loss = [curr_loss] + prev_loss[:9]
+               curr_loss = epoch_loss
 
       print()
       fp.close()
