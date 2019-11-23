@@ -39,7 +39,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    prev_loss = [0]*10
    epoch = 0
 
-   while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .01:
+   while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .1:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
       fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt","a")
       print('Epoch {}'.format(epoch))
