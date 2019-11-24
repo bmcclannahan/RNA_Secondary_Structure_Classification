@@ -38,6 +38,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    curr_loss = 0
    prev_loss = [0]*10
    epoch = 0
+   count = 0
 
    while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .05:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
@@ -57,12 +58,13 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          if epoch % 10 == 0:
             running_loss = 0.0
             running_corrects = 0
+            count = 0
 
          #previous for loop location
          inputs, labels = next(iter(dataloaders[phase]))
          inputs = inputs.to(device)
          labels = labels.to(device)
-         
+         print("inputs length:",inputs)
 
          optimizer.zero_grad()
          #class_correct = list(0. for i in range(2))
@@ -79,9 +81,9 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          running_loss += loss.item() * inputs.size(0)
          running_corrects += torch.sum(preds == labels.data)
 
-         epoch_loss = running_loss / batch_size
+         epoch_loss = running_loss / (batch_size*count)
             
-         epoch_acc = running_corrects.double()/batch_size
+         epoch_acc = running_corrects.double()/(batch_size*count)
 
          if phase == 'train':
             prev_loss = [curr_loss] + prev_loss[:9]
