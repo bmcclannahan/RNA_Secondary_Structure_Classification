@@ -79,12 +79,15 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          running_loss += loss.item() * inputs.size(0)
          running_corrects += torch.sum(preds == labels.data)
 
-          
-         if epoch % 10 == 0:
-            epoch_loss = running_loss / batch_size
-               
-            epoch_acc = running_corrects.double()/batch_size
-         
+         epoch_loss = running_loss / batch_size
+            
+         epoch_acc = running_corrects.double()/batch_size
+
+         if phase == 'train':
+            prev_loss = [curr_loss] + prev_loss[:9]
+            curr_loss = epoch_loss
+
+         if epoch % 10 == 0:   
             if phase == 'val':
                fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
             if phase == 'train':
@@ -101,9 +104,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             if phase == 'val':
                val_acc_history.append(epoch_acc)
 
-            if phase == 'train':
-               prev_loss = [curr_loss] + prev_loss[:9]
-               curr_loss = epoch_loss
+         
 
       print()
       fp.close()
