@@ -24,7 +24,7 @@ model_name = "resnet"
 num_classes = 2
 
 batch_size = 32
-epoch_size = {'train':640, 'val':320}
+epoch_size = {'train':1280, 'val':640}
 
 feature_extract = False
 
@@ -104,13 +104,12 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             if phase == 'val':
                val_acc_history.append(epoch_acc)
 
-         
-
       print()
       fp.close()
       ft.close()
       epoch += 1
       print(statistics.stdev([curr_loss]+prev_loss))
+      print(curr_loss,prev_loss)
     
    time_elapsed = time.time() - since
    print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
