@@ -53,7 +53,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
         print('-' * 20)
 
         for phase in ['train', 'val']:
-            if epoch % epoch_validation_frequency == 0 and phase == 'val':
+            if epoch % epoch_validation_frequency != 0 and phase == 'val':
                 continue
 
             print(phase)
@@ -72,20 +72,20 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
                 inputs = inputs.to(device)
                 labels = labels.to(device)
 
-            optimizer.zero_grad()
-            #class_correct = list(0. for i in range(2))
-            #class_total = list(0. for i in range(2))
-            with torch.set_grad_enabled(phase == 'train'):
-                outputs = model(inputs)
+                optimizer.zero_grad()
+                #class_correct = list(0. for i in range(2))
+                #class_total = list(0. for i in range(2))
+                with torch.set_grad_enabled(phase == 'train'):
+                    outputs = model(inputs)
 
-                loss = criterion(outputs, labels)
-                _, preds = torch.max(outputs, 1)
+                    loss = criterion(outputs, labels)
+                    _, preds = torch.max(outputs, 1)
 
-                if phase == 'train':
-                    loss.backward()
-                    optimizer.step()
-            running_loss += loss.item() * inputs.size(0)
-            running_corrects += torch.sum(preds == labels.data)
+                    if phase == 'train':
+                        loss.backward()
+                        optimizer.step()
+                running_loss += loss.item() * inputs.size(0)
+                running_corrects += torch.sum(preds == labels.data)
 
             epoch_loss = running_loss / epoch_size[phase]
 
@@ -99,7 +99,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
                 fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
             if phase == 'train':
                 ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
-                fl.write(epoch_loss)
+                fl.write(str(epoch_loss))
 
             print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
