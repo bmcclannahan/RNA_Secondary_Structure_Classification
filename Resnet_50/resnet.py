@@ -99,7 +99,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
                 fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
             if phase == 'train':
                 ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
-                fl.write(str(epoch_loss))
+                fl.write(str(epoch_loss)+"\n")
 
             print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
