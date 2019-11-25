@@ -64,7 +64,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          inputs, labels = next(iter(dataloaders[phase]))
          inputs = inputs.to(device)
          labels = labels.to(device)
-         print("inputs length:",inputs)
+         print("inputs length:",len(inputs))
 
          optimizer.zero_grad()
          #class_correct = list(0. for i in range(2))
