@@ -38,7 +38,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    curr_loss = 0
    prev_loss = [0]*10
    epoch = 0
-   count = 0
+   count = 1
 
    while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .05:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
@@ -58,7 +58,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          if epoch % 10 == 0:
             running_loss = 0.0
             running_corrects = 0
-            count = 0
+            count = 1
 
          #previous for loop location
          inputs, labels = next(iter(dataloaders[phase]))
