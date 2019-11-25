@@ -61,6 +61,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             # count = 1
 
          #previous for loop location
+         print(epoch_size[phase]/batch_size)
          for i in range(epoch_size[phase]/batch_size):
             inputs, labels = next(iter(dataloaders[phase]))
             inputs = inputs.to(device)
