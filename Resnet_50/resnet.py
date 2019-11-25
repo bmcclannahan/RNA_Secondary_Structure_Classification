@@ -36,13 +36,15 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    best_model_wts = copy.deepcopy(model.state_dict())
    best_acc = 0.0
    curr_loss = 0
-   prev_loss = [0]*10
+   epoch_loss_count = 100
+   prev_loss = [0]*epoch_loss_count
    epoch = 0
    count = 1
 
    while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .01 or curr_loss > .1:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
       fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt","a")
+      fl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt","a")
       print('Epoch {}'.format(epoch))
       print(time.ctime())
       print('-' * 20)
@@ -93,6 +95,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
          if phase == 'train':
             ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
+            fl.write(epoch_loss)
 
          print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
