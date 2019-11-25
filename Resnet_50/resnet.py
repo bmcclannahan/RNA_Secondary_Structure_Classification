@@ -81,7 +81,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels.data)
 
-         epoch_loss = running_loss / (batch_size)
+         epoch_loss = running_loss / epoch_size[phase]#(batch_size)
             
          epoch_acc = running_corrects.double()/(batch_size)
 
