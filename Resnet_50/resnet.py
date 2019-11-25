@@ -83,7 +83,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 
          epoch_loss = running_loss / epoch_size[phase]#(batch_size)
             
-         epoch_acc = running_corrects.double()/(batch_size)
+         epoch_acc = running_corrects.double()/epoch_size[phase]#(batch_size)
 
          if phase == 'train':
             prev_loss = [curr_loss] + prev_loss[:9]
