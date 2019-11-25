@@ -40,7 +40,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
    epoch = 0
    count = 1
 
-   while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .05:
+   while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .01:
       ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
       fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt","a")
       print('Epoch {}'.format(epoch))
@@ -88,30 +88,27 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
          if phase == 'train':
             prev_loss = [curr_loss] + prev_loss[:9]
             curr_loss = epoch_loss
+ 
+         if phase == 'val':
+            fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
+         if phase == 'train':
+            ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
 
-         if epoch % 10 == 0:   
-            if phase == 'val':
-               fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
-            if phase == 'train':
-               ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
+         print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
-            print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+         per_epoch_model = copy.deepcopy(model.state_dict())
+         torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch'+str(epoch)+'.pt')
 
-            per_epoch_model = copy.deepcopy(model.state_dict())
-            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch'+str(epoch)+'.pt')
-
-            if phase == 'val' and epoch_acc > best_acc:
-               best_acc = epoch_acc
-               best_model_wts = copy.deepcopy(model.state_dict())
-            if phase == 'val':
-               val_acc_history.append(epoch_acc)
+         if phase == 'val' and epoch_acc > best_acc:
+            best_acc = epoch_acc
+            best_model_wts = copy.deepcopy(model.state_dict())
+         if phase == 'val':
+            val_acc_history.append(epoch_acc)
 
       print()
       fp.close()
       ft.close()
       epoch += 1
-      print(statistics.stdev([curr_loss]+prev_loss))
-      print(curr_loss,prev_loss)
     
    time_elapsed = time.time() - since
    print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
