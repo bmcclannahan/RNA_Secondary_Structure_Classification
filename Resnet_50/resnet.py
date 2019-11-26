@@ -59,8 +59,6 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
             if epoch % epoch_validation_frequency != 0 and phase == 'val':
                 continue
 
-            print(phase)
-
             if phase == 'train':
                 schedular.step()
                 model.train()
