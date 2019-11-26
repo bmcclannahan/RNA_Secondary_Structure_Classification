@@ -43,7 +43,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
     epoch = 0
 
     epoch_validation_frequency = 5
-    epoch_loss_stddev_termination_threshold = .05
+    epoch_loss_stddev_termination_threshold = .005
     epoch_loss_termination_threshold = .1
     
 
