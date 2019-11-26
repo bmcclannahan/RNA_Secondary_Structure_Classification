@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-loss_file_location = "/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt"
+loss_file_location = "utils/loss.txt"
 
 loss_file = open(loss_file_location,'r')
 
