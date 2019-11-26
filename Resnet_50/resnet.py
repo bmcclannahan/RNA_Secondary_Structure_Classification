@@ -24,7 +24,7 @@ model_name = "resnet"
 num_classes = 2
 
 batch_size = 32
-epoch_size = {'train': 640, 'val': 12800}
+epoch_size = {'train': 32, 'val': 12800}
 
 feature_extract = False
 
@@ -42,9 +42,12 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 
     epoch = 0
 
-    epoch_validation_frequency = 10
+    epoch_validation_frequency = 50
+    epoch_loss_stddev_termination_threshold = .05
+    epoch_loss_termination_threshold = .1
+    
 
-    while epoch < 10 or statistics.stdev([curr_loss]+prev_loss) > .01 or curr_loss > .1:
+    while epoch < epoch_loss_count or (statistics.stdev([curr_loss]+prev_loss) > epoch_loss_stddev_termination_threshold and epoch_loss_termination_threshold > .1):
         ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
         fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt", "a")
         fl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt", "a")
