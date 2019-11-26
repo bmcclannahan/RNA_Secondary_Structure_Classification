@@ -24,7 +24,7 @@ model_name = "resnet"
 num_classes = 2
 
 batch_size = 32
-epoch_size = {'train': 32, 'val': 12800}
+epoch_size = {'train': 320, 'val': 12800}
 
 feature_extract = False
 
@@ -37,12 +37,12 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
     best_acc = 0.0
 
     curr_loss = 0
-    epoch_loss_count = 100
+    epoch_loss_count = 10
     prev_loss = [0]*epoch_loss_count
 
     epoch = 0
 
-    epoch_validation_frequency = 50
+    epoch_validation_frequency = 5
     epoch_loss_stddev_termination_threshold = .05
     epoch_loss_termination_threshold = .1
     
