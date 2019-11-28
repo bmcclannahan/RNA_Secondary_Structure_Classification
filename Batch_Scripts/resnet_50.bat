@@ -2,7 +2,7 @@
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 1
-#SBATCH --mem=8GB
+#SBATCH --mem=16GB
 #SBATCH -p gpu
 #SBATCH --gres="gpu:k40:1"
 #SBATCH -J RNA-Resnet50
@@ -23,7 +23,7 @@ sshfs b523m844@deadpool.ittc.ku.edu:/data/mount_data /scratch/b523m844/RNA_Secon
 
 python ~/RNA_Secondary_Structure_Classification/Resnet_50/resnet.py
 
-cp /scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt ./utils/loss.txt
+cp /scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt ~/RNA_Secondary_Structure_Classification/utils/loss.txt
 
 cd /scratch/b523m844/RNA_Secondary_Structure_Classification
 fusermount -u data

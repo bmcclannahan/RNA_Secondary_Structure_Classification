@@ -45,9 +45,11 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
     epoch_validation_frequency = 5
     epoch_loss_stddev_termination_threshold = .005
     epoch_loss_termination_threshold = .1
+    epoch_count_termination_thresholid = 200
     
 
-    while epoch < epoch_loss_count or (statistics.stdev([curr_loss]+prev_loss) > epoch_loss_stddev_termination_threshold and curr_loss > epoch_loss_termination_threshold):
+    while epoch < epoch_loss_count or (statistics.stdev([curr_loss]+prev_loss) > epoch_loss_stddev_termination_threshold 
+        and curr_loss > epoch_loss_termination_threshold and epoch <= epoch_count_termination_thresholid):
         ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
         fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt", "a")
         fl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt", "a")
