@@ -42,7 +42,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 
     epoch = 0
 
-    epoch_validation_frequency = 5
+    epoch_validation_frequency = 10
     epoch_loss_stddev_termination_threshold = .005
     epoch_loss_termination_threshold = .1
     epoch_count_termination_thresholid = 200
@@ -126,7 +126,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 
     model.load_state_dict(best_model_wts)
 
-    torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/checkpoints/weight.pt')
+    torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/checkpoints/best.pt')
     return model, val_acc_history
 
 
