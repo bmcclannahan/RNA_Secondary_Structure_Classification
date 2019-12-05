@@ -31,7 +31,7 @@ input_size = 224
 batch_size = 32
 num_classes = 2
 feature_extract = False
-data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/data/rna_classification"
+data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets"
 
 data_transforms = {
      'test': transforms.Compose([transforms.ToTensor(),
@@ -46,7 +46,7 @@ dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size
 
 
 def test_model(model,dataloaders):
-    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch160.pt") 
+    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch200.pt") 
     model.load_state_dict(best_model_wts)
     model.eval()
     
