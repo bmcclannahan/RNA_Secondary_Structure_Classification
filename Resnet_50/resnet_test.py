@@ -26,23 +26,16 @@ class ImageFolderWithPaths(datasets.ImageFolder):
          tuple_with_path = (original_tuple + (path,))
          return tuple_with_path
 
-
-
-
 input_size = 224
 
 batch_size = 32
 num_classes = 2
 feature_extract = False
-data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/Big_Training_Set"
+data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/data/rna_classification"
 
 data_transforms = {
-     'test': transforms.Compose([
-      transforms.RandomResizedCrop(input_size),
-      transforms.RandomHorizontalFlip(),
-      transforms.ToTensor(),
-      transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    ])
+     'test': transforms.Compose([transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
     }
 
 print('Initializing dataset and dataloader')
@@ -53,7 +46,7 @@ dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size
 
 
 def test_model(model,dataloaders):
-    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch99.pt") 
+    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch160.pt") 
     model.load_state_dict(best_model_wts)
     model.eval()
     
@@ -97,8 +90,8 @@ def test_model(model,dataloaders):
     fs.close()
     
     for i in range(2):
-        print('Accuracy of %5s : %2d %%' % (
-        str(i), 100 * class_correct[i] / class_total[i])) 
+        print('Accuracy of %5s : %2d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
+    print('Total accuracy is %2d %%' % (100 * sum(class_correct[i]) / sum(class_total[i])))
   
 
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained = False):
@@ -123,12 +116,15 @@ def set_parameter_requires_grad(model, feature_extracting):
         for param in model.parameters():
             param.requires_grad = False 
 
-model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=False)
+print("Loading Model")
 
+model_ft, input_size = initialize_model(model_name, num_classes, feature_extract, use_pretrained=False)
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 model_ft = model_ft.to(device)
+
+print("Testing Model")
 
 test_model(model_ft, dataloaders_dict)
 
