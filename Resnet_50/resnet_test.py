@@ -46,7 +46,7 @@ dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size
 
 
 def test_model(model,dataloaders):
-    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch200.pt") 
+    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch120.pt") 
     model.load_state_dict(best_model_wts)
     model.eval()
     
@@ -90,8 +90,8 @@ def test_model(model,dataloaders):
     fs.close()
     
     for i in range(2):
-        print('Accuracy of %5s : %2d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
-    print('Total accuracy is %2d %%' % (100 * sum(class_correct) / sum(class_total)))
+        print('Accuracy of %5s : %3d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
+    print('Total accuracy is %3d %%' % (100 * sum(class_correct) / sum(class_total)))
   
 
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained = False):
