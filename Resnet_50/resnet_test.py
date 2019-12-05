@@ -91,7 +91,7 @@ def test_model(model,dataloaders):
     
     for i in range(2):
         print('Accuracy of %5s : %2d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
-    print('Total accuracy is %2d %%' % (100 * sum(class_correct[i]) / sum(class_total[i])))
+    print('Total accuracy is %2d %%' % (100 * sum(class_correct) / sum(class_total)))
   
 
 def initialize_model(model_name, num_classes, feature_extract, use_pretrained = False):
