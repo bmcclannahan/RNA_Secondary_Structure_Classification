@@ -159,7 +159,7 @@ def make_weights_for_classes(images):
     for item in images:
         count[item[1]] += 1
     weight_per_class = [0.] * nclasses
-    class_weight = [.75, .25]
+    class_weight = [.5, .5]
     N = float(sum(count))
     for i in range(nclasses):
         weight_per_class[i] = N*class_weight[i]/float(count[i])
