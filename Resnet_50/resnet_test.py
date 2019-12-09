@@ -46,7 +46,7 @@ dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size
 
 
 def test_model(model,dataloaders):
-    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch120.pt") 
+    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/checkpoints/best.pt") 
     model.load_state_dict(best_model_wts)
     model.eval()
     
