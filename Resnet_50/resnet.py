@@ -37,14 +37,14 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
     best_acc = 0.0
 
     curr_loss = 0
-    epoch_loss_count = 10
+    epoch_loss_count = 200
     prev_loss = [0]*epoch_loss_count
 
     epoch = 0
 
     epoch_validation_frequency = 50
     epoch_loss_stddev_termination_threshold = .005
-    epoch_loss_termination_threshold = .1
+    epoch_loss_termination_threshold = .01
     epoch_count_termination_thresholid = 1000
     
 
@@ -58,7 +58,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
         print('-' * 20)
 
         for phase in ['train', 'val']:
-            if epoch % epoch_validation_frequency != 0 and phase == 'val':
+            if epoch % epoch_validation_frequency != 0 and epoch != 0 and phase == 'val':
                 continue
 
             if phase == 'train':
@@ -233,9 +233,9 @@ else:
             print("\t", name)
 
 
-optimizer_ft = optim.SGD(params_to_update, lr=0.02, momentum=0.9)
+optimizer_ft = optim.SGD(params_to_update, lr=0.01, momentum=0.9)
 
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=100, gamma=0.5)
+exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=50, gamma=0.5)
 
 
 criterion = nn.CrossEntropyLoss()
