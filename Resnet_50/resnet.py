@@ -233,9 +233,9 @@ else:
             print("\t", name)
 
 
-optimizer_ft = optim.SGD(params_to_update, lr=0.01, momentum=0.9)
+optimizer_ft = optim.SGD(params_to_update, lr=0.02, momentum=0.9)
 
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=70, gamma=0.1)
+exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=100, gamma=0.5)
 
 
 criterion = nn.CrossEntropyLoss()
