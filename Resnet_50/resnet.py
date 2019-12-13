@@ -17,7 +17,7 @@ print("PyTorch Version: ", torch.__version__)
 print("Torchvision Version: ", torchvision.__version__)
 
 
-data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/data/rna_classification"
+data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets"
 
 model_name = "resnet"
 
@@ -42,10 +42,10 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 
     epoch = 0
 
-    epoch_validation_frequency = 10
+    epoch_validation_frequency = 50
     epoch_loss_stddev_termination_threshold = .005
     epoch_loss_termination_threshold = .1
-    epoch_count_termination_thresholid = 200
+    epoch_count_termination_thresholid = 1000
     
 
     while epoch < epoch_loss_count or (statistics.stdev([curr_loss]+prev_loss) > epoch_loss_stddev_termination_threshold 
