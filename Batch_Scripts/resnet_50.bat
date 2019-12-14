@@ -21,4 +21,5 @@ source activate
 
 python ~/RNA_Secondary_Structure_Classification/Resnet_50/resnet.py
 
-cp /scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt ~/RNA_Secondary_Structure_Classification/utils/loss.txt
+cp /scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_loss.txt ~/RNA_Secondary_Structure_Classification/utils/train_loss.txt
+cp /scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_loss.txt ~/RNA_Secondary_Structure_Classification/utils/val_loss.txt

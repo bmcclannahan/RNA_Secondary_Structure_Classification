@@ -52,7 +52,8 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
         and curr_loss > epoch_loss_termination_threshold and epoch <= epoch_count_termination_thresholid):
         ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
         fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt", "a")
-        fl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/loss.txt", "a")
+        ftl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_loss.txt", "a")
+        fvl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_loss.txt", "a")
         print('Epoch {}'.format(epoch))
         print(time.ctime())
         print('-' * 20)
@@ -100,9 +101,12 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, is_inceptio
 
             if phase == 'val':
                 fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
+                #write the validation loss enough times so it can be graphed over the train loss
+                for i in range(epoch_validation_frequency):
+                    fvl.write(str(epoch_loss)+"\n")
             if phase == 'train':
                 ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
-                fl.write(str(epoch_loss)+"\n")
+                ftl.write(str(epoch_loss)+"\n")
 
             print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
