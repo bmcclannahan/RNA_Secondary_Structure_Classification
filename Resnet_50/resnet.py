@@ -239,7 +239,7 @@ else:
 
 optimizer_ft = optim.SGD(params_to_update, lr=0.01, momentum=0.9)
 
-exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=50, gamma=0.5)
+exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=50, gamma=0.25)
 
 
 criterion = nn.CrossEntropyLoss()
