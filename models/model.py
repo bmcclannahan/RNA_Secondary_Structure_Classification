@@ -152,7 +152,7 @@ def make_weights_for_classes(images):
 def build_model(initial_model):
     phases = ['train', 'val']
 
-    model_ft, input_size = initialize_model(num_classes, feature_extract, use_pretrained=True)
+    model_ft, input_size = initialize_model()
     print(model_ft)
 
     print('Initializing Dataset')
