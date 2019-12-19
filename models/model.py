@@ -149,7 +149,7 @@ def make_weights_for_classes(images):
         weight[idx] = weight_per_class[val[1]]
     return weight
 
-def build_model(initialize_model):
+def build_model(initializex_model):
     phases = ['train', 'val']
 
     model_ft, input_size = initialize_model()
@@ -169,7 +169,7 @@ def build_model(initialize_model):
 
     weights = make_weights_for_classes(image_datasets['train'].imgs)
     weights = torch.DoubleTensor(weights)
-    sampler_train = torch.utils.data.sampler.WeightedRandomSampler(weights=weights, num_samples=epoch_size[x])
+    sampler_train = torch.utils.data.sampler.WeightedRandomSampler(weights=weights, num_samples=epoch_size)
 
     print('Initializing Dataloader')
 
