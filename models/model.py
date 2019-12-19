@@ -149,7 +149,7 @@ def make_weights_for_classes(images):
         weight[idx] = weight_per_class[val[1]]
     return weight
 
-def build_model(initial_model):
+def build_model(initialize_model):
     phases = ['train', 'val']
 
     model_ft, input_size = initialize_model()
