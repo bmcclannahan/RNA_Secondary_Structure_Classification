@@ -183,7 +183,7 @@ def build_model(model):
 
     weights = make_weights_for_classes(image_datasets['train'].imgs)
     weights = torch.DoubleTensor(weights)
-    sampler_train = torch.utils.data.sampler.WeightedRandomSampler(weights=weights, num_samples=epoch_size)
+    sampler_train = torch.utils.data.sampler.WeightedRandomSampler(weights=weights, num_samples=epoch_size['train'])
 
     print('Initializing Dataloader')
 
