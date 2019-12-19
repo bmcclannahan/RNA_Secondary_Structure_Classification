@@ -21,4 +21,4 @@ def initialize_model():
 model_ft, dataloaders_dict, criterion, optimizer_ft, exp_lr_scheduler, device = build_model(initialize_model)
 
 model_ft, hist = train_model(model_ft, dataloaders_dict, criterion,
-                             optimizer_ft, exp_lr_scheduler, device=device is_inception=False)
+                             optimizer_ft, exp_lr_scheduler, device=device, is_inception=False)
