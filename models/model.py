@@ -128,6 +128,20 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, is_
     return model, val_acc_history
 
 
+def initialize_model(model):
+    num_classes = 2
+    feature_extract = False
+    use_pretrained=True
+    model_ft = None
+    input_size = 0
+    model_ft = model(pretrained=use_pretrained)
+    set_parameter_requires_grad(model_ft, feature_extract)
+    num_ftrs = model_ft.fc.in_features
+    model_ft.fc = nn.Linear(num_ftrs, num_classes)
+    input_size = 224
+
+    return model_ft, input_size
+
 def set_parameter_requires_grad(model, feature_extracting):
     if feature_extracting:
         for param in model.parameters():
@@ -149,10 +163,10 @@ def make_weights_for_classes(images):
         weight[idx] = weight_per_class[val[1]]
     return weight
 
-def build_model(initializex_model):
+def build_model(model):
     phases = ['train', 'val']
 
-    model_ft, input_size = initialize_model()
+    model_ft, input_size = initialize_model(model)
     print(model_ft)
 
     print('Initializing Dataset')
