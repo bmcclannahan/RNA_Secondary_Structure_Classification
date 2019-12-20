@@ -20,7 +20,7 @@ print("Torchvision Version: ", torchvision.__version__)
 data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets"
 
 batch_size = 32
-epoch_size = {'train': 320, 'val': 12800}
+iteration_size = {'train': 320, 'val': 12800}
 
 class ImageFolderWithPaths(datasets.ImageFolder):
      def __getitem__(self, index):
@@ -41,29 +41,29 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
     best_acc = 0.0
 
     curr_loss = 0
-    epoch_loss_count = 200
-    prev_loss = [0]*epoch_loss_count
+    iteration_loss_count = 200
+    prev_loss = [0]*iteration_loss_count
 
-    epoch = 0
+    iteration = 1
 
-    epoch_validation_frequency = 50
-    epoch_loss_stddev_termination_threshold = .005
-    epoch_loss_termination_threshold = .01
-    epoch_count_termination_thresholid = 1000
+    iteration_validation_frequency = 50
+    iteration_loss_stddev_termination_threshold = .005
+    iteration_loss_termination_threshold = .01
+    iteration_count_termination_thresholid = 1000
     
 
-    while epoch < epoch_loss_count or (statistics.stdev([curr_loss]+prev_loss) > epoch_loss_stddev_termination_threshold 
-        and curr_loss > epoch_loss_termination_threshold and epoch <= epoch_count_termination_thresholid):
+    while iteration < iteration_loss_count or (statistics.stdev([curr_loss]+prev_loss) > iteration_loss_stddev_termination_threshold 
+        and curr_loss > iteration_loss_termination_threshold and iteration <= iteration_count_termination_thresholid):
         ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/train_result.txt", "a")
         fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/val_result.txt", "a")
         ftl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/train_loss.txt", "a")
         fvl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/val_loss.txt", "a")
-        print('Epoch {}'.format(epoch))
+        print('Iteration {}'.format(iteration))
         print(time.ctime())
         print('-' * 20)
 
         for phase in ['train', 'val']:
-            if epoch % epoch_validation_frequency != 0 and epoch != 0 and phase == 'val':
+            if iteration % iteration_validation_frequency != 0 and iteration != 0 and phase == 'val':
                 continue
 
             if phase == 'train':
@@ -79,7 +79,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
             class_total = list(0. for i in range(2))
 
             if phase == 'train':
-                for i in range(int(epoch_size[phase]/batch_size)):
+                for i in range(int(iteration_size[phase]/batch_size)):
                     inputs, labels = next(iter(dataloaders[phase]))
                     inputs = inputs.to(device)
                     labels = labels.to(device)
@@ -116,43 +116,43 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
                         class_total[labels[i]] += 1
 
             if phase == 'train':
-                epoch_loss = running_loss / epoch_size['train']
-                epoch_acc = running_corrects.double() / epoch_size['train'] 
+                iteration_loss = running_loss / iteration_size['train']
+                iteration_acc = running_corrects.double() / iteration_size['train'] 
             else:
-                epoch_loss = running_loss / len(dataloaders[phase].dataset)
+                iteration_loss = running_loss / len(dataloaders[phase].dataset)
                 accuracy = list(0. for i in range(2))
                 for i in range(len(accuracy)):
                     accuracy[i] = class_correct[i]/class_total[i]
-                epoch_acc = sum(accuracy)/len(accuracy)
+                iteration_acc = sum(accuracy)/len(accuracy)
 
             if phase == 'train':
                 prev_loss = [curr_loss] + prev_loss[:9]
-                curr_loss = epoch_loss
+                curr_loss = iteration_loss
 
             if phase == 'val':
-                fp.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
+                fp.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
                 #write the validation loss enough times so it can be graphed over the train loss
-                for i in range(epoch_validation_frequency):
-                    fvl.write(str(epoch_loss)+"\n")
+                for i in range(iteration_validation_frequency):
+                    fvl.write(str(iteration_loss)+"\n")
             if phase == 'train':
-                ft.write('{: .4f} and {: .4f}\n'.format(epoch_loss, epoch_acc))
-                ftl.write(str(epoch_loss)+"\n")
+                ft.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
+                ftl.write(str(iteration_loss)+"\n")
 
-            print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
+            print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, iteration_loss, iteration_acc))
 
-            per_epoch_model = copy.deepcopy(model.state_dict())
-            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/' + model_name + '/chekers/iter'+str(epoch)+'.pt')
+            per_iteration_model = copy.deepcopy(model.state_dict())
+            torch.save(per_iteration_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/' + model_name + '/chekers/iter'+str(iteration)+'.pt')
 
-            if phase == 'val' and epoch_acc > best_acc:
-                best_acc = epoch_acc
+            if phase == 'val' and iteration_acc > best_acc:
+                best_acc = iteration_acc
                 best_model_wts = copy.deepcopy(model.state_dict())
             if phase == 'val':
-                val_acc_history.append(epoch_acc)
+                val_acc_history.append(iteration_acc)
 
         print()
         fp.close()
         ft.close()
-        epoch += 1
+        iteration += 1
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
@@ -223,7 +223,7 @@ def build_model(model,model_name):
 
     weights = make_weights_for_classes(image_datasets['train'].imgs)
     weights = torch.DoubleTensor(weights)
-    sampler_train = torch.utils.data.sampler.WeightedRandomSampler(weights=weights, num_samples=epoch_size['train'])
+    sampler_train = torch.utils.data.sampler.WeightedRandomSampler(weights=weights, num_samples=iteration_size['train'])
 
     print('Initializing Dataloader')
 
