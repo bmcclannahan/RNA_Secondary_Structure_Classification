@@ -108,9 +108,6 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
                     
                         loss = criterion(outputs, labels)       
                         _, preds = torch.max(outputs, 1)
-                        
-                        loss.backward()
-                        optimizer.step()
                     
                     running_loss += loss.item() * inputs.size(0)
                     running_corrects += torch.sum(preds == labels.data)
