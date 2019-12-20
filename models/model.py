@@ -44,7 +44,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
     epoch_loss_count = 200
     prev_loss = [0]*epoch_loss_count
 
-    epoch = 1
+    epoch = 0
 
     epoch_validation_frequency = 50
     epoch_loss_stddev_termination_threshold = .005
