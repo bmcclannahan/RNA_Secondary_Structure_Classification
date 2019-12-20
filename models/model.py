@@ -44,7 +44,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
     epoch_loss_count = 200
     prev_loss = [0]*epoch_loss_count
 
-    epoch = 0
+    epoch = 1
 
     epoch_validation_frequency = 50
     epoch_loss_stddev_termination_threshold = .005
@@ -75,29 +75,58 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
             running_loss = 0.0
             running_corrects = 0
 
-            for i in range(int(epoch_size[phase]/batch_size)):
-                inputs, labels = next(iter(dataloaders[phase]))
-                inputs = inputs.to(device)
-                labels = labels.to(device)
+            if phase == 'train':
+                for i in range(int(epoch_size[phase]/batch_size)):
+                    inputs, labels = next(iter(dataloaders[phase]))
+                    inputs = inputs.to(device)
+                    labels = labels.to(device)
 
-                optimizer.zero_grad()
-                #class_correct = list(0. for i in range(2))
-                #class_total = list(0. for i in range(2))
-                with torch.set_grad_enabled(phase == 'train'):
-                    outputs = model(inputs)
+                    optimizer.zero_grad()
+                    class_correct = list(0. for i in range(2))
+                    class_total = list(0. for i in range(2))
+                    with torch.set_grad_enabled(phase == 'train'):
+                        outputs = model(inputs)
 
-                    loss = criterion(outputs, labels)
-                    _, preds = torch.max(outputs, 1)
+                        loss = criterion(outputs, labels)
+                        _, preds = torch.max(outputs, 1)
 
-                    if phase == 'train':
                         loss.backward()
                         optimizer.step()
-                running_loss += loss.item() * inputs.size(0)
-                running_corrects += torch.sum(preds == labels.data)
+                    running_loss += loss.item() * inputs.size(0)
+                    running_corrects += torch.sum(preds == labels.data)
+            if phase == 'val':
+                for inputs, labels in dataloaders[phase]:
+                    inputs = inputs.to(device)
+                    labels = labels.to(device)
+                
+                    
+                    optimizer.zero_grad()
+                    class_correct = list(0. for i in range(2))
+                    class_total = list(0. for i in range(2))
+                    with torch.set_grad_enabled(phase == 'train'):
+                        outputs = model(inputs)
+                    
+                        loss = criterion(outputs, labels)       
+                        _, preds = torch.max(outputs, 1)
+                        
+                        loss.backward()
+                        optimizer.step()
+                    
+                    running_loss += loss.item() * inputs.size(0)
+                    running_corrects += torch.sum(preds == labels.data)
+                    for i in range(len(preds)):
+                        class_correct[labels[i]] += (labels[i] == preds[i])
+                        class_total[labels[i]] += 1
 
-            epoch_loss = running_loss / epoch_size[phase]
-
-            epoch_acc = running_corrects.double()/epoch_size[phase]
+            if phase == 'train':
+                epoch_loss = running_loss / epoch_size['train']
+                epoch_acc = running_corrects.double() / epoch_size['train'] 
+            else:
+                epoch_loss = running_loss / len(dataloaders[phase].dataset)
+                accuracy = list(0. for i in range(2))
+                for i in range(len(accuracy)):
+                    accuracy[i] = class_correct[i]/class_total[i]
+                epoch_acc = sum(accuracy)/len(accuracy)
 
             if phase == 'train':
                 prev_loss = [curr_loss] + prev_loss[:9]
@@ -138,7 +167,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
     return model, val_acc_history
 
 
-def initialize_model(model):
+def initialize_model(model,new_fc):
     num_classes = 2
     feature_extract = False
     use_pretrained=True
@@ -146,8 +175,9 @@ def initialize_model(model):
     input_size = 0
     model_ft = model(pretrained=use_pretrained)
     set_parameter_requires_grad(model_ft, feature_extract)
-    num_ftrs = model_ft.fc.in_features
-    model_ft.fc = nn.Linear(num_ftrs, num_classes)
+    if new_fc:
+        num_ftrs = model_ft.fc.in_features
+        model_ft.fc = nn.Linear(num_ftrs, num_classes)
     input_size = 224
 
     return model_ft, input_size
@@ -173,10 +203,10 @@ def make_weights_for_classes(images):
         weight[idx] = weight_per_class[val[1]]
     return weight
 
-def build_model(model):
+def build_model(model, new_fc = True):
     phases = ['train', 'val']
 
-    model_ft, input_size = initialize_model(model)
+    model_ft, input_size = initialize_model(model,new_fc)
     print(model_ft)
 
     print('Initializing Dataset')
@@ -232,7 +262,7 @@ def _test_model(model,dataloaders, device, model_name):
     model.load_state_dict(best_model_wts)
     model.eval()
     
-    fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "predicionhval.txt", "a")
+    fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/predictionhval.txt", "a")
     class_correct = list(0. for i in range(2))
     class_total = list(0. for i in range(2))
 
@@ -299,3 +329,5 @@ def test_model(model, model_name):
     print("Testing Model")
 
     _test_model(model_ft, dataloaders_dict, device, model_name)
+
+    print("Finished testing " + model_name)
