@@ -112,7 +112,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
                     running_loss += loss.item() * inputs.size(0)
                     running_corrects += torch.sum(preds == labels.data)
                     for i in range(len(labels)):
-                        class_correct[labels[i]] += (labels[i] == preds[i])
+                        class_correct[labels[i]] += int(labels[i] == preds[i])
                         class_total[labels[i]] += 1
 
             if phase == 'train':
