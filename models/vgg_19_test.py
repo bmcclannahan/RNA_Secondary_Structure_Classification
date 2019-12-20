@@ -2,6 +2,6 @@ from torchvision import models
 
 from model import test_model
 
-model_name = "resnet_50"
+model_name = "vgg_19"
 
-test_model(models.resnet50,model_name)
+test_model(models.vgg19,model_name)
