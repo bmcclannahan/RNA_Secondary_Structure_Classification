@@ -7,7 +7,7 @@
 #SBATCH --gres="gpu:k40:1"
 #SBATCH -J RNA-Resnet50
 
-model="resnet_50"
+model="resnet_101"
 
 module load Python/3.5.2
 module load slurm-torque/14.11.8
