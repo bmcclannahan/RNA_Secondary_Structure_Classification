@@ -7,8 +7,6 @@
 #SBATCH --gres="gpu:k40:1"
 #SBATCH -J RNA-Resnet50
 
-model="resnet_101"
-
 module load Python/3.5.2
 module load slurm-torque/14.11.8
 module load CUDA/9.0.176
@@ -18,6 +16,8 @@ cd /nfs/apps/7/arch/generic/Python/3.5.2/bin
 pyvenv /scratch/b523m844/python352/bin/
 cd /scratch/b523m844/python352/bin/
 source activate
+
+model="resnet_101"
 
 rm /scratch/b523m844/RNA_Secondary_Structure_Classification/$model/train_loss.txt
 rm /scratch/b523m844/RNA_Secondary_Structure_Classification/$model/val_loss.txt
