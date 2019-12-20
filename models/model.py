@@ -74,6 +74,9 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
 
             running_loss = 0.0
             running_corrects = 0
+            
+            class_correct = list(0. for i in range(2))
+            class_total = list(0. for i in range(2))
 
             if phase == 'train':
                 for i in range(int(epoch_size[phase]/batch_size)):
@@ -82,8 +85,8 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
                     labels = labels.to(device)
 
                     optimizer.zero_grad()
-                    class_correct = list(0. for i in range(2))
-                    class_total = list(0. for i in range(2))
+                    # class_correct = list(0. for i in range(2))
+                    # class_total = list(0. for i in range(2))
                     with torch.set_grad_enabled(phase == 'train'):
                         outputs = model(inputs)
 
@@ -98,11 +101,8 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
                 for inputs, labels in dataloaders[phase]:
                     inputs = inputs.to(device)
                     labels = labels.to(device)
-                
                     
                     optimizer.zero_grad()
-                    class_correct = list(0. for i in range(2))
-                    class_total = list(0. for i in range(2))
                     with torch.set_grad_enabled(phase == 'train'):
                         outputs = model(inputs)
                     
@@ -111,7 +111,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
                     
                     running_loss += loss.item() * inputs.size(0)
                     running_corrects += torch.sum(preds == labels.data)
-                    for i in range(len(preds)):
+                    for i in range(len(labels)):
                         class_correct[labels[i]] += (labels[i] == preds[i])
                         class_total[labels[i]] += 1
 
