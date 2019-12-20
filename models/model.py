@@ -22,8 +22,18 @@ data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datas
 batch_size = 32
 epoch_size = {'train': 320, 'val': 12800}
 
+class ImageFolderWithPaths(datasets.ImageFolder):
+     def __getitem__(self, index):
+         # this is what ImageFolder normally returns 
+         original_tuple = super(ImageFolderWithPaths, self).__getitem__(index)
+         # the image file path
+         path = self.imgs[index][0]
+         # make a new tuple that includes original and the pat
+         tuple_with_path = (original_tuple + (path,))
+         return tuple_with_path
 
-def train_model(model, dataloaders, criterion, optimizer, schedular, device, is_inception=False):
+
+def train_model(model, dataloaders, criterion, optimizer, schedular, device, model_name, is_inception=False):
     since = time.time()
     val_acc_history = []
 
@@ -44,10 +54,10 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, is_
 
     while epoch < epoch_loss_count or (statistics.stdev([curr_loss]+prev_loss) > epoch_loss_stddev_termination_threshold 
         and curr_loss > epoch_loss_termination_threshold and epoch <= epoch_count_termination_thresholid):
-        ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_result.txt", "a")
-        fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_result.txt", "a")
-        ftl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/train_loss.txt", "a")
-        fvl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/val_loss.txt", "a")
+        ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/train_result.txt", "a")
+        fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/val_result.txt", "a")
+        ftl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/train_loss.txt", "a")
+        fvl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/val_loss.txt", "a")
         print('Epoch {}'.format(epoch))
         print(time.ctime())
         print('-' * 20)
@@ -105,7 +115,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, is_
             print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, epoch_loss, epoch_acc))
 
             per_epoch_model = copy.deepcopy(model.state_dict())
-            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/chekers/epoch'+str(epoch)+'.pt')
+            torch.save(per_epoch_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/' + model_name + '/chekers/iter'+str(epoch)+'.pt')
 
             if phase == 'val' and epoch_acc > best_acc:
                 best_acc = epoch_acc
@@ -124,7 +134,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, is_
 
     model.load_state_dict(best_model_wts)
 
-    torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/resnet/checkpoints/best.pt')
+    torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/' + model_name + '/checkpoints/best.pt')
     return model, val_acc_history
 
 
@@ -216,3 +226,76 @@ def build_model(model):
     criterion = nn.CrossEntropyLoss()
 
     return model_ft, dataloaders_dict, criterion, optimizer_ft, exp_lr_scheduler, device
+
+def _test_model(model,dataloaders, device, model_name):
+    best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "/checkpoints/best.pt") 
+    model.load_state_dict(best_model_wts)
+    model.eval()
+    
+    fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + model_name + "predicionhval.txt", "a")
+    class_correct = list(0. for i in range(2))
+    class_total = list(0. for i in range(2))
+
+    for inputs, labels, path in dataloaders['test']:
+        
+    
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+        outputs = model(inputs)
+        _,preds = torch.max(outputs,1)
+        c = (preds == labels).squeeze()
+        path_list = list(path)
+        l = 0
+        for item in path_list:
+            pt = str(item)
+            labs = labels[l]
+            lb = labs.item()
+            k = preds[l]
+            pn = k.item()
+            sn = str(pn)
+            ls = str(lb)
+            op = outputs[l]
+            opn = op.cpu().detach().numpy()
+            a1 = str(opn[0])
+            a2 = str(opn[1])
+
+            
+            l = l + 1
+            fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
+            
+        for i in range(4):
+            label = labels[i]
+            class_correct[label] += c[i].item()
+            class_total[label] += 1
+        
+    fs.close()
+    
+    for i in range(2):
+        print('Accuracy of %5s : %3d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
+    print('Total accuracy is %3d %%' % (100 * sum(class_correct) / sum(class_total)))
+
+def test_model(model, model_name):
+    data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets"
+
+    data_transforms = {
+        'test': transforms.Compose([transforms.ToTensor(),
+                        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+        }
+
+    print('Initializing dataset and dataloader')
+
+    image_datasets = {x: ImageFolderWithPaths(os.path.join(data_dir,x), data_transforms[x]) for x in ['test']}
+
+    dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=batch_size, shuffle=True, num_workers=4) for x in ['test']} 
+
+    print("Loading Model")
+
+    model_ft, input_size = initialize_model(model)
+
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+    model_ft = model_ft.to(device)
+
+    print("Testing Model")
+
+    _test_model(model_ft, dataloaders_dict, device, model_name)
