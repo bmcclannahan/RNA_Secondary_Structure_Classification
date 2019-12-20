@@ -164,7 +164,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
     return model, val_acc_history
 
 
-def initialize_model(model,new_fc):
+def initialize_model(model,model_name):
     num_classes = 2
     feature_extract = False
     use_pretrained=True
@@ -172,9 +172,12 @@ def initialize_model(model,new_fc):
     input_size = 0
     model_ft = model(pretrained=use_pretrained)
     set_parameter_requires_grad(model_ft, feature_extract)
-    if new_fc:
+    if model_name.split('_')[0] == 'resnet':
         num_ftrs = model_ft.fc.in_features
         model_ft.fc = nn.Linear(num_ftrs, num_classes)
+    elif model_name.split('_')[0] == 'vgg':
+        num_ftrs = model_ft.classifier[-1].in_features
+        model_ft.classifier[-1] = nn.Linear(num_ftrs, num_classes)
     input_size = 224
 
     return model_ft, input_size
@@ -200,10 +203,10 @@ def make_weights_for_classes(images):
         weight[idx] = weight_per_class[val[1]]
     return weight
 
-def build_model(model, new_fc = True):
+def build_model(model,model_name):
     phases = ['train', 'val']
 
-    model_ft, input_size = initialize_model(model,new_fc)
+    model_ft, input_size = initialize_model(model,model_name)
     print(model_ft)
 
     print('Initializing Dataset')
