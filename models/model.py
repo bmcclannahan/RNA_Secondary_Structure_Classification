@@ -65,6 +65,8 @@ class Model:
 
         best_model_wts = copy.deepcopy(self.model.state_dict())
         best_acc = 0.0
+        best_train_acc = 0.0
+        train_acc = 0.0
 
         # curr_loss = 0
         # iteration_loss_count = 200
@@ -142,7 +144,8 @@ class Model:
 
                 if phase == 'train':
                     iteration_loss = running_loss / Model.iteration_size['train']
-                    iteration_acc = running_corrects.double() / Model.iteration_size['train'] 
+                    iteration_acc = running_corrects.double() / Model.iteration_size['train']
+                    train_acc = iteration_acc
                 else:
                     iteration_loss = running_loss / len(self.dataloaders[phase].dataset)
                     accuracy = list(0. for i in range(2))
@@ -171,6 +174,7 @@ class Model:
                 if phase == 'val' and iteration_acc > best_acc:
                     best_acc = iteration_acc
                     best_model_wts = copy.deepcopy(self.model.state_dict())
+                    best_train_acc = train_acc
                 if phase == 'val':
                     val_acc_history.append(iteration_acc)
 
@@ -182,6 +186,7 @@ class Model:
         time_elapsed = time.time() - since
         print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
         print('Best value Acc: {:4f}'.format(best_acc))
+        print('Best train acc: {:4f}'.format(train_acc))
 
         self.model.load_state_dict(best_model_wts)
 
