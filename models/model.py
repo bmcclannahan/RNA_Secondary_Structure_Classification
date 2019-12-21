@@ -66,15 +66,15 @@ class Model:
         best_model_wts = copy.deepcopy(self.model.state_dict())
         best_acc = 0.0
 
-        curr_loss = 0
-        iteration_loss_count = 200
-        prev_loss = [0]*iteration_loss_count
+        # curr_loss = 0
+        # iteration_loss_count = 200
+        # prev_loss = [0]*iteration_loss_count
 
         iteration = 1
 
         iteration_validation_frequency = 50
-        iteration_loss_stddev_termination_threshold = .005
-        iteration_loss_termination_threshold = .01
+        # iteration_loss_stddev_termination_threshold = .005
+        # iteration_loss_termination_threshold = .01
         iteration_count_termination_thresholid = 400
         
 
@@ -150,9 +150,9 @@ class Model:
                         accuracy[i] = class_correct[i]/class_total[i]
                     iteration_acc = sum(accuracy)/len(accuracy)
 
-                if phase == 'train':
-                    prev_loss = [curr_loss] + prev_loss[:9]
-                    curr_loss = iteration_loss
+                # if phase == 'train':
+                #     prev_loss = [curr_loss] + prev_loss[:9]
+                #     curr_loss = iteration_loss
 
                 if phase == 'val':
                     fp.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
@@ -194,7 +194,7 @@ class Model:
         use_pretrained=True
         model_ft = None
         input_size = 0
-        model_ft = self.model(pretrained=use_pretrained)
+        model_ft = self.model_func(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         if self.name.split('_')[0] == 'resnet':
             num_ftrs = model_ft.fc.in_features
