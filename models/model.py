@@ -197,9 +197,11 @@ class Model:
         model_ft = self.model_func(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         if self.name.split('_')[0] == 'resnet':
+            print("Detected resnet model")
             num_ftrs = model_ft.fc.in_features
             model_ft.fc = nn.Linear(num_ftrs, num_classes)
         elif self.name.split('_')[0] == 'vgg':
+            print("Detected vggnet model")
             num_ftrs = model_ft.classifier[-1].in_features
             model_ft.classifier[-1] = nn.Linear(num_ftrs, num_classes)
         input_size = 224
