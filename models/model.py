@@ -49,7 +49,7 @@ def train_model(model, dataloaders, criterion, optimizer, schedular, device, mod
     iteration_validation_frequency = 50
     iteration_loss_stddev_termination_threshold = .005
     iteration_loss_termination_threshold = .01
-    iteration_count_termination_thresholid = 1000
+    iteration_count_termination_thresholid = 400
     
 
     while iteration < iteration_loss_count or (statistics.stdev([curr_loss]+prev_loss) > iteration_loss_stddev_termination_threshold 
@@ -320,7 +320,7 @@ def test_model(model, model_name):
 
     print("Loading Model")
 
-    model_ft, input_size = initialize_model(model)
+    model_ft, input_size = initialize_model(model,model_name)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
