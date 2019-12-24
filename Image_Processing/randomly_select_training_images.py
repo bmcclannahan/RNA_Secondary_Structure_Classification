@@ -10,7 +10,7 @@ num_per_family = 20
 family_dict = dict()
 
 for f in files:
-    family1,family2,img1,img2,_ = f.split('_')
+    _,family1,family2,img1,img2,_ = f.split('_')
     if family1 not in family_dict.keys():
         family_dict[family1] = [img1]
     elif img1 not in family_dict[family1]:
