@@ -54,10 +54,14 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=400):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
+        self.learning_rate = learning_rate
+        self.lr_gamma = lr_gamma
+        self.lr_step = lr_step
+        self.iteration_limit = iteration_limit
 
     def train_model(self):
         since = time.time()
@@ -65,7 +69,6 @@ class Model:
 
         best_model_wts = copy.deepcopy(self.model.state_dict())
         best_acc = 0.0
-        best_train_acc = 0.0
         train_acc = 0.0
 
         # curr_loss = 0
@@ -77,7 +80,7 @@ class Model:
         iteration_validation_frequency = 50
         # iteration_loss_stddev_termination_threshold = .005
         # iteration_loss_termination_threshold = .01
-        iteration_count_termination_thresholid = 400
+        iteration_count_termination_thresholid = self.iteration_limit
         
 
         while iteration <= iteration_count_termination_thresholid:
@@ -259,9 +262,9 @@ class Model:
                 print("\t", name)
 
 
-        optimizer_ft = optim.SGD(params_to_update, lr=0.01, momentum=0.9)
+        optimizer_ft = optim.SGD(params_to_update, lr=self.learning_rate, momentum=0.9)
 
-        exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=50, gamma=0.25)
+        exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma)
 
 
         criterion = nn.CrossEntropyLoss()
