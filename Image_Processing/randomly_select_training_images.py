@@ -27,7 +27,7 @@ keys = family_dict.keys()
 for key in keys:
     imgs = family_dict[key]
     at_key = 0 #so I can add 1 to i when I hit the index of the current family to prevent making same class images
-    for i in len(keys)-1:
+    for i in range(len(keys)-1):
         if keys[i] == key:
             at_key = 1
         r1 = randint(0,len(imgs)-1)
