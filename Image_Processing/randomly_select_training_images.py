@@ -24,20 +24,21 @@ for f in files:
     
 keys = list(family_dict.keys())
 
-for key in keys:
-    imgs = family_dict[key]
-    at_key = 0 #so I can add 1 to i when I hit the index of the current family to prevent making same class images
-    for i in range(len(keys)-1):
-        if keys[i] == key:
-            at_key = 1
-        r1 = randint(0,len(imgs)-1)
-        img1 = imgs[r1]
-        r2 = randint(0,len(keys)-1)
-        while keys[r2] == key:
+for j in range(num_per_family):
+    for key in keys:
+        imgs = family_dict[key]
+        at_key = 0 #so I can add 1 to i when I hit the index of the current family to prevent making same class images
+        for i in range(len(keys)-1):
+            if keys[i] == key:
+                at_key = 1
+            r1 = randint(0,len(imgs)-1)
+            img1 = imgs[r1]
             r2 = randint(0,len(keys)-1)
-        family2 = keys[r2]
-        imgs2 = family_dict[key]
-        r3 = randint(0,len(imgs2)-1)
-        img2 = imgs2[r3]
-        file_name = '_'.join([str(key),str(family2),str(img1),str(img2),"0.jpg"])
-        training_list.write(file_name + '\n')
+            while keys[r2] == key:
+                r2 = randint(0,len(keys)-1)
+            family2 = keys[r2]
+            imgs2 = family_dict[key]
+            r3 = randint(0,len(imgs2)-1)
+            img2 = imgs2[r3]
+            file_name = '_'.join([str(key),str(family2),str(img1),str(img2),"0.jpg"])
+            training_list.write(file_name + '\n')
