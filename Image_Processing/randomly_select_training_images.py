@@ -22,7 +22,7 @@ for f in files:
     elif img2 not in family_dict[family2]:
         family_dict[family2].append(img2)
     
-keys = family_dict.keys()
+keys = list(family_dict.keys())
 
 for key in keys:
     imgs = family_dict[key]
