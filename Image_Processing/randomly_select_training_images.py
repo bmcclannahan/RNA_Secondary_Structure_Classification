@@ -11,7 +11,9 @@ family_dict = dict()
 
 for f in files:
     print(f.split('_'))
-    _,family1,family2,img1,img2,_ = f.split('_')
+    dir_split = f.split('/')
+    file_name = dir_split[-1]
+    _,family1,family2,img1,img2,_ = file_name.split('_')
     if family1 not in family_dict.keys():
         family_dict[family1] = [img1]
     elif img1 not in family_dict[family1]:
