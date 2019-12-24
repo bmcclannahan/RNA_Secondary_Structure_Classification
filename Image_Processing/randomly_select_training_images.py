@@ -32,7 +32,7 @@ for key in keys:
             at_key = 1
         r1 = randint(0,len(imgs)-1)
         img1 = imgs[r1]
-        r2 = randint(0,len(keys))
+        r2 = randint(0,len(keys)-1)
         while keys[r2] == key:
             r2 = randint(0,len(keys)-1)
         family2 = keys[r2]
