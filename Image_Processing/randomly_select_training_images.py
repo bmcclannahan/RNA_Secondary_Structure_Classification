@@ -2,7 +2,7 @@ from glob import glob
 from random import randint
 
 file_dir = "/data/rna_classification/train/Diff_Family/"
-file_list = "/data/rna_classifcation/training_file_list.txt"
+file_list = "/data/rna_classification/training_file_list.txt"
 training_list = open(file_list,'a+')
 files = glob(file_dir+"*.jpg")
 num_per_family = 20
