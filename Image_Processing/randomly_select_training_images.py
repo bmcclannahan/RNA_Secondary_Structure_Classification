@@ -10,7 +10,6 @@ num_per_family = 20
 family_dict = dict()
 
 for f in files:
-    print(f.split('_'))
     dir_split = f.split('/')
     file_name = dir_split[-1]
     _,family1,family2,img1,img2,_ = file_name.split('_')
