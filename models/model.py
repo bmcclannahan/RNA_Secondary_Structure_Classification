@@ -326,7 +326,7 @@ class Model:
         self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt"))
     
     def _test_iteration_model(self,iteration):
-        self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/chekers/iter" + iteration +".pt"))
+        self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/chekers/iter" + str(iteration) +".pt"))
 
     def test_model(self,iterations_to_test=[199,299,399]):
         data_transforms = {
