@@ -276,9 +276,8 @@ class Model:
         self.scheduler = exp_lr_scheduler
         self.device = device
 
-    def _test_model(self):
-        best_model_wts = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt") 
-        self.model.load_state_dict(best_model_wts)
+    def _test_model(self,model):
+        self.model.load_state_dict(model)
         self.model.eval()
         
         fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/predictionhval.txt", "a")
@@ -323,7 +322,13 @@ class Model:
             print('Accuracy of %5s : %3d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
         print('Total accuracy is %3d %%' % (100 * sum(class_correct) / sum(class_total)))
 
-    def test_model(self):
+    def _test_best_model(self):
+        self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt"))
+    
+    def _test_iteration_model(self,iteration):
+        self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/chekers/iter" + iteration +".pt"))
+
+    def test_model(self,iterations_to_test=[199,299,399]):
         data_transforms = {
             'test': transforms.Compose([transforms.ToTensor(),
                             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
@@ -343,8 +348,12 @@ class Model:
 
         model_ft = model_ft.to(device)
 
-        print("Testing Model")
+        print("Testing Best Model")
 
-        self._test_model()
+        self._test_best_model()
+
+        if len(iterations_to_test) > 0:
+            for iteration in iterations_to_test:
+                self._test_iteration_model(iteration)
 
         print("Finished testing " + self.name)

@@ -1,4 +1,4 @@
-from model import train_model, build_model
+from model import Model
 import torch.nn as nn
 from torchvision import models
 
