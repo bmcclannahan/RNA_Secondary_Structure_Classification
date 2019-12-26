@@ -32,16 +32,15 @@ def set_parameter_requires_grad(model, feature_extracting):
         for param in model.parameters():
             param.requires_grad = False
         
-def make_weights_for_classes(images):
+def make_weights_for_classes(images,class_weights):
     nclasses = 2
     count = [0] * nclasses
     for item in images:
         count[item[1]] += 1
     weight_per_class = [0.] * nclasses
-    class_weight = [.5, .5]
     N = float(sum(count))
     for i in range(nclasses):
-        weight_per_class[i] = N*class_weight[i]/float(count[i])
+        weight_per_class[i] = N*class_weights[i]/float(count[i])
     weight = [0] * len(images)
     for idx, val in enumerate(images):
         weight[idx] = weight_per_class[val[1]]
@@ -54,7 +53,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=400):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=400,class_weights=[.5,.5]):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -62,6 +61,7 @@ class Model:
         self.lr_gamma = lr_gamma
         self.lr_step = lr_step
         self.iteration_limit = iteration_limit
+        self.class_weights = class_weights
 
     def train_model(self):
         since = time.time()
@@ -70,6 +70,7 @@ class Model:
         best_model_wts = copy.deepcopy(self.model.state_dict())
         best_acc = 0.0
         train_acc = 0.0
+        best_train_acc = 0.0
 
         # curr_loss = 0
         # iteration_loss_count = 200
@@ -189,7 +190,7 @@ class Model:
         time_elapsed = time.time() - since
         print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
         print('Best value Acc: {:4f}'.format(best_acc))
-        print('Best train acc: {:4f}'.format(train_acc))
+        print('Best train acc: {:4f}'.format(best_train_acc))
 
         self.model.load_state_dict(best_model_wts)
 
@@ -235,7 +236,7 @@ class Model:
         image_datasets = {x: datasets.ImageFolder(os.path.join(Model.data_dir, x), data_normalization[x]) for x in phases}
         print('Weighting Classes')
 
-        weights = make_weights_for_classes(image_datasets['train'].imgs)
+        weights = make_weights_for_classes(image_datasets['train'].imgs,self.class_weights)
         weights = torch.DoubleTensor(weights)
         sampler_train = torch.utils.data.sampler.WeightedRandomSampler(weights=weights, num_samples=Model.iteration_size['train'])
 
