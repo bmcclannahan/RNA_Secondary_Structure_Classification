@@ -53,7 +53,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=400,class_weights=[.5,.5]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=400,class_weights=[.67,.33]):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -355,6 +355,7 @@ class Model:
 
         if len(iterations_to_test) > 0:
             for iteration in iterations_to_test:
+                print("Testing model from iteration:",iteration)
                 self._test_iteration_model(iteration)
 
         print("Finished testing " + self.name)
