@@ -33,6 +33,7 @@ def set_parameter_requires_grad(model, feature_extracting):
             param.requires_grad = False
         
 def make_weights_for_classes(images,class_weights):
+    print("Class Weights:", class_weights)
     nclasses = 2
     count = [0] * nclasses
     for item in images:
@@ -188,7 +189,8 @@ class Model:
             iteration += 1
 
         time_elapsed = time.time() - since
-        print('Training complete in {:.0f}m {:.0f}s '.format(time_elapsed / 60, time_elapsed % 60))
+        print('Model Name:', self.name)
+        print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed / 60, time_elapsed % 60))
         print('Best value Acc: {:4f}'.format(best_acc))
         print('Best train acc: {:4f}'.format(best_train_acc))
 
@@ -321,6 +323,7 @@ class Model:
             
         fs.close()
         
+        print('Model Name:', self.name)
         for i in range(2):
             print('Accuracy of %5s : %3d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
         print('Total accuracy is %3d %%' % (100 * sum(class_correct) / sum(class_total)))
