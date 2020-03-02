@@ -191,7 +191,7 @@ class Model:
         time_elapsed = time.time() - since
         print('Model Name:', self.name)
         print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed / 60, time_elapsed % 60))
-        print('Best value Acc: {:4f}'.format(best_acc))
+        print('Best val Acc: {:4f}'.format(best_acc))
         print('Best train acc: {:4f}'.format(best_train_acc))
 
         self.model.load_state_dict(best_model_wts)
@@ -210,7 +210,7 @@ class Model:
         if self.name.split('_')[0] == 'resnet':
             print("Detected resnet model")
             num_ftrs = model_ft.fc.in_features
-            model_ft.fc = nn.Linear(num_ftrs, num_classes)
+            model_ft.fc = nn.Linear(num_ftrs, 1)
         elif self.name.split('_')[0] == 'vgg':
             print("Detected vggnet model")
             num_ftrs = model_ft.classifier[-1].in_features
@@ -272,7 +272,7 @@ class Model:
         exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma)
 
 
-        criterion = nn.CrossEntropyLoss()
+        criterion = nn.BCELoss()
 
         self.model = model_ft
         self.dataloaders = dataloaders_dict
@@ -325,8 +325,8 @@ class Model:
         
         print('Model Name:', self.name)
         for i in range(2):
-            print('Accuracy of %5s : %3d %%' % (str(i), 100 * class_correct[i] / class_total[i])) 
-        print('Total accuracy is %3d %%' % (100 * sum(class_correct) / sum(class_total)))
+            print('Accuracy of %5s : %3.1d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
+        print('Total accuracy is %3.1d %%' % (100.0 * sum(class_correct) / sum(class_total)))
 
     def _test_best_model(self):
         self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt"))
