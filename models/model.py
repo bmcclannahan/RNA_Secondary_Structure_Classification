@@ -145,6 +145,7 @@ class Model:
                             loss = self.criterion(outputs, labels)       
                             _, preds = torch.max(outputs, 1)
                         
+                        labels = labels.long()
                         running_loss += loss.item() * inputs.size(0)
                         running_corrects += torch.sum(preds == labels.data)
                         for i in range(len(labels)):
