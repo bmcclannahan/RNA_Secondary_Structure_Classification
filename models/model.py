@@ -122,10 +122,10 @@ class Model:
                         with torch.set_grad_enabled(phase == 'train'):
                             outputs = self.model(inputs)
                             
-                            print(labels)
-                            print(outputs)
+                            #print(labels)
+                            #print(outputs)
                             labels = labels.float()
-                            print(labels)
+                            #print(labels)
                             loss = self.criterion(outputs, labels)
                             _, preds = torch.max(outputs, 1)
 
@@ -216,7 +216,7 @@ class Model:
         if self.name.split('_')[0] == 'resnet':
             print("Detected resnet model")
             num_ftrs = model_ft.fc.in_features
-            model_ft.fc = nn.Linear(num_ftrs, final_layer_size)
+            resnet.fc = nn.Sequential(nn.Sigmoid(),nn.Linear(num_ftrs, final_layer_size))
         elif self.name.split('_')[0] == 'vgg':
             print("Detected vggnet model")
             num_ftrs = model_ft.classifier[-1].in_features
