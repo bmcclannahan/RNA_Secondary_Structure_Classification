@@ -122,10 +122,7 @@ class Model:
                         with torch.set_grad_enabled(phase == 'train'):
                             outputs = self.model(inputs)
                             
-                            #print(labels)
-                            #print(outputs)
                             labels = labels.float()
-                            #print(labels)
                             loss = self.criterion(outputs, labels)
                             _, preds = torch.max(outputs, 1)
 
@@ -142,7 +139,9 @@ class Model:
                         self.optimizer.zero_grad()
                         with torch.set_grad_enabled(phase == 'train'):
                             outputs = self.model(inputs)
-                        
+
+                            
+                            labels = labels.float()
                             loss = self.criterion(outputs, labels)       
                             _, preds = torch.max(outputs, 1)
                         
