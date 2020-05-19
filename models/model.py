@@ -54,7 +54,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=400,class_weights=[.8,.2]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.8,.2]):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
