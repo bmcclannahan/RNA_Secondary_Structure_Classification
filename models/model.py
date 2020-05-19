@@ -54,7 +54,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.8,.2]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33]):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -340,7 +340,7 @@ class Model:
     def _test_iteration_model(self,iteration):
         self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/chekers/iter" + str(iteration) +".pt"))
 
-    def test_model(self,iterations_to_test=[199,299,399]):
+    def test_model(self,iterations_to_test=[199,299,399,499,599]):
         data_transforms = {
             'test': transforms.Compose([transforms.ToTensor(),
                             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
