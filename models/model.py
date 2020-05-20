@@ -122,14 +122,12 @@ class Model:
                         with torch.set_grad_enabled(phase == 'train'):
                             outputs = self.model(inputs)
                             
-                            labels = labels.float()
                             loss = self.criterion(outputs, labels)
                             _, preds = torch.max(outputs, 1)
 
                             loss.backward()
                             self.optimizer.step()
                         running_loss += loss.item() * inputs.size(0)
-                        labels = labels.long()
                         running_corrects += torch.sum(preds == labels.data)
                 if phase == 'val':
                     for inputs, labels in self.dataloaders[phase]:
@@ -141,11 +139,9 @@ class Model:
                             outputs = self.model(inputs)
 
                             
-                            labels = labels.float()
                             loss = self.criterion(outputs, labels)       
                             _, preds = torch.max(outputs, 1)
                         
-                        labels = labels.long()
                         running_loss += loss.item() * inputs.size(0)
                         running_corrects += torch.sum(preds == labels.data)
                         for i in range(len(labels)):
@@ -278,7 +274,7 @@ class Model:
         exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma)
 
 
-        criterion = nn.BCELoss()
+        criterion = nn.CrossEntropyLoss()
 
         self.model = model_ft
         self.dataloaders = dataloaders_dict
