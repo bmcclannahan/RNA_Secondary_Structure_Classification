@@ -206,7 +206,7 @@ class Model:
 
     def initialize_model(self):
         num_classes = 2
-        final_layer_size = 1
+        final_layer_size = 2
         feature_extract = False
         use_pretrained=True
         model_ft = None
@@ -216,7 +216,7 @@ class Model:
         if self.name.split('_')[0] == 'resnet':
             print("Detected resnet model")
             num_ftrs = model_ft.fc.in_features
-            model_ft.fc = nn.Sequential(nn.Linear(num_ftrs, final_layer_size),nn.Sigmoid())
+            model_ft.fc = nn.Linear(num_ftrs, final_layer_size)
         elif self.name.split('_')[0] == 'vgg':
             print("Detected vggnet model")
             num_ftrs = model_ft.classifier[-1].in_features
