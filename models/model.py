@@ -117,8 +117,6 @@ class Model:
                         labels = labels.to(self.device)
 
                         self.optimizer.zero_grad()
-                        # class_correct = list(0. for i in range(2))
-                        # class_total = list(0. for i in range(2))
                         with torch.set_grad_enabled(phase == 'train'):
                             outputs = self.model(inputs)
                             
@@ -201,7 +199,6 @@ class Model:
         return self.model, val_acc_history
 
     def initialize_model(self):
-        num_classes = 2
         final_layer_size = 2
         feature_extract = False
         use_pretrained=True
