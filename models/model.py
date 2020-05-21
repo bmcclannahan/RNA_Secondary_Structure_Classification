@@ -247,7 +247,7 @@ class Model:
         print('Initializing Dataloader')
 
         data_loaders_train = torch.utils.data.DataLoader(
-            image_datasets['train'], batch_size=Model.batch_size, sampler=sampler_train, num_workers=4)
+            image_datasets['train'], batch_size=Model.batch_size, sampler=sampler_train, num_workers=1)
         data_loaders_val = torch.utils.data.DataLoader(image_datasets['val'], batch_size=Model.batch_size, num_workers=4)
 
         dataloaders_dict = {
