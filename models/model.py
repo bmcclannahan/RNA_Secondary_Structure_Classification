@@ -111,6 +111,7 @@ class Model:
                 class_total = list(0. for i in range(2))
 
                 if phase == 'train':
+                    print('Batch Size:', Model.batch_size)
                     for i in range(int(Model.iteration_size[phase]/Model.batch_size)):
                         inputs, labels = next(iter(self.dataloaders[phase]))
                         inputs = inputs.to(self.device)
