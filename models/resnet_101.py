@@ -4,7 +4,7 @@ from torchvision import models
 
 model_name = "resnet_101"
 
-weights = [.67,.33]
+weights = [.5,.5]
 
 print(model_name, weights)
 
