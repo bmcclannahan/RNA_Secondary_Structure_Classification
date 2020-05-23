@@ -287,6 +287,8 @@ class Model:
         fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/predictionhval.txt", "a")
         class_correct = list(0. for i in range(2))
         class_total = list(0. for i in range(2))
+        
+        print(time.ctime())
 
         for inputs, labels, path in self.dataloaders['test']:
             
@@ -326,6 +328,7 @@ class Model:
         for i in range(2):
             print('Accuracy of %5s : %3.1d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
         print('Total accuracy is %3.1d %%' % (100.0 * sum(class_correct) / sum(class_total)))
+        print(time.ctime())
 
     def _test_best_model(self):
         self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt"))
