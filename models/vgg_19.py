@@ -4,7 +4,7 @@ from torchvision import models
 
 model_name = "vgg_19"
 
-weights = [.8,.2]
+weights = [.67,.33]
 
 print(model_name, weights)
 
