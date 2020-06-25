@@ -15,7 +15,7 @@ import copy
 
 class Multi_Training_Phase_Model(Model):
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=300,start_weights=[.2,.8],end_weights=[.8,.2]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=100,start_weights=[.2,.8],end_weights=[.8,.2]):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights)
         self.start_weights = start_weights
         self.end_weights = end_weights
@@ -23,7 +23,7 @@ class Multi_Training_Phase_Model(Model):
     def execute_training_steps(self):
         self.build_model()
         self.train_model()
-        self.class_weights = end_weights
+        self.class_weights = self.end_weights
         self.build_model()
         self.model = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/chekers/iter" + str(self.iteration_limit) +".pt")
         self.train_model()
