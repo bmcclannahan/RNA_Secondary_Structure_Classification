@@ -20,7 +20,7 @@ class Multi_Training_Phase_Model(Model):
         self.start_weights = start_weights
         self.end_weights = end_weights
     
-    def execute_training_steps():
+    def execute_training_steps(self):
         self.build_model()
         self.train_model()
         self.class_weights = end_weights
