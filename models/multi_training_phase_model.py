@@ -15,10 +15,11 @@ import copy
 
 class Multi_Training_Phase_Model(Model):
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=200,start_weights=[.2,.8],end_weights=[.8,.2]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=800,iteration_swap_threshold=600,start_weights=[.2,.8],end_weights=[.8,.2]):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights)
         self.start_weights = start_weights
         self.end_weights = end_weights
+        self.iteration_swap_threshold = iteration_swap_threshold
     
     def train_model(self):
         since = time.time()
@@ -37,6 +38,7 @@ class Multi_Training_Phase_Model(Model):
 
         iteration_validation_frequency = 50
         
+        weights_changed_flag = False
 
         while iteration <= self.iteration_limit:
             ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/train_result.txt", "a")
@@ -135,7 +137,7 @@ class Multi_Training_Phase_Model(Model):
                 if phase == 'val':
                     val_acc_history.append(iteration_acc)
 
-                if iteration * 2 > self.iteration_limit:
+                if iteration == self.iteration_swap_threshold:
                     self.class_weights = self.end_weights
                     self._build_dataloaders()
 
