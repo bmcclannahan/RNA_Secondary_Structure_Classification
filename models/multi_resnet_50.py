@@ -9,4 +9,6 @@ weights = [.8,.5]#
 print(model_name, weights)
 
 model = Multi_Training_Phase_Model(models.resnet50,model_name)
-model.execute_training_steps()
+model.build_model()
+model.train_model()
+model.test_model()
