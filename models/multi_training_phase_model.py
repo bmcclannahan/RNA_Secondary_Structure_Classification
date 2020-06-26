@@ -15,7 +15,7 @@ import copy
 
 class Multi_Training_Phase_Model(Model):
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=100,start_weights=[.2,.8],end_weights=[.8,.2]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=200,start_weights=[.2,.8],end_weights=[.8,.2]):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights)
         self.start_weights = start_weights
         self.end_weights = end_weights
@@ -136,7 +136,7 @@ class Multi_Training_Phase_Model(Model):
                     val_acc_history.append(iteration_acc)
 
                 if iteration * 2 > self.iteration_limit:
-                    self.class_weights = end_weights
+                    self.class_weights = self.end_weights
                     self._build_dataloaders()
 
             print()

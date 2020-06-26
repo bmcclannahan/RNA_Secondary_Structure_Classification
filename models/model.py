@@ -220,12 +220,40 @@ class Model:
 
 
     def build_model(self):
-        phases = ['train', 'val']
-
         print("Training",self.name,"model")
 
         model_ft, input_size = self.initialize_model()
         print(model_ft)
+
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+
+        model_ft = model_ft.to(device)
+
+        params_to_update = model_ft.parameters()
+        print("Parmas to learn:")
+
+        for name, param in model_ft.named_parameters():
+            if param.requires_grad == True:
+                print("\t", name)
+
+
+        optimizer_ft = optim.SGD(params_to_update, lr=self.learning_rate, momentum=0.9)
+
+        exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma)
+
+
+        criterion = nn.CrossEntropyLoss()
+
+        self._build_dataloaders()
+
+        self.model = model_ft
+        self.criterion = criterion
+        self.optimizer = optimizer_ft
+        self.scheduler = exp_lr_scheduler
+        self.device = device
+
+    def _build_dataloaders(self):
+        phases = ['train', 'val']
 
         print('Initializing Dataset')
 
@@ -254,31 +282,7 @@ class Model:
             'val':data_loaders_val
         }
 
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-
-        model_ft = model_ft.to(device)
-
-        params_to_update = model_ft.parameters()
-        print("Parmas to learn:")
-
-        for name, param in model_ft.named_parameters():
-            if param.requires_grad == True:
-                print("\t", name)
-
-
-        optimizer_ft = optim.SGD(params_to_update, lr=self.learning_rate, momentum=0.9)
-
-        exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma)
-
-
-        criterion = nn.CrossEntropyLoss()
-
-        self.model = model_ft
         self.dataloaders = dataloaders_dict
-        self.criterion = criterion
-        self.optimizer = optimizer_ft
-        self.scheduler = exp_lr_scheduler
-        self.device = device
 
     def _test_model(self,model):
         self.model.load_state_dict(model)
