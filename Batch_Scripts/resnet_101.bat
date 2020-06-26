@@ -5,7 +5,7 @@
 #SBATCH --mem=16GB
 #SBATCH -p gpu
 #SBATCH --gres="gpu:k40:1"
-#SBATCH -J RNA-Resnet50
+#SBATCH -J RNA-Resnet101
 
 module load Python/3.5.2
 module load slurm-torque/14.11.8
