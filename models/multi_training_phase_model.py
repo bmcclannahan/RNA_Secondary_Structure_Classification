@@ -135,7 +135,6 @@ class Multi_Training_Phase_Model(Model):
                 if iteration == self.iteration_swap_threshold and phase == 'val':
                     self.class_weights = self.end_weights
                     self._build_dataloaders()
-                    self.scheduler.
 
             print()
             fp.close()
