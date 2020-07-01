@@ -284,6 +284,13 @@ class Model:
 
         self.dataloaders = dataloaders_dict
 
+    def _clear_dataloaders(self):
+        dataloaders_dict = {
+            'train': None,
+            'val': None
+        }
+        self.dataloaders = dataloaders_dict
+
     def _test_model(self,model):
         self.model.load_state_dict(model)
         self.model.eval()

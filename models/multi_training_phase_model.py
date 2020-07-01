@@ -137,7 +137,7 @@ class Multi_Training_Phase_Model(Model):
                 if phase == 'val':
                     val_acc_history.append(iteration_acc)
 
-                if iteration == self.iteration_swap_threshold:
+                if iteration == self.iteration_swap_threshold and phase == 'val':
                     self.class_weights = self.end_weights
                     self._build_dataloaders()
 
@@ -151,6 +151,8 @@ class Multi_Training_Phase_Model(Model):
         print('Training complete in {:.0f}m {:.0f}s'.format(time_elapsed / 60, time_elapsed % 60))
         print('Best val Acc: {:4f}'.format(best_acc))
         print('Best train acc: {:4f}'.format(best_train_acc))
+
+        self._clear_dataloaders()
 
         self.model.load_state_dict(best_model_wts)
 
