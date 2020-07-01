@@ -15,8 +15,8 @@ import copy
 
 class Multi_Training_Phase_Model(Model):
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=800,iteration_swap_threshold=600,start_weights=[.2,.8],end_weights=[.8,.2]):
-        super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights)
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=800,iteration_swap_threshold=450,start_weights=[.2,.8],end_weights=[.8,.2]):
+        super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights,last_epoch=iteration_swap_threshold+1)
         self.start_weights = start_weights
         self.end_weights = end_weights
         self.iteration_swap_threshold = iteration_swap_threshold
@@ -37,8 +37,6 @@ class Multi_Training_Phase_Model(Model):
         iteration = 1
 
         iteration_validation_frequency = 50
-        
-        weights_changed_flag = False
 
         while iteration <= self.iteration_limit:
             ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/train_result.txt", "a")
@@ -112,9 +110,6 @@ class Multi_Training_Phase_Model(Model):
                         accuracy[i] = class_correct[i]/class_total[i]
                     iteration_acc = sum(accuracy)/len(accuracy)
 
-                # if phase == 'train':
-                #     prev_loss = [curr_loss] + prev_loss[:9]
-                #     curr_loss = iteration_loss
 
                 if phase == 'val':
                     fp.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
@@ -140,6 +135,7 @@ class Multi_Training_Phase_Model(Model):
                 if iteration == self.iteration_swap_threshold and phase == 'val':
                     self.class_weights = self.end_weights
                     self._build_dataloaders()
+                    self.scheduler.
 
             print()
             fp.close()
