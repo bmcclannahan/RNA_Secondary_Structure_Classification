@@ -54,7 +54,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],last_epoch=-1):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33]):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -63,7 +63,6 @@ class Model:
         self.lr_step = lr_step
         self.iteration_limit = iteration_limit
         self.class_weights = class_weights
-        self.last_epoch = last_epoch
 
     def train_model(self):
         since = time.time()
@@ -240,7 +239,7 @@ class Model:
 
         optimizer_ft = optim.SGD(params_to_update, lr=self.learning_rate, momentum=0.9)
 
-        exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma,last_epoch=self.last_epoch)
+        exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma)
 
 
         criterion = nn.CrossEntropyLoss()

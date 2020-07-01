@@ -16,7 +16,7 @@ import copy
 class Multi_Training_Phase_Model(Model):
 
     def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=800,iteration_swap_threshold=450,start_weights=[.2,.8],end_weights=[.8,.2]):
-        super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights,last_epoch=iteration_swap_threshold+1)
+        super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights)
         self.start_weights = start_weights
         self.end_weights = end_weights
         self.iteration_swap_threshold = iteration_swap_threshold
@@ -135,6 +135,8 @@ class Multi_Training_Phase_Model(Model):
                 if iteration == self.iteration_swap_threshold and phase == 'val':
                     self.class_weights = self.end_weights
                     self._build_dataloaders()
+                    for param in optim.param_groups:
+                        param['lr'] = .001
 
             print()
             fp.close()
