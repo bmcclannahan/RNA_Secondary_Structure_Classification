@@ -135,7 +135,7 @@ class Multi_Training_Phase_Model(Model):
                 if iteration == self.iteration_swap_threshold and phase == 'val':
                     self.class_weights = self.end_weights
                     self._build_dataloaders()
-                    for param in optim.param_groups:
+                    for param in self.optimizer.param_groups:
                         param['lr'] = .001
 
             print()

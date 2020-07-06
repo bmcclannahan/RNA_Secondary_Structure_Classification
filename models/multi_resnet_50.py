@@ -4,7 +4,7 @@ from torchvision import models
 
 model_name = "testing"
 
-weights = [.8,.5]#
+weights = [.8,.2]
 
 print(model_name, weights)
 
