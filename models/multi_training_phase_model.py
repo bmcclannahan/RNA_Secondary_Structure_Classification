@@ -15,7 +15,7 @@ import copy
 
 class Multi_Training_Phase_Model(Model):
 
-    def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.5,lr_step=50,iteration_limit=600,iteration_swap_threshold=350,start_weights=[.2,.8],end_weights=[.8,.2]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.5,lr_step=50,iteration_limit=600,iteration_swap_threshold=350,start_weights=[.2,.8],end_weights=[.8,.2]):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,start_weights)
         self.start_weights = start_weights
         self.end_weights = end_weights
