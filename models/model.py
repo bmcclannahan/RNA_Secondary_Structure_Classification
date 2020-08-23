@@ -214,6 +214,10 @@ class Model:
             print("Detected vggnet model")
             num_ftrs = model_ft.classifier[-1].in_features
             model_ft.classifier[-1] = nn.Linear(num_ftrs, final_layer_size)
+        elif self.name.split('_')[0] == 'densenet':
+            print("Detected densenet model")
+            num_ftrs = model_ft.classifier.in_features
+            model_ft.classifier = nn.Linear(num_ftrs, final_layer_size)
         input_size = 224
 
         return model_ft, input_size
