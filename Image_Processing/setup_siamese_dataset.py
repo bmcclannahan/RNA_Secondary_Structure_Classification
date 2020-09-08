@@ -1,7 +1,9 @@
 import os, glob
+import shutil
 
 rna_list = '/data/train.out'
 data_dir = '/data/Full_Image_Set/'
+dest_dir = '/data/Siamese/train/'
 
 images = glob.glob(data_dir+"*.jpg")
 
@@ -15,9 +17,16 @@ k = 0
 while k < len(lines):
     line = lines[k]
     if line.split(' ')[0] == 'family':
-        family = lines[k+2].split(' ')[-1].rstrip()
+        family = int(lines[k+2].split(' ')[-1].rstrip())
         rna_fmailies.append(family)
         print(family)
     k += 4
 
 print(rna_fmailies)
+
+for image in images[100]:
+    family = int(image[2:].split('_')[0])
+    if family in rna_fmailies:
+        new_file = image.split('/')[-1]
+        print(new_file)
+        #shutil.copy(image,dest_dir + new_file)
