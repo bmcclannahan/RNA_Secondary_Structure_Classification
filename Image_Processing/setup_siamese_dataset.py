@@ -15,7 +15,9 @@ k = 0
 while k < len(lines):
     line = lines[k]
     if line.split(' ') == 'family':
-        rna_fmailies.append(lines[k+2].split(' ')[-1])    
+        family = lines[k+2].split(' ')[-1]
+        rna_fmailies.append(family)
+        print(family)
     k += 4
 
 print(rna_fmailies)
