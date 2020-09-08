@@ -26,7 +26,7 @@ print(rna_fmailies)
 
 print('Number of RNA:',len(images))
 
-for image in images[:100]:
+for image in images:
     print(image)
     print(image.split('/')[-1][2:].split('_')[0])
     family = int(image.split('/')[-1][2:].split('_')[0])
