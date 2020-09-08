@@ -28,6 +28,8 @@ print('Number of RNA:',len(images))
 
 for image in images[100]:
     print(image)
+    if len(image) < 2:
+        continue
     family = int(image[2:].split('_')[0])
     if family in rna_fmailies:
         new_file = image.split('/')[-1]
