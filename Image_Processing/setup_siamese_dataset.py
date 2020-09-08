@@ -32,5 +32,5 @@ for image in images:
     family = int(image.split('/')[-1][2:].split('_')[0])
     if family in rna_fmailies:
         new_file = image.split('/')[-1]
-        print(new_file)
-        #shutil.copy(image,dest_dir + new_file)
+        #print(new_file)
+        shutil.copy(image,dest_dir + new_file)
