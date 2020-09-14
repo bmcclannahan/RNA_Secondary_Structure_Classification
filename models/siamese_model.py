@@ -1,3 +1,4 @@
+import torch
 from torch.optim import lr_scheduler
 import numpy as np
 import torchvision
