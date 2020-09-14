@@ -1,7 +1,7 @@
 import os, glob
 import shutil
 
-data_dir = '/data/Siamese/train/'
+data_dir = '/data/Siamese/val/'
 
 images = glob.glob(data_dir+"*.jpg")
 
