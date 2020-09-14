@@ -12,4 +12,4 @@ for image in images:
         #print('new folder:', family)
     new_file = image.split('/')[-1]
     print(new_file)
-    shutil.copy(image,data_dir + family + '/' + new_file)
+    shutil.copy(image,data_dir + str(family) + '/' + new_file)
