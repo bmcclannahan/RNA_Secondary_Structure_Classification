@@ -19,7 +19,7 @@ class Siamese_Model(Model):
     data_dir = "/data/Siamese"
 
     def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.5,lr_step=50,iteration_limit=600):
-        super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None)
+        super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,Siamese_Model.data_dir)
     
     def _build_dataloaders(self):
         phases = ['train', 'val']

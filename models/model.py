@@ -55,7 +55,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],data_dir=Model.data_dir):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -64,6 +64,7 @@ class Model:
         self.lr_step = lr_step
         self.iteration_limit = iteration_limit
         self.class_weights = class_weights
+        self.data_dir = data_dir
 
     def train_model(self):
         since = time.time()
@@ -269,7 +270,7 @@ class Model:
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         }
 
-        image_datasets = {x: datasets.ImageFolder(os.path.join(Model.data_dir, x), data_normalization[x]) for x in phases}
+        image_datasets = {x: datasets.ImageFolder(os.path.join(self.data_dir, x), data_normalization[x]) for x in phases}
         print('Weighting Classes')
 
         weights = make_weights_for_classes(image_datasets['train'].imgs,self.class_weights)
@@ -360,7 +361,7 @@ class Model:
 
         print('Initializing dataset and dataloader')
 
-        image_datasets = {x: ImageFolderWithPaths(os.path.join(Model.data_dir,x), data_transforms[x]) for x in ['test']}
+        image_datasets = {x: ImageFolderWithPaths(os.path.join(self.data_dir,x), data_transforms[x]) for x in ['test']}
 
         self.dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=Model.batch_size, shuffle=True, num_workers=4) for x in ['test']} 
 
