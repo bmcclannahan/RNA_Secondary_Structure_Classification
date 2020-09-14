@@ -55,7 +55,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],data_dir=Model.data_dir):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],data_dir=None):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -65,6 +65,8 @@ class Model:
         self.iteration_limit = iteration_limit
         self.class_weights = class_weights
         self.data_dir = data_dir
+        if self.data_dir == None:
+            self.data_dir = Model.data_dir
 
     def train_model(self):
         since = time.time()
@@ -248,7 +250,7 @@ class Model:
         exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=self.lr_step, gamma=self.lr_gamma)
 
 
-        criterion = nn.CrossEntropyLoss()
+        criterion = self._get_criterion()
 
         self._build_dataloaders()
 
@@ -257,6 +259,9 @@ class Model:
         self.optimizer = optimizer_ft
         self.scheduler = exp_lr_scheduler
         self.device = device
+
+    def _get_criterion(self):
+        return nn.CrossEntropyLoss()
 
     def _build_dataloaders(self):
         phases = ['train', 'val']

@@ -1,6 +1,3 @@
-import torch
-import torch.nn as nn
-import torch.optim as optim
 from torch.optim import lr_scheduler
 import numpy as np
 import torchvision
@@ -8,18 +5,15 @@ from torchvision import datasets, transforms
 from model import Model
 from Siamese import SiameseNetworkDataset, Contrastive_Loss
 
-import statistics
-import matplotlib.pyplot as plt
-import time
-import os
-import copy
-
 class Siamese_Model(Model):
 
     data_dir = "/data/Siamese"
 
     def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.5,lr_step=50,iteration_limit=600):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,Siamese_Model.data_dir)
+
+    def _get_criterion(self):
+        return Contrastive_Loss.ContrastiveLoss()
     
     def _build_dataloaders(self):
         phases = ['train', 'val']
