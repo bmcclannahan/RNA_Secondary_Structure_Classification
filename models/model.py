@@ -7,6 +7,7 @@ from torch.optim import lr_scheduler
 import numpy as np
 import torchvision
 from torchvision import datasets, transforms
+from Siamese import Siamese_Network
 
 import statistics
 import matplotlib.pyplot as plt
@@ -202,8 +203,6 @@ class Model:
         final_layer_size = 2
         feature_extract = False
         use_pretrained=True
-        model_ft = None
-        input_size = 0
         model_ft = self.model_func(pretrained=use_pretrained)
         set_parameter_requires_grad(model_ft, feature_extract)
         if self.name.split('_')[0] == 'resnet':
@@ -218,15 +217,17 @@ class Model:
             print("Detected densenet model")
             num_ftrs = model_ft.classifier.in_features
             model_ft.classifier = nn.Linear(num_ftrs, final_layer_size)
-        input_size = 224
+        elif self.name.split('_')[0] == 'siamese':
+            print("Detected siamese model")
+            model_ft = Siamese_Network.SiameseNetwork(self.model_func)
 
-        return model_ft, input_size
+        return model_ft
 
 
     def build_model(self):
         print("Training",self.name,"model")
 
-        model_ft, input_size = self.initialize_model()
+        model_ft = self.initialize_model()
         print(model_ft)
 
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
