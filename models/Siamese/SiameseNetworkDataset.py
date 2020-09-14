@@ -7,7 +7,7 @@ import numpy as np
 
 class SiameseNetworkDataset(Dataset):
     
-    def __init__(self,imageFolderDataset,transform=None,should_invert=True):
+    def __init__(self,imageFolderDataset,transform=None,should_invert=False):
         self.imageFolderDataset = imageFolderDataset    
         self.transform = transform
         self.should_invert = should_invert
