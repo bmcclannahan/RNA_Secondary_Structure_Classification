@@ -1,16 +1,12 @@
 import torch
 from torch.utils.data import Dataset
-import PIL
-from PIL import Image
 import random
 import numpy as np
 
 class SiameseNetworkDataset(Dataset):
     
-    def __init__(self,imageFolderDataset,transform=None,should_invert=False):
-        self.imageFolderDataset = imageFolderDataset    
-        self.transform = transform
-        self.should_invert = should_invert
+    def __init__(self,imageFolderDataset):
+        self.imageFolderDataset = imageFolderDataset
         
     def __getitem__(self,index):
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
@@ -25,10 +21,8 @@ class SiameseNetworkDataset(Dataset):
         else:
             img1_tuple = random.choice(self.imageFolderDataset.imgs)
 
-        img0 = Image.open(img0_tuple[0])
-        img1 = Image.open(img1_tuple[0])
-        img0 = img0.convert("L")
-        img1 = img1.convert("L")
+        img0 = img0_tuple[0])
+        img1 = img1_tuple[0])
         
         if self.should_invert:
             img0 = PIL.ImageOps.invert(img0)
@@ -38,7 +32,7 @@ class SiameseNetworkDataset(Dataset):
             img0 = self.transform(img0)
             img1 = self.transform(img1)
         
-        return img0, img1 , torch.from_numpy(np.array([int(img1_tuple[1]!=img0_tuple[1])],dtype=np.float32))
+        return img0, img1, torch.from_numpy(np.array([should_get_same_class],dtype=np.float32))
     
     def __len__(self):
         return len(self.imageFolderDataset.imgs)
