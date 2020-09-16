@@ -55,7 +55,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33]):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],logging=True):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -64,6 +64,7 @@ class Model:
         self.lr_step = lr_step
         self.iteration_limit = iteration_limit
         self.class_weights = class_weights
+        self.logging = logging
 
     def train_model(self):
         since = time.time()
@@ -87,10 +88,11 @@ class Model:
         
 
         while iteration <= iteration_count_termination_thresholid:
-            ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/train_result.txt", "a")
-            fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/val_result.txt", "a")
-            ftl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/train_loss.txt", "a")
-            fvl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/val_loss.txt", "a")
+            if self.logging:
+                ft = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/train_result.txt", "a")
+                fp = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/val_result.txt", "a")
+                ftl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/train_loss.txt", "a")
+                fvl = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/val_loss.txt", "a")
             print('Iteration {}'.format(iteration))
             print(time.ctime())
             print('-' * 20)
@@ -174,7 +176,8 @@ class Model:
                 print('{} Loss: {: .4f} Acc: {:.4f}'.format(phase, iteration_loss, iteration_acc))
 
                 per_iteration_model = copy.deepcopy(self.model.state_dict())
-                torch.save(per_iteration_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/' + self.name + '/chekers/iter'+str(iteration)+'.pt')
+                if self.logging:
+                    torch.save(per_iteration_model, '/scratch/b523m844/RNA_Secondary_Structure_Classification/' + self.name + '/chekers/iter'+str(iteration)+'.pt')
 
                 if phase == 'val' and iteration_acc > best_acc:
                     best_acc = iteration_acc
@@ -196,7 +199,8 @@ class Model:
 
         self.model.load_state_dict(best_model_wts)
 
-        torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/' + self.name + '/checkpoints/best.pt')
+        if self.logging:
+            torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/' + self.name + '/checkpoints/best.pt')
         return self.model, val_acc_history
 
     def initialize_model(self):
