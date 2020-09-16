@@ -21,8 +21,8 @@ class SiameseNetworkDataset(Dataset):
         else:
             img1_tuple = random.choice(self.imageFolderDataset.imgs)
 
-        img0 = img0_tuple[0])
-        img1 = img1_tuple[0])
+        img0 = img0_tuple[0]
+        img1 = img1_tuple[0]
         
         if self.should_invert:
             img0 = PIL.ImageOps.invert(img0)
