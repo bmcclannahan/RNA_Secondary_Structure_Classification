@@ -16,6 +16,51 @@ class Siamese_Model(Model):
 
     def _get_criterion(self):
         return Contrastive_Loss.ContrastiveLoss()
+
+    def _train_phase(self,running_loss,running_corrects):
+        for _ in range(int(Model.iteration_size['train']/Model.batch_size)):
+            inputs, labels = next(iter(self.dataloaders['train']))
+            
+            inputs1 = [i[0] for i in inputs]
+            inputs2 = [i[1] for i in inputs]
+            inputs1 = inputs1.to(self.device)
+            inputs2 = inputs2.to(self.device)
+            labels = labels.to(self.device)
+
+            self.optimizer.zero_grad()
+            with torch.set_grad_enabled(True):
+                outputs = self.model(inputs1,inputs2)
+                
+                loss = self.criterion(outputs, labels)
+                _, preds = torch.max(outputs, 1)
+
+                loss.backward()
+                self.optimizer.step()
+            running_loss += loss.item() * inputs.size(0)
+            running_corrects += torch.sum(preds == labels.data)
+
+        return running_loss, running_corrects
+
+    def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
+        for inputs, labels in self.dataloaders['val']:
+            inputs = inputs.to(self.device)
+            labels = labels.to(self.device)
+            
+            self.optimizer.zero_grad()
+            with torch.set_grad_enabled(False):
+                outputs = self.model(inputs)
+
+                
+                loss = self.criterion(outputs, labels)       
+                _, preds = torch.max(outputs, 1)
+            
+            running_loss += loss.item() * inputs.size(0)
+            running_corrects += torch.sum(preds == labels.data)
+            for i in range(len(labels)):
+                class_correct[labels[i]] += int(labels[i] == preds[i])
+                class_total[labels[i]] += 1
+
+        return running_loss, running_corrects, class_correct, class_total
     
     def _build_dataloaders(self):
         phases = ['train', 'val']
