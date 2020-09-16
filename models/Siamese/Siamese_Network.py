@@ -39,7 +39,9 @@ class SiameseNetwork(nn.Module):
         output = self.flatten(output)
         return output
 
-    def forward(self, input1, input2):
+    def forward(self, input_tuple):
+        input1 = input_tuple[0]
+        input2 = input_tuple[1]
         # forward pass of input 1
         left = self.forward_once(input1)
         # forward pass of input 2
