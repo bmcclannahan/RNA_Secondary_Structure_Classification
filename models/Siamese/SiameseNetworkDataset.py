@@ -24,14 +24,6 @@ class SiameseNetworkDataset(Dataset):
         img0 = img0_tuple[0]
         img1 = img1_tuple[0]
         
-        if self.should_invert:
-            img0 = PIL.ImageOps.invert(img0)
-            img1 = PIL.ImageOps.invert(img1)
-
-        if self.transform is not None:
-            img0 = self.transform(img0)
-            img1 = self.transform(img1)
-        
         return img0, img1, torch.from_numpy(np.array([should_get_same_class],dtype=np.float32))
     
     def __len__(self):
