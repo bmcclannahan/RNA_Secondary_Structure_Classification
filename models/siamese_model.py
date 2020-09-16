@@ -20,6 +20,7 @@ class Siamese_Model(Model):
     def _train_phase(self,running_loss,running_corrects):
         for _ in range(int(Model.iteration_size['train']/Model.batch_size)):
             inputs, labels = next(iter(self.dataloaders['train']))
+            print(type(inputs))
             
             inputs1 = [i[0] for i in inputs]
             inputs2 = [i[1] for i in inputs]
