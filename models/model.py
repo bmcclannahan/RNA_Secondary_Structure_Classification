@@ -114,40 +114,9 @@ class Model:
                 class_total = list(0. for i in range(2))
 
                 if phase == 'train':
-                    for i in range(int(Model.iteration_size[phase]/Model.batch_size)):
-                        inputs, labels = next(iter(self.dataloaders[phase]))
-                        inputs = inputs.to(self.device)
-                        labels = labels.to(self.device)
-
-                        self.optimizer.zero_grad()
-                        with torch.set_grad_enabled(phase == 'train'):
-                            outputs = self.model(inputs)
-                            
-                            loss = self.criterion(outputs, labels)
-                            _, preds = torch.max(outputs, 1)
-
-                            loss.backward()
-                            self.optimizer.step()
-                        running_loss += loss.item() * inputs.size(0)
-                        running_corrects += torch.sum(preds == labels.data)
+                    running_loss, running_corrects = self._train_phase(running_loss, running_corrects)
                 if phase == 'val':
-                    for inputs, labels in self.dataloaders[phase]:
-                        inputs = inputs.to(self.device)
-                        labels = labels.to(self.device)
-                        
-                        self.optimizer.zero_grad()
-                        with torch.set_grad_enabled(phase == 'train'):
-                            outputs = self.model(inputs)
-
-                            
-                            loss = self.criterion(outputs, labels)       
-                            _, preds = torch.max(outputs, 1)
-                        
-                        running_loss += loss.item() * inputs.size(0)
-                        running_corrects += torch.sum(preds == labels.data)
-                        for i in range(len(labels)):
-                            class_correct[labels[i]] += int(labels[i] == preds[i])
-                            class_total[labels[i]] += 1
+                    running_loss, running_corrects, class_correct, class_total = self._val_phase(running_loss,running_corrects,class_correct,class_total)
 
                 if phase == 'train':
                     iteration_loss = running_loss / Model.iteration_size['train']
@@ -164,12 +133,12 @@ class Model:
                 #     prev_loss = [curr_loss] + prev_loss[:9]
                 #     curr_loss = iteration_loss
 
-                if phase == 'val':
+                if phase == 'val' and self.logging:
                     fp.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
                     #write the validation loss enough times so it can be graphed over the train loss
                     for i in range(iteration_validation_frequency):
                         fvl.write(str(iteration_loss)+"\n")
-                if phase == 'train':
+                if phase == 'train' and self.logging:
                     ft.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
                     ftl.write(str(iteration_loss)+"\n")
 
@@ -202,6 +171,47 @@ class Model:
         if self.logging:
             torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/' + self.name + '/checkpoints/best.pt')
         return self.model, val_acc_history
+
+    def _train_phase(self,running_loss,running_corrects):
+        for _ in range(int(Model.iteration_size['train']/Model.batch_size)):
+            inputs, labels = next(iter(self.dataloaders['train']))
+            inputs = inputs.to(self.device)
+            labels = labels.to(self.device)
+
+            self.optimizer.zero_grad()
+            with torch.set_grad_enabled(True):
+                outputs = self.model(inputs)
+                
+                loss = self.criterion(outputs, labels)
+                _, preds = torch.max(outputs, 1)
+
+                loss.backward()
+                self.optimizer.step()
+            running_loss += loss.item() * inputs.size(0)
+            running_corrects += torch.sum(preds == labels.data)
+
+        return running_loss, running_corrects
+
+    def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
+        for inputs, labels in self.dataloaders['val']:
+            inputs = inputs.to(self.device)
+            labels = labels.to(self.device)
+            
+            self.optimizer.zero_grad()
+            with torch.set_grad_enabled(False):
+                outputs = self.model(inputs)
+
+                
+                loss = self.criterion(outputs, labels)       
+                _, preds = torch.max(outputs, 1)
+            
+            running_loss += loss.item() * inputs.size(0)
+            running_corrects += torch.sum(preds == labels.data)
+            for i in range(len(labels)):
+                class_correct[labels[i]] += int(labels[i] == preds[i])
+                class_total[labels[i]] += 1
+
+        return running_loss, running_corrects, class_correct, class_total
 
     def initialize_model(self):
         final_layer_size = 2
