@@ -21,7 +21,7 @@ class Siamese_Model(Model):
         for _ in range(int(Model.iteration_size['train']/Model.batch_size)):
             inputs1, inputs2, labels = next(iter(self.dataloaders['train']))
             print(type(inputs1), inputs1)
-            print(type(inputs1[0],inputs1[1]))
+            print(type(inputs1[0]),type(inputs1[1]))
 
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
