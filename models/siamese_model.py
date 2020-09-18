@@ -36,7 +36,7 @@ class Siamese_Model(Model):
 
                 loss.backward()
                 self.optimizer.step()
-            running_loss += loss.item() * inputs.size(0)
+            running_loss += loss.item() * inputs1.size(0)
             running_corrects += torch.sum(preds == labels.data)
 
         return running_loss, running_corrects
@@ -74,9 +74,9 @@ class Siamese_Model(Model):
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         }
 
-        image_folders = {x: datasets.ImageFolder(os.path.join(Siamese_Model.data_dir, x), data_normalization[x]) for x in phases}
+        image_folders = {x: datasets.ImageFolder(os.path.join(Siamese_Model.data_dir, x)) for x in phases}
 
-        image_datasets = {x: SiameseNetworkDataset.SiameseNetworkDataset(image_folders[x]) for x in phases}
+        image_datasets = {x: SiameseNetworkDataset.SiameseNetworkDataset(image_folders[x], data_normalization[x]) for x in phases}
 
         print('Initializing Dataloader')
 
