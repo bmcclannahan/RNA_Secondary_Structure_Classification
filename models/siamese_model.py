@@ -76,7 +76,7 @@ class Siamese_Model(Model):
 
         image_folders = {x: datasets.ImageFolder(os.path.join(Siamese_Model.data_dir, x)) for x in phases}
 
-        image_datasets = {x: SiameseNetworkDataset.SiameseNetworkDataset(image_folders[x], transforms==data_normalization[x]) for x in phases}
+        image_datasets = {x: SiameseNetworkDataset.SiameseNetworkDataset(image_folders[x], transforms=data_normalization[x]) for x in phases}
 
         print('Initializing Dataloader')
 
