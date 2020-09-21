@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import Dataset
 import random
 import numpy as np
+from PIL import Image
 
 class SiameseNetworkDataset(Dataset):
     
@@ -25,8 +26,13 @@ class SiameseNetworkDataset(Dataset):
         img0_path = img0_tuple[0]
         img1_path = img1_tuple[0]
 
-        img0 = self.loader(img0_path)
-        img1 = self.loader(img1_path)
+        img0 = Image.open(img0_path)
+        img1 = Image.open(img1_path)
+        
+        if self.transform is not None:#I think the transform is essential if you want to use GPU, because you have to trans data to tensor first.
+            img0 = self.transform(img0)
+            img1 = self.transform(img1)
+
         print(type(img0),type(img1))
 
         if self.transforms is not None:
