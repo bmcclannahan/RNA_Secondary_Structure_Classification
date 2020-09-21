@@ -29,7 +29,7 @@ class SiameseNetworkDataset(Dataset):
         img0 = Image.open(img0_path)
         img1 = Image.open(img1_path)
         
-        if self.transform is not None:#I think the transform is essential if you want to use GPU, because you have to trans data to tensor first.
+        if self.transforms is not None:#I think the transform is essential if you want to use GPU, because you have to trans data to tensor first.
             img0 = self.transform(img0)
             img1 = self.transform(img1)
 
