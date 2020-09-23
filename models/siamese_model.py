@@ -1,4 +1,5 @@
 import torch
+import torch.nn as nn
 from torch.optim import lr_scheduler
 import numpy as np
 import torchvision
@@ -15,13 +16,12 @@ class Siamese_Model(Model):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,logging)
 
     def _get_criterion(self):
-        return Contrastive_Loss.ContrastiveLoss()
+        return nn.CrossEntropyLoss()
+        #return Contrastive_Loss.ContrastiveLoss()
 
     def _train_phase(self,running_loss,running_corrects):
         for _ in range(int(Model.iteration_size['train']/Model.batch_size)):
             inputs1, inputs2, labels = next(iter(self.dataloaders['train']))
-            print(type(inputs1), inputs1)
-            print(type(inputs1[0]),type(inputs1[1]))
 
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
