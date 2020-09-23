@@ -16,7 +16,7 @@ class Siamese_Model(Model):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,logging)
 
     def _get_criterion(self):
-        return nn.CrossEntropyLoss()
+        return nn.BCELoss()
         #return Contrastive_Loss.ContrastiveLoss()
 
     def _train_phase(self,running_loss,running_corrects):
