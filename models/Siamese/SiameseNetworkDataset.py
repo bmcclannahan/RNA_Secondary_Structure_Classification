@@ -28,12 +28,12 @@ class SiameseNetworkDataset(Dataset):
 
         img0 = Image.open(img0_path).convert('LA')
         img1 = Image.open(img1_path).convert('LA')
+
+        print(img0.shape())
         
         if self.transforms is not None:#I think the transform is essential if you want to use GPU, because you have to trans data to tensor first.
             img0 = self.transforms(img0)
             img1 = self.transforms(img1)
-
-        print(type(img0),type(img1))
         
         return img0, img1, torch.from_numpy(np.array([should_get_same_class],dtype=np.float32))
     
