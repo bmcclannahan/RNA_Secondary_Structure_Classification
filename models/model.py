@@ -10,7 +10,6 @@ from torchvision import datasets, transforms
 from Siamese import Siamese_Network
 
 import statistics
-import matplotlib.pyplot as plt
 import time
 import os
 import copy
