@@ -26,8 +26,8 @@ class SiameseNetworkDataset(Dataset):
         img0_path = img0_tuple[0]
         img1_path = img1_tuple[0]
 
-        img0 = Image.open(img0_path).convert(‘RGB’)
-        img1 = Image.open(img1_path).convert(‘RGB’)
+        img0 = Image.open(img0_path).convert('RGB')
+        img1 = Image.open(img1_path).convert('RGB')
         
         if self.transforms is not None:#I think the transform is essential if you want to use GPU, because you have to trans data to tensor first.
             img0 = self.transforms(img0)
