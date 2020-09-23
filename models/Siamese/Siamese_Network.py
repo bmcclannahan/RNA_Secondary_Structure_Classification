@@ -19,7 +19,7 @@ class SiameseNetwork(nn.Module):
         # First Dense Layer
         nn.Linear(2048, 1024),
         nn.ReLU(inplace=True))
-        self.euclidean = nn.Sequential(EuclidianDistance())
+        self.euclidean = EuclidianDistance()
         self.fc = nn.Sequential(
             nn.Linear(1024,1),
             nn.Sigmoid()
