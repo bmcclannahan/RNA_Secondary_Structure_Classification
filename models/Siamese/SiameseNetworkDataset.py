@@ -33,7 +33,7 @@ class SiameseNetworkDataset(Dataset):
             img0 = self.transforms(img0)
             img1 = self.transforms(img1)
 
-        print(img0.shape())
+        print(img0.shape)
         
         return img0, img1, torch.from_numpy(np.array([should_get_same_class],dtype=np.float32))
     
