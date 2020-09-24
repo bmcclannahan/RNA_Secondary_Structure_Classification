@@ -38,10 +38,8 @@ class Siamese_Model(Model):
                 self.optimizer.step()
             running_loss += loss.item() * inputs1.size(0)
             running_corrects += torch.sum(preds == labels.data)
-        
-        print(running_loss,running_corrects)
 
-        return running_loss, running_corrects
+        return running_loss, running_corrects.double()
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
         for inputs, labels in self.dataloaders['val']:

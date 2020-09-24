@@ -117,9 +117,11 @@ class Model:
                 if phase == 'val':
                     running_loss, running_corrects, class_correct, class_total = self._val_phase(running_loss,running_corrects,class_correct,class_total)
 
+                print(running_loss,running_corrects)
+
                 if phase == 'train':
                     iteration_loss = running_loss / Model.iteration_size['train']
-                    iteration_acc = running_corrects.double() / Model.iteration_size['train']
+                    iteration_acc = running_corrects / Model.iteration_size['train']
                     train_acc = iteration_acc
                 else:
                     iteration_loss = running_loss / len(self.dataloaders[phase].dataset)
@@ -191,7 +193,7 @@ class Model:
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels.data)
 
-        return running_loss, running_corrects
+        return running_loss, running_corrects.double()
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
         for inputs, labels in self.dataloaders['val']:
