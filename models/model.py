@@ -117,11 +117,9 @@ class Model:
                 if phase == 'val':
                     running_loss, running_corrects, running_total, class_correct, class_total = self._val_phase(running_loss,running_corrects,class_correct,class_total)
 
-                print(running_loss,running_corrects,running_total)
-
                 if phase == 'train':
-                    iteration_loss = running_loss / Model.iteration_size['train']
-                    iteration_acc = running_corrects / Model.iteration_size['train']
+                    iteration_loss = running_loss / running_total
+                    iteration_acc = running_corrects / running_total
                     train_acc = iteration_acc
                 else:
                     iteration_loss = running_loss / len(self.dataloaders[phase].dataset)
