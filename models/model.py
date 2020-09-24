@@ -155,8 +155,10 @@ class Model:
                     val_acc_history.append(iteration_acc)
 
             print()
-            fp.close()
-            ft.close()
+            
+            if self.logging:
+                fp.close()
+                ft.close()
             iteration += 1
 
         time_elapsed = time.time() - since
