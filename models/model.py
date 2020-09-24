@@ -176,7 +176,6 @@ class Model:
     def _train_phase(self,running_loss,running_corrects):
         for _ in range(int(Model.iteration_size['train']/Model.batch_size)):
             inputs, labels = next(iter(self.dataloaders['train']))
-            print(type(inputs),type(labels))
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
 
