@@ -12,15 +12,16 @@ class Siamese_Model(Model):
 
     data_dir = "/data/Siamese"
 
+    iteration_size = {'train': 1661, 'val': 120}
+
     def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.5,lr_step=50,iteration_limit=600,logging=True):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,logging)
 
     def _get_criterion(self):
         return nn.BCELoss()
-        #return Contrastive_Loss.ContrastiveLoss()
 
     def _train_phase(self,running_loss,running_corrects):
-        for _ in range(int(Model.iteration_size['train']/Model.batch_size)):
+        for _ in range(int(Siamese_Model.iteration_size['train']/Model.batch_size)):
             inputs1, inputs2, labels = next(iter(self.dataloaders['train']))
 
             inputs1 = inputs1.to(self.device)
@@ -39,28 +40,32 @@ class Siamese_Model(Model):
             running_loss += loss.item() * inputs1.size(0)
             running_corrects += torch.sum(preds == labels.data)
 
-        return running_loss, running_corrects.double()
+        return running_loss, running_corrects.double(), Siamese_Model.iteration_size['train']
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
-        for inputs, labels in self.dataloaders['val']:
-            inputs = inputs.to(self.device)
-            labels = labels.to(self.device)
-            
-            self.optimizer.zero_grad()
-            with torch.set_grad_enabled(False):
-                outputs = self.model(inputs)
+        for _ in range(int(Siamese_Model.iteration_size['val']/Model.batch_size)):
+            inputs1, inputs2, labels = next(iter(self.dataloaders['val']))
 
+            inputs1 = inputs1.to(self.device)
+            inputs2 = inputs2.to(self.device)
+            labels = labels.to(self.device)
+
+            self.optimizer.zero_grad()
+            with torch.set_grad_enabled(True):
+                outputs = self.model(inputs1,inputs2)
                 
-                loss = self.criterion(outputs, labels)       
+                loss = self.criterion(outputs, labels)
                 _, preds = torch.max(outputs, 1)
-            
-            running_loss += loss.item() * inputs.size(0)
+
+                loss.backward()
+                self.optimizer.step()
+            running_loss += loss.item() * inputs1.size(0)
             running_corrects += torch.sum(preds == labels.data)
             for i in range(len(labels)):
                 class_correct[labels[i]] += int(labels[i] == preds[i])
                 class_total[labels[i]] += 1
 
-        return running_loss, running_corrects, class_correct, class_total
+        return running_loss, running_corrects, Siamese_Model.iteration_size['val'], class_correct, class_total
     
     def _build_dataloaders(self):
         phases = ['train', 'val']

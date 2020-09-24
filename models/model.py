@@ -113,11 +113,11 @@ class Model:
                 class_total = list(0. for i in range(2))
 
                 if phase == 'train':
-                    running_loss, running_corrects = self._train_phase(running_loss, running_corrects)
+                    running_loss, running_corrects, running_total = self._train_phase(running_loss, running_corrects)
                 if phase == 'val':
-                    running_loss, running_corrects, class_correct, class_total = self._val_phase(running_loss,running_corrects,class_correct,class_total)
+                    running_loss, running_corrects, running_total, class_correct, class_total = self._val_phase(running_loss,running_corrects,class_correct,class_total)
 
-                print(running_loss,running_corrects)
+                print(running_loss,running_corrects,running_total)
 
                 if phase == 'train':
                     iteration_loss = running_loss / Model.iteration_size['train']
@@ -193,7 +193,7 @@ class Model:
             running_loss += loss.item() * inputs.size(0)
             running_corrects += torch.sum(preds == labels.data)
 
-        return running_loss, running_corrects.double()
+        return running_loss, running_corrects.double(), Model.iteration_size['train']
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
         for inputs, labels in self.dataloaders['val']:
@@ -214,7 +214,7 @@ class Model:
                 class_correct[labels[i]] += int(labels[i] == preds[i])
                 class_total[labels[i]] += 1
 
-        return running_loss, running_corrects, class_correct, class_total
+        return running_loss, running_corrects, Model.iteration_size['val'], class_correct, class_total
 
     def initialize_model(self):
         final_layer_size = 2
