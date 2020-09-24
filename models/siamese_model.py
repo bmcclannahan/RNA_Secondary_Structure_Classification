@@ -5,7 +5,7 @@ import numpy as np
 import torchvision
 from torchvision import datasets, transforms
 from model import Model
-from Siamese import SiameseNetworkDataset, Contrastive_Loss
+from Siamese import SiameseNetworkDataset
 import os
 
 class Siamese_Model(Model):
