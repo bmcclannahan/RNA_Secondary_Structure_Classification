@@ -1,9 +1,9 @@
 import os, glob
 import shutil
 
-rna_list = '/data/train.out'
+rna_list = '/data/test.out'
 data_dir = '/data/Full_Image_Set/'
-dest_dir = '/data/Siamese/train/'
+dest_dir = '/data/Siamese/test/'
 
 images = glob.glob(data_dir+"*.jpg")
 
