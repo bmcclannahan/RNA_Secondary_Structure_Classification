@@ -10,7 +10,7 @@ import os
 
 class Siamese_Model(Model):
 
-    data_dir = "/data/Siamese"
+    data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
 
     iteration_size = {'train': 1661, 'val': 120}
 
