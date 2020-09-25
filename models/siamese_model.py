@@ -38,8 +38,10 @@ class Siamese_Model(Model):
                 loss.backward()
                 self.optimizer.step()
             print(type(preds),type(labels.data))
+
+            expected = labels.data.long()
             running_loss += loss.item() * inputs1.size(0)
-            running_corrects += torch.sum(preds == labels.data)
+            running_corrects += torch.sum(preds == expected)
 
         return running_loss, running_corrects.double(), Siamese_Model.iteration_size['train']
 
