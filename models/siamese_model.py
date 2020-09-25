@@ -62,7 +62,8 @@ class Siamese_Model(Model):
                 loss.backward()
                 self.optimizer.step()
             running_loss += loss.item() * inputs1.size(0)
-            running_corrects += torch.sum(preds == labels.data)
+            expected = labels.data.long()
+            running_corrects += torch.sum(preds == expected)
             for i in range(len(labels)):
                 class_correct[labels[i]] += int(labels[i].long() == preds[i])
                 class_total[labels[i]] += 1
