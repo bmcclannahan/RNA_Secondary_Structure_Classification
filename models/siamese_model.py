@@ -21,7 +21,9 @@ class Siamese_Model(Model):
         return nn.BCELoss()
 
     def _train_phase(self,running_loss,running_corrects):
-        for _ in range(int(Siamese_Model.iteration_size['train']/Model.batch_size)):
+        num_iterations = int(Siamese_Model.iteration_size['train']/Model.batch_size)
+        print("Number of iterations:", num_iterations)
+        for _ in range(num_iterations):
             inputs1, inputs2, labels = next(iter(self.dataloaders['train']))
 
             inputs1 = inputs1.to(self.device)
@@ -40,6 +42,7 @@ class Siamese_Model(Model):
 
             running_loss += loss.item() * inputs1.size(0)
             running_corrects += torch.sum(preds.float() == labels.data)
+            print("Running corrects:", running_corrects)
 
         return running_loss, running_corrects.int(), Siamese_Model.iteration_size['train']
 
