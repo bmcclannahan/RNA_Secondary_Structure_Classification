@@ -117,7 +117,7 @@ class Model:
                 if phase == 'val':
                     running_loss, running_corrects, running_total, class_correct, class_total = self._val_phase(running_loss,running_corrects,class_correct,class_total)
 
-                print(running_loss,running_total,type(running_loss),type(running_total), running_corrects / running_total)
+                print(running_corrects,running_total,type(running_loss),type(running_total), running_corrects / running_total)
 
                 if phase == 'train':
                     iteration_loss = running_loss / running_total
