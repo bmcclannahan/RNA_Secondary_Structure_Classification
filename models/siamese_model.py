@@ -40,7 +40,7 @@ class Siamese_Model(Model):
 
             expected = labels.data.long()
             running_loss += loss.item() * inputs1.size(0)
-            running_corrects += torch.sum(torch.round(preds) == expected)
+            running_corrects += torch.sum(preds.float() == labels.data)
 
         return running_loss, running_corrects.double(), Siamese_Model.iteration_size['train']
 
