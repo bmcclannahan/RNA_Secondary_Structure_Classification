@@ -64,11 +64,8 @@ class Siamese_Model(Model):
             running_loss += loss.item() * inputs1.size(0)
             expected = labels.data.long()
             running_corrects += torch.sum(preds == expected)
-            for i in range(len(labels)):
-                class_correct[labels[i]] += int(labels[i].long() == preds[i])
-                class_total[labels[i]] += 1
 
-        return running_loss, running_corrects, Siamese_Model.iteration_size['val'], class_correct, class_total
+        return running_loss, running_corrects, Siamese_Model.iteration_size['val'], None, None
     
     def _build_dataloaders(self):
         phases = ['train', 'val']
