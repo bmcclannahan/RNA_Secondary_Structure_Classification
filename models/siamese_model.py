@@ -38,11 +38,10 @@ class Siamese_Model(Model):
                 loss.backward()
                 self.optimizer.step()
 
-            expected = labels.data.long()
             running_loss += loss.item() * inputs1.size(0)
             running_corrects += torch.sum(preds.float() == labels.data)
 
-        return running_loss, running_corrects.double(), Siamese_Model.iteration_size['train']
+        return running_loss, running_corrects.int(), Siamese_Model.iteration_size['train']
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
         for _ in range(int(Siamese_Model.iteration_size['val']/Model.batch_size)):
