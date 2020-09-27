@@ -46,7 +46,7 @@ class Siamese_Model(Model):
             running_loss += loss.item() * inputs1.size(0)
             correct_array = preds.float() == labels.data
 
-            print("Size of correct array", correct_array.Size())
+            print("Size of correct array", correct_array.shape())
             running_corrects += torch.sum(preds.float() == labels.data)
             print("Number of labels:", len(labels))
             print("Running corrects:", running_corrects)
