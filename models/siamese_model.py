@@ -26,9 +26,12 @@ class Siamese_Model(Model):
         for _ in range(num_iterations):
             inputs1, inputs2, labels = next(iter(self.dataloaders['train']))
 
+            print("Number of inputs",len(inputs1),len(inputs2))
+
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
+
 
             self.optimizer.zero_grad()
             with torch.set_grad_enabled(True):
@@ -41,6 +44,9 @@ class Siamese_Model(Model):
                 self.optimizer.step()
 
             running_loss += loss.item() * inputs1.size(0)
+            correct_array = preds.float() == labels.data
+
+            print("Size of correct array", correct_array.Size())
             running_corrects += torch.sum(preds.float() == labels.data)
             print("Number of labels:", len(labels))
             print("Running corrects:", running_corrects)
