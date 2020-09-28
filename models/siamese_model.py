@@ -14,7 +14,7 @@ class Siamese_Model(Model):
 
     iteration_size = {'train': 1661, 'val': 120}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.5,lr_step=50,iteration_limit=600,logging=True,starting_weight=.75):
+    def __init__(self,model_func,model_name,learning_rate=0.1,lr_gamma=0.5,lr_step=50,iteration_limit=600,logging=True,starting_weight=.75):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,logging)
         self.starting_weights = {'train':starting_weight, 'val':0.5}
 
@@ -74,9 +74,6 @@ class Siamese_Model(Model):
                 
                 loss = self.criterion(outputs, labels)
                 _, preds = torch.max(outputs, 1)
-
-                loss.backward()
-                self.optimizer.step()
 
             running_loss += loss.item() * inputs1.size(0)
             expected = torch.reshape(labels.data,(Model.batch_size,)).long()
