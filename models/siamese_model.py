@@ -47,6 +47,8 @@ class Siamese_Model(Model):
             expected = torch.reshape(labels.data,(Model.batch_size,))
             running_corrects += torch.sum(preds.float() == expected)
 
+            print("Expected:",expected)
+            print("preds:", preds)
             #print("Shape of preds:",preds.shape)
             #print("Shape of labels:", expected.shape)
             #print("Number of labels:", len(labels))
