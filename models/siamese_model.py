@@ -56,7 +56,7 @@ class Siamese_Model(Model):
             #print("Number of labels:", len(labels))
             #print("Running corrects:", running_corrects)
 
-        return running_loss.item(), running_corrects.int().item(), Siamese_Model.iteration_size['train']
+        return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['train']
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
         for _ in range(int(Siamese_Model.iteration_size['val']/Model.batch_size)):
