@@ -44,12 +44,13 @@ class Siamese_Model(Model):
                 self.optimizer.step()
 
             running_loss += loss.item() * inputs1.size(0)
-            expected = torch.reshape(labels.data,(Model.batch_size,))
-            running_corrects += torch.sum(preds.float() == expected)
+            expected = torch.reshape(labels.data,(Model.batch_size,)).long()
+            running_corrects += torch.sum(preds == expected)
 
             print("Expected:",expected)
             print("preds:", preds)
             print("equivalency of exp and preds:", preds.float() == expected)
+            print("Sum of above:", torch.sum(preds.float() == expected))
             #print("Shape of preds:",preds.shape)
             #print("Shape of labels:", expected.shape)
             #print("Number of labels:", len(labels))
