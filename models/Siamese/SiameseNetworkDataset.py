@@ -15,7 +15,8 @@ class SiameseNetworkDataset(Dataset):
         
     def __getitem__(self,index):
         if self.image_count > 1500:
-            self.seed += 1        
+            self.seed += 1    
+            random.seed(self.seed)    
         self.image_count += 1
         
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
