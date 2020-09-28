@@ -49,6 +49,7 @@ class Siamese_Model(Model):
 
             print("Expected:",expected)
             print("preds:", preds)
+            print("equivalency of exp and preds:", preds.float() == expected)
             #print("Shape of preds:",preds.shape)
             #print("Shape of labels:", expected.shape)
             #print("Number of labels:", len(labels))
