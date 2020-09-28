@@ -5,7 +5,7 @@ import numpy as np
 import torchvision
 from torchvision import datasets, transforms
 from model import Model
-from Siamese import SiameseNetworkDataset
+from Siamese import SiameseNetworkDataset as SND
 import os
 
 class Siamese_Model(Model):
@@ -98,7 +98,7 @@ class Siamese_Model(Model):
 
         image_folders = {x: datasets.ImageFolder(os.path.join(Siamese_Model.data_dir, x)) for x in phases}
 
-        image_datasets = {x: SiameseNetworkDataset.SiameseNetworkDataset(image_folders[x], data_normalization[x],self.starting_weights[phase]) for x in phases}
+        image_datasets = {x: SND.SiameseNetworkDataset(image_folders[x], data_normalization[x],self.starting_weights[x]) for x in phases}
 
         print('Initializing Dataloader')
 
