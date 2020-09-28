@@ -14,8 +14,9 @@ class Siamese_Model(Model):
 
     iteration_size = {'train': 1661, 'val': 120}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.5,lr_step=50,iteration_limit=600,logging=True):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.5,lr_step=50,iteration_limit=600,logging=True,starting_weight=.75):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,logging)
+        self.starting_weights = {'train':starting_weight, 'val':0.5}
 
     def _get_criterion(self):
         return nn.BCELoss()
@@ -66,8 +67,9 @@ class Siamese_Model(Model):
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
 
+
             self.optimizer.zero_grad()
-            with torch.set_grad_enabled(True):
+            with torch.set_grad_enabled(False):
                 outputs = self.model(inputs1,inputs2)
                 
                 loss = self.criterion(outputs, labels)
@@ -75,11 +77,12 @@ class Siamese_Model(Model):
 
                 loss.backward()
                 self.optimizer.step()
+
             running_loss += loss.item() * inputs1.size(0)
-            expected = labels.data.long()
+            expected = torch.reshape(labels.data,(Model.batch_size,)).long()
             running_corrects += torch.sum(preds == expected)
 
-        return running_loss, running_corrects, Siamese_Model.iteration_size['val'], None, None
+        return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['val'], None, None
     
     def _build_dataloaders(self):
         phases = ['train', 'val']
@@ -95,7 +98,7 @@ class Siamese_Model(Model):
 
         image_folders = {x: datasets.ImageFolder(os.path.join(Siamese_Model.data_dir, x)) for x in phases}
 
-        image_datasets = {x: SiameseNetworkDataset.SiameseNetworkDataset(image_folders[x], data_normalization[x]) for x in phases}
+        image_datasets = {x: SiameseNetworkDataset.SiameseNetworkDataset(image_folders[x], data_normalization[x],self.starting_weights[phase]) for x in phases}
 
         print('Initializing Dataloader')
 

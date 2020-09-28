@@ -6,15 +6,16 @@ from PIL import Image
 
 class SiameseNetworkDataset(Dataset):
     
-    def __init__(self,imageFolderDataset,transforms=None):
+    def __init__(self,imageFolderDataset,transforms=None,weight=0.5):
         self.imageFolderDataset = imageFolderDataset
         self.transforms = transforms
+        self.weight = weight
         
     def __getitem__(self,index):
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
         #we need to make sure approx 50% of images are in the same class
-        should_get_same_class = random.randint(0,1) 
-        if should_get_same_class:
+        should_get_same_class = random.random()
+        if should_get_same_class < self.weight:
             while True:
                 #keep looping till the same class image is found
                 img1_tuple = random.choice(self.imageFolderDataset.imgs) 
