@@ -10,8 +10,14 @@ class SiameseNetworkDataset(Dataset):
         self.imageFolderDataset = imageFolderDataset
         self.transforms = transforms
         self.weight = weight
+        self.seed = 1
+        self.image_count = 0
         
     def __getitem__(self,index):
+        if self.image_count > 1500:
+            self.seed += 1        
+        self.image_count += 1
+        
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
         #we need to make sure approx 50% of images are in the same class
         should_get_same_class = random.random()
@@ -34,7 +40,7 @@ class SiameseNetworkDataset(Dataset):
             img0 = self.transforms(img0)
             img1 = self.transforms(img1)
         
-        return img0, img1, torch.from_numpy(np.array([should_get_same_class],dtype=np.float32))
+        return img0, img1, torch.from_numpy(np.array([img0_tuple[1] == img1_tuple[1]],dtype=np.float32))
     
     def __len__(self):
         return len(self.imageFolderDataset.imgs)
