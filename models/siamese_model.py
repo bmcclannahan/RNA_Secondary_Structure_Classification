@@ -22,11 +22,11 @@ class Siamese_Model(Model):
 
     def _train_phase(self,running_loss,running_corrects):
         num_iterations = int(Siamese_Model.iteration_size['train']/Model.batch_size)
-        print("Number of iterations:", num_iterations)
+        #print("Number of iterations:", num_iterations)
         for _ in range(num_iterations):
             inputs1, inputs2, labels = next(iter(self.dataloaders['train']))
 
-            print("Number of inputs",len(inputs1),len(inputs2))
+            #print("Number of inputs",len(inputs1),len(inputs2))
 
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
@@ -47,10 +47,10 @@ class Siamese_Model(Model):
             expected = torch.reshape(labels.data,(Model.batch_size,))
             running_corrects += torch.sum(preds.float() == expected)
 
-            print("Shape of preds:",preds.shape)
-            print("Shape of labels:", expected.shape)
-            print("Number of labels:", len(labels))
-            print("Running corrects:", running_corrects)
+            #print("Shape of preds:",preds.shape)
+            #print("Shape of labels:", expected.shape)
+            #print("Number of labels:", len(labels))
+            #print("Running corrects:", running_corrects)
 
         return running_loss, running_corrects.int(), Siamese_Model.iteration_size['train']
 
