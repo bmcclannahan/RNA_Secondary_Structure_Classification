@@ -47,16 +47,16 @@ class Siamese_Model(Model):
             expected = torch.reshape(labels.data,(Model.batch_size,)).long()
             running_corrects += torch.sum(preds == expected)
 
-            print("Expected:",expected)
-            print("preds:", preds)
-            print("equivalency of exp and preds:", preds == expected)
-            print("Sum of above:", torch.sum(preds == expected))
+            #print("Expected:",expected)
+            #print("preds:", preds)
+            #print("equivalency of exp and preds:", preds == expected)
+            #print("Sum of above:", torch.sum(preds == expected))
             #print("Shape of preds:",preds.shape)
             #print("Shape of labels:", expected.shape)
             #print("Number of labels:", len(labels))
             #print("Running corrects:", running_corrects)
 
-        return running_loss, running_corrects.int(), Siamese_Model.iteration_size['train']
+        return running_loss.item(), running_corrects.int().item(), Siamese_Model.iteration_size['train']
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
         for _ in range(int(Siamese_Model.iteration_size['val']/Model.batch_size)):
