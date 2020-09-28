@@ -44,10 +44,11 @@ class Siamese_Model(Model):
                 self.optimizer.step()
 
             running_loss += loss.item() * inputs1.size(0)
-            running_corrects += torch.sum(preds.float() == labels.data)
+            expected = torch.reshape(labels.data,(Model.batch_size))
+            running_corrects += torch.sum(preds.float() == expected)
 
             print("Shape of preds:",preds.shape)
-            print("Shape of labels:", labels.data.shape)
+            print("Shape of labels:", expected.shape)
             print("Number of labels:", len(labels))
             print("Running corrects:", running_corrects)
 
