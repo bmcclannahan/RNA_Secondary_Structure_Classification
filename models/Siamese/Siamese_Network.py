@@ -17,7 +17,7 @@ class SiameseNetwork(nn.Module):
         # Defining the fully connected layers
         self.flatten = nn.Sequential(
         # First Dense Layer
-        nn.Linear(2048, 32),
+        nn.Linear(2048, 1024),
         nn.ReLU(inplace=True))
         self.euclidean = EuclidianDistance()
         self.fc = nn.Sequential(
@@ -41,13 +41,13 @@ class SiameseNetwork(nn.Module):
 
     def forward(self, input1, input2):
         # forward pass of input 1
-        left = torch.reshape(self.forward_once(input1),(1024,))
+        left = self.forward_once(input1)
         # forward pass of input 2
-        right = torch.reshape(self.forward_once(input2),(1024,))
+        right = self.forward_once(input2)
         # pass both through euclidean layer
-        print('left:',left.shape)
-        print('right:',right.shape)
+        print('left:',left.data[0][:5])
+        print('right:',right.data[0][:5])
         euclidean = self.euclidean(left,right)
-        print('euclidean:',euclidean.shape)
+        print('euclidean:',euclidean.data[0][:5])
         output = self.fc(euclidean)
         return output
