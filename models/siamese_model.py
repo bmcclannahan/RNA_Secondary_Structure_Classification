@@ -93,12 +93,20 @@ class Siamese_Model(Model):
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         }
 
-        image_folders = {x: datasets.ImageFolder(os.path.join(Siamese_Model.data_dir, x)) for x in phases}
-
-        image_datasets = {x: SND.SiameseNetworkDataset(image_folders[x], data_normalization[x],self.starting_weights[x]) for x in phases}
+        #image_datasets = {x: _get_rna_dataset(self,x,data_normalization[x]) for x in phases}
+        image_datasets = {x: _get_test_dataset(self,x,data_normalization[x]) for x in phases}
 
         print('Initializing Dataloader')
 
         dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=Model.batch_size, shuffle=True, num_workers=4) for x in ['train', 'val']}
 
         self.dataloaders = dataloaders_dict
+
+    def _get_rna_dataset(self,phase,data_normalization):
+        image_folder = datasets.ImageFolder(os.path.join(Siamese_Model.data_dir,phase))
+        return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase])
+    
+    #For testing model works with cifar 10
+    def _get_test_dataset(self,phase,data_normalization):
+        image_folder = datasets.('/data/test_datasets')
+        return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase])
