@@ -45,9 +45,9 @@ class SiameseNetwork(nn.Module):
         # forward pass of input 2
         right = self.forward_once(input2)
         # pass both through euclidean layer
-        print('left:',left.data[:5])
-        print('right:',right.data[:5])
+        print('left:',left.shape)
+        print('right:',right.shape)
         euclidean = self.euclidean(left,right)
-        print('euclidean:',euclidean.data[:5])
+        print('euclidean:',euclidean.shape)
         output = self.fc(euclidean)
         return output
