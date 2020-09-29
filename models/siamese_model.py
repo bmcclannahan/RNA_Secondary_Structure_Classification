@@ -108,5 +108,5 @@ class Siamese_Model(Model):
     
     #For testing model works with cifar 10
     def _get_test_dataset(self,phase,data_normalization):
-        image_folder = datasets.('/data/test_datasets')
+        image_folder = datasets.CIFAR10('/data/test_datasets')
         return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase])
