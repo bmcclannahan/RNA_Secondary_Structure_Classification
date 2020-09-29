@@ -93,8 +93,8 @@ class Siamese_Model(Model):
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         }
 
-        #image_datasets = {x: _get_rna_dataset(self,x,data_normalization[x]) for x in phases}
-        image_datasets = {x: _get_test_dataset(self,x,data_normalization[x]) for x in phases}
+        #image_datasets = {x: self._get_rna_dataset(x,data_normalization[x]) for x in phases}
+        image_datasets = {x: self._get_test_dataset(x,data_normalization[x]) for x in phases}
 
         print('Initializing Dataloader')
 
