@@ -28,7 +28,7 @@ class SiameseNetworkDataset(Dataset):
                 img1_tuple = random.choice(self.imageFolderDataset.imgs) 
                 if img0_tuple[1]==img1_tuple[1]:
                     break
-        elif:
+        else:
             while True:
                 #keep looping till the same class image is found
                 img1_tuple = random.choice(self.imageFolderDataset.imgs) 
