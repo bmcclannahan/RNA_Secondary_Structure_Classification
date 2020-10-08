@@ -45,7 +45,7 @@ class SiameseNetworkDataset(Dataset):
             img0 = self.transforms(img0)
             img1 = self.transforms(img1)
         
-        return img0, img1, torch.from_numpy(np.array([img0_tuple[1] == img1_tuple[1]],dtype=np.float32))
+        return img0, img1, torch.from_numpy(np.array([img0_tuple[1] != img1_tuple[1]],dtype=np.float32))
     
     def __len__(self):
         return len(self.imageFolderDataset.imgs)
