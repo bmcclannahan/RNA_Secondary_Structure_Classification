@@ -15,7 +15,7 @@ class Siamese_Model(Model):
 
     iteration_size = {'train': 32000, 'val': 1600}
 
-    def __init__(self,model_func,model_name,learning_rate=0.0001,lr_gamma=0.25,lr_step=50,iteration_limit=600,logging=True,starting_weight=.75):
+    def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.25,lr_step=50,iteration_limit=600,logging=True,starting_weight=.75):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,logging)
         self.starting_weights = {'train':starting_weight, 'val':0.5}
 
