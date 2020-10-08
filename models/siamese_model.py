@@ -40,7 +40,8 @@ class Siamese_Model(Model):
                 outputs = self.model(inputs1,inputs2)
                 
                 loss = self.criterion(outputs, labels)
-                _, preds = torch.max(outputs, 1)
+                _, preds = torch.max(outputs, 2)
+                print("preds:", preds)
 
                 loss.backward()
                 self.optimizer.step()
