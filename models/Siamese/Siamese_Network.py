@@ -24,6 +24,7 @@ class SiameseNetwork(nn.Module):
             nn.Linear(1024,1)#,
             #nn.Sigmoid()
         )
+        self.fc2 = nn.Sequential(nn.Sigmoid())
     
     def create_cnn(self,model_func):
         modules=list(model_func().children())[:-1]
@@ -48,6 +49,8 @@ class SiameseNetwork(nn.Module):
         #print('left:',left.data[0][:5])
         #print('right:',right.data[0][:5])
         euclidean = self.euclidean(left,right)
-        #print('euclidean:',euclidean.data[0][:5])
+        print('euclidean:',euclidean.data[0][:5])
         output = self.fc(euclidean)
+        print('Output:', output[:5])
+        output = self.fc2(output)
         return output
