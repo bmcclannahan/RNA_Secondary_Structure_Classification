@@ -41,7 +41,7 @@ class Siamese_Model(Model):
                 
                 loss = self.criterion(outputs, labels)
                 preds, _ = torch.max(outputs, 1)
-                print("preds:", preds)
+                #print("preds:", preds)
                 preds = torch.round(preds)
 
                 loss.backward()
@@ -51,9 +51,9 @@ class Siamese_Model(Model):
             expected = torch.reshape(labels.data,(Model.batch_size,))
             running_corrects += torch.sum(preds == expected)
 
-            print("Expected:",expected)
-            print("Outputs:", outputs)
-            print("preds:", preds)
+            #print("Expected:",expected)
+            #print("Outputs:", outputs)
+            #print("preds:", preds)
             #print("equivalency of exp and preds:", preds == expected)
             #print("Sum of above:", torch.sum(preds == expected))
             #print("Shape of preds:",preds.shape)
