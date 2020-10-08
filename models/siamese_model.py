@@ -50,6 +50,7 @@ class Siamese_Model(Model):
             running_corrects += torch.sum(preds == expected)
 
             print("Expected:",expected)
+            print("Outputs:", output)
             print("preds:", preds)
             #print("equivalency of exp and preds:", preds == expected)
             #print("Sum of above:", torch.sum(preds == expected))
