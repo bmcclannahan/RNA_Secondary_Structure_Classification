@@ -49,8 +49,8 @@ class Siamese_Model(Model):
             expected = torch.reshape(labels.data,(Model.batch_size,)).long()
             running_corrects += torch.sum(preds == expected)
 
-            #print("Expected:",expected)
-            #print("preds:", preds)
+            print("Expected:",expected)
+            print("preds:", preds)
             #print("equivalency of exp and preds:", preds == expected)
             #print("Sum of above:", torch.sum(preds == expected))
             #print("Shape of preds:",preds.shape)
