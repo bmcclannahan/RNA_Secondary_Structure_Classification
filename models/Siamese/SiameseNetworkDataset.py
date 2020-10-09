@@ -7,24 +7,18 @@ import datetime
 
 class SiameseNetworkDataset(Dataset):
     
-    def __init__(self,imageFolderDataset,transforms=None,weight=0.5,image_batch=32):
+    def __init__(self,imageFolderDataset,transforms=None,weight=0.5):
         self.imageFolderDataset = imageFolderDataset
         self.transforms = transforms
         self.weight = weight
         self.seed = datetime.datetime.utcnow().second
         self.image_count = 0
-        self.image_batch = 32
-        self.current_should_get_same_class = 0
         
     def __getitem__(self,index):        
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
         #we need to make sure approx 50% of images are in the same class
-        
-        if self.image_count > self.image_batch:
-            self.current_should_get_same_class = random.random()
-            self.image_count = 0
-            print('new random class', self.current_should_get_same_class)
-        if self.current_should_get_same_class < self.weight:
+        should_get_same_class = random.random()
+        if should_get_same_class < self.weight:
             while True:
                 #keep looping till the same class image is found
                 img1_tuple = random.choice(self.imageFolderDataset.imgs) 
@@ -36,7 +30,6 @@ class SiameseNetworkDataset(Dataset):
                 img1_tuple = random.choice(self.imageFolderDataset.imgs) 
                 if not img0_tuple[1]==img1_tuple[1]:
                     break
-        self.image_count += 1
 
         img0_path = img0_tuple[0]
         img1_path = img1_tuple[0]
