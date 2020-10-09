@@ -168,7 +168,7 @@ class Siamese_Model(Model):
         print(time.ctime())
 
         
-    def _build_test_dataloader(self,image_datasets)
+    def _build_test_dataloader(self,image_datasets):
         data_normalization = transforms.Compose([transforms.Resize([224,224]),transforms.ToTensor(),
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         image_datasets = {x: self._get_rna_dataset(x,data_normalization) for x in ['test']}
