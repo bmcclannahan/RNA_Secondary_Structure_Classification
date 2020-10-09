@@ -375,20 +375,13 @@ class Model:
         self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/chekers/iter" + str(iteration) +".pt"))
 
     def test_model(self,iterations_to_test=[199,299,399,499,599]):
-        data_transforms = {
-            'test': transforms.Compose([transforms.ToTensor(),
-                            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
-            }
-
         print('Initializing dataset and dataloader')
 
-        image_datasets = {x: ImageFolderWithPaths(os.path.join(Model.data_dir,x), data_transforms[x]) for x in ['test']}
-
-        self.dataloaders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=Model.batch_size, shuffle=True, num_workers=4) for x in ['test']} 
+        self.dataloaders = self._build_test_dataloader()
 
         print("Loading Model")
 
-        model_ft, input_size = self.initialize_model()
+        model_ft, _ = self.initialize_model()
 
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -404,3 +397,8 @@ class Model:
                 self._test_iteration_model(iteration)
 
         print("Finished testing " + self.name)
+
+    def _build_test_dataloader(self):
+        data_transforms = transforms.Compose([transforms.ToTensor(),transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+        image_datasets = ImageFolderWithPaths(os.path.join(Model.data_dir,'test'), data_transforms)
+        return {x: torch.utils.data.DataLoader(image_datasets, batch_size=Model.batch_size, shuffle=True, num_workers=4) for x in ['test']} 
