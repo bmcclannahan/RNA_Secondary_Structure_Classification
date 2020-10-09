@@ -77,10 +77,11 @@ class Siamese_Model(Model):
                 outputs = self.model(inputs1,inputs2)
                 
                 loss = self.criterion(outputs, labels)
-                _, preds = torch.max(outputs, 1)
+                preds, _ = torch.max(outputs, 1)
+                preds = torch.round(preds)
 
             running_loss += loss.item() * inputs1.size(0)
-            expected = torch.reshape(labels.data,(Model.batch_size,)).long()
+            expected = torch.reshape(labels.data,(Model.batch_size,))
             running_corrects += torch.sum(preds == expected)
 
         return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['val'], None, None
@@ -114,3 +115,61 @@ class Siamese_Model(Model):
     def _get_test_dataset(self,phase,data_normalization):
         image_folder = datasets.CIFAR10('/data/test_datasets')
         return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase])
+
+    def _test_model(self,model):
+        self.model.load_state_dict(model)
+        self.model.eval()
+        
+        fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/predictionhval.txt", "a")
+        class_correct = list(0. for i in range(2))
+        class_total = list(0. for i in range(2))
+        
+        print(time.ctime())
+
+        for inputs1, inputs2, labels, path in self.dataloaders['test']:
+
+            inputs1 = inputs1.to(self.device)
+            inputs2 = inputs2.to(self.device)
+            labels = labels.to(self.device)
+            outputs = self.model(inputs)
+            preds,_ = torch.max(outputs,1)
+            preds = torch.round(preds)
+            c = (preds == labels).squeeze()
+            path_list = list(path)
+            l = 0
+            for item in path_list:
+                pt = str(item)
+                labs = labels[l]
+                lb = labs.item()
+                k = preds[l]
+                pn = k.item()
+                sn = str(pn)
+                ls = str(lb)
+                op = outputs[l]
+                opn = op.cpu().detach().numpy()
+                a1 = str(opn[0])
+                a2 = str(opn[1])
+
+                
+                l = l + 1
+                fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
+                
+            for i in range(4):
+                label = labels[i]
+                class_correct[label] += c[i].item()
+                class_total[label] += 1
+            
+        fs.close()
+        
+        print('Model Name:', self.name)
+        for i in range(2):
+            print('Accuracy of %5s : %3.2d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
+        print('Total accuracy is %3.2d %%' % (100.0 * sum(class_correct) / sum(class_total)))
+        print(time.ctime())
+
+        
+    def _build_test_dataloader(self,image_datasets)
+        data_normalization = transforms.Compose([transforms.Resize([224,224]),transforms.ToTensor(),
+                                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+        image_datasets = {x: self._get_rna_dataset(x,data_normalization) for x in ['test']}
+        return {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=Model.batch_size, shuffle=True, num_workers=4) for x in ['test']} 
