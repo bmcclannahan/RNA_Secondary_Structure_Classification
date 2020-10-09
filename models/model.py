@@ -54,7 +54,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],logging=True):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],validation_frequency=50,logging=True):
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
@@ -63,6 +63,7 @@ class Model:
         self.lr_step = lr_step
         self.iteration_limit = iteration_limit
         self.class_weights = class_weights
+        self.iteration_validation_frequency = validation_frequency
         self.logging = logging
 
     def train_model(self):
@@ -79,8 +80,6 @@ class Model:
         # prev_loss = [0]*iteration_loss_count
 
         iteration = 1
-
-        iteration_validation_frequency = 50
         # iteration_loss_stddev_termination_threshold = .005
         # iteration_loss_termination_threshold = .01
         iteration_count_termination_thresholid = self.iteration_limit
@@ -97,7 +96,7 @@ class Model:
             print('-' * 20)
 
             for phase in ['train', 'val']:
-                if iteration % iteration_validation_frequency != 0 and iteration != 0 and phase == 'val':
+                if iteration % self.iteration_validation_frequency != 0 and iteration != 0 and phase == 'val':
                     continue
 
                 if phase == 'train':
@@ -140,7 +139,7 @@ class Model:
                 if phase == 'val' and self.logging:
                     fp.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
                     #write the validation loss enough times so it can be graphed over the train loss
-                    for i in range(iteration_validation_frequency):
+                    for i in range(self.iteration_validation_frequency):
                         fvl.write(str(iteration_loss)+"\n")
                 if phase == 'train' and self.logging:
                     ft.write('{: .4f} and {: .4f}\n'.format(iteration_loss, iteration_acc))
