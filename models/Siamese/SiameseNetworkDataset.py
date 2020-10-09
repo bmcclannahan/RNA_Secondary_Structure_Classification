@@ -23,6 +23,7 @@ class SiameseNetworkDataset(Dataset):
         if self.image_count > self.image_batch:
             self.current_should_get_same_class = random.random()
             self.image_count = 0
+            print('new random class', self.current_should_get_same_class)
         if self.current_should_get_same_class < self.weight:
             while True:
                 #keep looping till the same class image is found
