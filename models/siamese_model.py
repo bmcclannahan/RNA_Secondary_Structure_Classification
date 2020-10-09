@@ -8,6 +8,7 @@ from model import Model
 from Siamese import SiameseNetworkDataset as SND
 #from Siamese import TestSiameseNetworkDatset as TSND
 import os
+import time
 
 class Siamese_Model(Model):
 
@@ -131,7 +132,7 @@ class Siamese_Model(Model):
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
-            outputs = self.model(inputs)
+            outputs = self.model(inputs1,inputs2)
             preds,_ = torch.max(outputs,1)
             preds = torch.round(preds)
             c = (preds == labels).squeeze()
