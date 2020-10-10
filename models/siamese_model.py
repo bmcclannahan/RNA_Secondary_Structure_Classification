@@ -110,12 +110,12 @@ class Siamese_Model(Model):
 
     def _get_rna_dataset(self,phase,data_normalization):
         image_folder = datasets.ImageFolder(os.path.join(Siamese_Model.data_dir,phase))
-        return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase])
+        return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase],phase)
     
     #For testing model works with cifar 10
     def _get_test_dataset(self,phase,data_normalization):
         image_folder = datasets.CIFAR10('/data/test_datasets')
-        return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase])
+        return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase],phase)
 
     def _test_model(self,model):
         self.model.load_state_dict(model)
