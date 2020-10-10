@@ -7,13 +7,46 @@ import datetime
 
 class SiameseNetworkDataset(Dataset):
     
-    def __init__(self,imageFolderDataset,transforms=None,weight=0.5):
+    def __init__(self,imageFolderDataset,transforms=None,weight=0.5,mode='train'):
         self.imageFolderDataset = imageFolderDataset
         self.transforms = transforms
         self.weight = weight
         self.seed = datetime.datetime.utcnow().second
         self.image_count = 0
+        self.mode = 'train'
+        self._intialize_dataset()
+
+    def _intialize_dataset(self):
+        if self.mode == 'train' or self.mode == 'val':
+            return
         
+        image_dict = {}
+        for image,label in self.imageFolderDataset.imgs:
+            if label not in image_dict.keys():
+                image_dict[label] = [image]
+            else:
+                image_dict[label].append(image)
+        
+        keys = image_dict.keys()
+        self.image_list = []
+
+        for k in range(len(keys)):
+            key = keys[k]
+            same_images = []
+            different_images = []
+            family_size = len(image_dict[key])
+            for i in range(family_size):
+                for j in range(i,family_size):
+                    same_images.append([image_dict[key][i],image_dict[key][j],0])
+            for i in range(k+1,len(keys)):
+                new_key = keys[i]
+                for j in range(family_size):
+                    new_family_size = len(image_dict[new_key])
+                    for k in range(new_family_size):
+                        different_images.append([image_dict[key][j],image_dict[new_key][k],1])
+            self.image_list.extend(same_images)
+            self.image_list.extend(different_images)
+
     def __getitem__(self,index):        
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
         #we need to make sure approx 50% of images are in the same class
