@@ -18,7 +18,7 @@ class Siamese_Model(Model):
 
     def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.25,lr_step=10,iteration_limit=50,validation_frequency=5,logging=True,starting_weight=.5):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,validation_frequency,logging)
-        self.starting_weights = {'train':starting_weight, 'val':0.5}
+        self.starting_weights = {'train':starting_weight, 'val':0.5, 'test':0.5}
 
     def _get_criterion(self):
         return nn.BCELoss()
