@@ -118,6 +118,7 @@ class Siamese_Model(Model):
         return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase],phase)
 
     def _test_model(self,model):
+        print(model)
         self.model.load_state_dict(model)
         self.model.eval()
         
