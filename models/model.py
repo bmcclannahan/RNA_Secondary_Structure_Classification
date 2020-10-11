@@ -381,7 +381,7 @@ class Model:
 
         print("Loading Model")
 
-        model_ft, _ = self.initialize_model()
+        model_ft = self.initialize_model()
 
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
