@@ -123,13 +123,13 @@ class Siamese_Model(Model):
         self.model.load_state_dict(model)
         self.model.eval()
         
-        fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/predictionhval.txt", "a")
+        #fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/predictionhval.txt", "a")
         class_correct = list(0. for i in range(2))
         class_total = list(0. for i in range(2))
         
         print(time.ctime())
 
-        for inputs1, inputs2, labels, path in self.dataloaders['test']:
+        for inputs1, inputs2, labels in self.dataloaders['test']:
 
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
@@ -138,31 +138,30 @@ class Siamese_Model(Model):
             preds,_ = torch.max(outputs,1)
             preds = torch.round(preds)
             c = (preds == labels).squeeze()
-            path_list = list(path)
-            l = 0
-            for item in path_list:
-                pt = str(item)
-                labs = labels[l]
-                lb = labs.item()
-                k = preds[l]
-                pn = k.item()
-                sn = str(pn)
-                ls = str(lb)
-                op = outputs[l]
-                opn = op.cpu().detach().numpy()
-                a1 = str(opn[0])
-                a2 = str(opn[1])
+            # path_list = list(path)
+            # l = 0
+            # for item in path_list:
+            #     pt = str(item)
+            #     labs = labels[l]
+            #     lb = labs.item()
+            #     k = preds[l]
+            #     pn = k.item()
+            #     sn = str(pn)
+            #     ls = str(lb)
+            #     op = outputs[l]
+            #     opn = op.cpu().detach().numpy()
+            #     a1 = str(opn[0])
+            #     a2 = str(opn[1])
 
-                
-                l = l + 1
-                fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
+                #l = l + 1
+                #fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
                 
             for i in range(4):
                 label = labels[i]
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
             
-        fs.close()
+        #fs.close()
         
         print('Model Name:', self.name)
         for i in range(2):
