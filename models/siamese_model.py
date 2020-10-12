@@ -145,7 +145,6 @@ class Siamese_Model(Model):
             c = (preds == labels).squeeze()
             print("c:",c)
             print(len(c))
-            print(len(c[0]))
             # path_list = list(path)
             # l = 0
             # for item in path_list:
@@ -164,7 +163,7 @@ class Siamese_Model(Model):
                 #l = l + 1
                 #fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
                 
-            for i in range(4):
+            for i in range(32):
                 label = labels[i]
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
