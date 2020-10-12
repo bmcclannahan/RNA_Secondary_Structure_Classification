@@ -144,6 +144,7 @@ class Siamese_Model(Model):
             c = (preds == labels).squeeze()
             print("c:",c)
             print(len(c))
+            print(c[0])
             # path_list = list(path)
             # l = 0
             # for item in path_list:
