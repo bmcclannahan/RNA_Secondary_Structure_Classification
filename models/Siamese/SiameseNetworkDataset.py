@@ -17,12 +17,9 @@ class SiameseNetworkDataset(Dataset):
             self.mode = False
         else:
             self.mode = True
-        self._intialize_dataset()
+            self._intialize_dataset()
 
     def _intialize_dataset(self):
-        if not self.mode:
-            return
-        
         image_dict = {}
         for image,label in self.imageFolderDataset.imgs:
             if label not in image_dict.keys():
@@ -30,7 +27,7 @@ class SiameseNetworkDataset(Dataset):
             else:
                 image_dict[label].append(image)
         
-        keys = image_dict.keys()
+        keys = list(image_dict.keys())
         self.image_list = []
 
         for k in range(len(keys)):
