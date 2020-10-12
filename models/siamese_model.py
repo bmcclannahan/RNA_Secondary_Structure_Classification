@@ -165,7 +165,7 @@ class Siamese_Model(Model):
                 
             for i in range(32):
                 label = labels[i]
-                class_correct[label] += c[i].item()
+                class_correct[label] += int(c[i].item())
                 class_total[label] += 1
             
         #fs.close()
