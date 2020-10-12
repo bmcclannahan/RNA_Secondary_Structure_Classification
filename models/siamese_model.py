@@ -15,7 +15,7 @@ class Siamese_Model(Model):
     #data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
     data_dir = "/data/Siamese/"
 
-    iteration_size = {'train': 32000, 'val': 16000}
+    iteration_size = {'train': 32000, 'val': 7260, 'test':32385}
 
     def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.25,lr_step=10,iteration_limit=50,validation_frequency=5,logging=True,starting_weight=.5):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,validation_frequency,logging)
@@ -127,7 +127,7 @@ class Siamese_Model(Model):
         
         print(time.ctime())
 
-        for inputs1, inputs2, labels in self.dataloaders['test']:
+        for _ in range(int(Siamese_Model.iteration_size['test']/Model.batch_size)):
 
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
@@ -145,7 +145,7 @@ class Siamese_Model(Model):
             # print(len(c))
             # print(c[0].item())
                 
-            for i in range(len(c)):
+            for i in range(32):
                 label = int(labels[i].item())
                 print(labels[i],c[i])
                 class_correct[label] += c[i].item()
