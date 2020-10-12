@@ -25,6 +25,9 @@ class SiameseNetwork(nn.Module):
             #nn.Sigmoid()
         )
         self.fc2 = nn.Sequential(nn.Sigmoid())
+
+    def load_state_dict(self, state_dict,strict = True):
+        super(SiameseNetwork, self).load_state_dict(state_dict,strict)
     
     def create_cnn(self,model_func):
         modules=list(model_func().children())[:-1]
