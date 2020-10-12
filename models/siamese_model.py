@@ -138,6 +138,7 @@ class Siamese_Model(Model):
             preds,_ = torch.max(outputs,1)
             preds = torch.round(preds)
             c = (preds == labels).squeeze()
+            print(c)
             # path_list = list(path)
             # l = 0
             # for item in path_list:
