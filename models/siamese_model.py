@@ -122,7 +122,6 @@ class Siamese_Model(Model):
         self.model.load_state_dict(model)
         self.model.eval()
         
-        #fs = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/predictionhval.txt", "a")
         class_correct = list(0. for i in range(2))
         class_total = list(0. for i in range(2))
         
@@ -134,41 +133,22 @@ class Siamese_Model(Model):
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
             labels,_ = torch.max(labels,1)
-            print('labels:',labels)
-            print(len(labels))
+            # print('labels:',labels)
+            # print(len(labels))
             outputs = self.model(inputs1,inputs2)
             preds,_ = torch.max(outputs,1)
             preds = torch.round(preds)
-            print('preds:',preds)
-            print(len(preds))
+            # print('preds:',preds)
+            # print(len(preds))
             c = (preds == labels).squeeze()
-            print("c:",c)
-            print(len(c))
-            print(c[0].item())
-            # path_list = list(path)
-            # l = 0
-            # for item in path_list:
-            #     pt = str(item)
-            #     labs = labels[l]
-            #     lb = labs.item()
-            #     k = preds[l]
-            #     pn = k.item()
-            #     sn = str(pn)
-            #     ls = str(lb)
-            #     op = outputs[l]
-            #     opn = op.cpu().detach().numpy()
-            #     a1 = str(opn[0])
-            #     a2 = str(opn[1])
-
-                #l = l + 1
-                #fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
+            # print("c:",c)
+            # print(len(c))
+            # print(c[0].item())
                 
             for i in range(32):
                 label = int(labels[i].item())
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
-            
-        #fs.close()
         
         print('Model Name:', self.name)
         for i in range(2):
