@@ -13,6 +13,7 @@ class SiameseNetworkDataset(Dataset):
         self.weight = weight
         self.seed = datetime.datetime.utcnow().second
         self.image_count = 0
+        print("Building dataset for", mode)
         if mode == 'train':
             self.mode = False
         else:
@@ -75,6 +76,9 @@ class SiameseNetworkDataset(Dataset):
             img0_path = img0_tuple[0]
             img1_path = img1_tuple[0]
             label = img0_tuple[1] != img1_tuple[1]
+
+        if label == 1:
+            print("label 1")
 
         img0 = Image.open(img0_path).convert('RGB')
         img1 = Image.open(img1_path).convert('RGB')
