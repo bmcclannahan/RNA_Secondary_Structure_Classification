@@ -134,11 +134,17 @@ class Siamese_Model(Model):
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
+            print('labels:',labels)
+            print(len(labels))
             outputs = self.model(inputs1,inputs2)
             preds,_ = torch.max(outputs,1)
             preds = torch.round(preds)
+            print('preds:',preds)
+            print(len(preds))
             c = (preds == labels).squeeze()
-            print(c)
+            print("c:",c)
+            print(len(c))
+            print(len(c[0]))
             # path_list = list(path)
             # l = 0
             # for item in path_list:
