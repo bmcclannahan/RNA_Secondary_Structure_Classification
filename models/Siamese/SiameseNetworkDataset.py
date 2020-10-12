@@ -46,7 +46,7 @@ class SiameseNetworkDataset(Dataset):
                         different_images.append([image_dict[key][j],image_dict[new_key][k],1])
             self.image_list.extend(same_images)
             self.image_list.extend(different_images)
-            print("image list:",self.image_list[0:10])
+        print("Dataset Size:", len(self.image_list))
 
     def __getitem__(self,index):
         if self.mode:
