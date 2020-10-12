@@ -13,11 +13,14 @@ class SiameseNetworkDataset(Dataset):
         self.weight = weight
         self.seed = datetime.datetime.utcnow().second
         self.image_count = 0
-        self.mode = 'train'
+        if mode == 'train':
+            self.mode = False
+        else:
+            self.mode = True
         self._intialize_dataset()
 
     def _intialize_dataset(self):
-        if self.mode == 'train' or self.mode == 'val':
+        if not self.mode:
             return
         
         image_dict = {}
@@ -47,7 +50,14 @@ class SiameseNetworkDataset(Dataset):
             self.image_list.extend(same_images)
             self.image_list.extend(different_images)
 
-    def __getitem__(self,index):        
+    def __getitem__(self,index):
+        if self.mode:
+            image0, image1, label = self.image_list[self.image_count]
+            self.image_count += 1
+            if self.image_count == len(self.image_list):
+                self.image_count = 0
+            return image0, image1, torch.from_numpy(np.array(label,dtype=np.float32))
+
         img0_tuple = random.choice(self.imageFolderDataset.imgs)
         #we need to make sure approx 50% of images are in the same class
         should_get_same_class = random.random()
