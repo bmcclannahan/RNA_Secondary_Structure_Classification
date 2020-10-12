@@ -145,7 +145,7 @@ class Siamese_Model(Model):
             # print(len(c))
             # print(c[0].item())
                 
-            for i in range(32):
+            for i in range(len(c)):
                 label = int(labels[i].item())
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
