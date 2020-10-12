@@ -51,12 +51,7 @@ class SiameseNetworkDataset(Dataset):
 
     def __getitem__(self,index):
         if self.mode:
-            img0_path, img1_path, label = self.image_list[self.image_count]
-            self.image_count += 1
-            print("Image count:", self.image_count)
-            if self.image_count >= len(self.image_list):
-                self.image_count = 0
-                print("Resetting image count")
+            img0_path, img1_path, label = self.image_list[index]
 
         else:
             img0_tuple = random.choice(self.imageFolderDataset.imgs)
