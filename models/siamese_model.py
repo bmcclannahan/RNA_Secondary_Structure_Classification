@@ -164,7 +164,7 @@ class Siamese_Model(Model):
                 #fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
                 
             for i in range(32):
-                label = labels[i].item()
+                label = int(labels[i].item())
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
             
