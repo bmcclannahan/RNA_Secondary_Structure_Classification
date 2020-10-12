@@ -369,8 +369,8 @@ class Model:
         print(time.ctime())
 
     def _test_best_model(self):
-        #best_model = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt")
-        best_model = torch.load("/nfs/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/best.pt")
+        #best_model = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt",,map_location=self.device)
+        best_model = torch.load("/nfs/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/best.pt",map_location=self.device)
         self._test_model(best_model)
 
     
@@ -386,9 +386,9 @@ class Model:
 
         model_ft = self.initialize_model()
 
-        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-        model_ft = model_ft.to(device)
+        model_ft = model_ft.to(self.device)
 
         print("Testing Best Model")
 
