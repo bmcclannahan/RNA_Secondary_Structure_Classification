@@ -134,6 +134,7 @@ class Siamese_Model(Model):
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
+            labels,_ = torch.max(labels,1)
             print('labels:',labels)
             print(len(labels))
             outputs = self.model(inputs1,inputs2)
