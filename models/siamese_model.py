@@ -145,15 +145,15 @@ class Siamese_Model(Model):
             print("c:",c)
             # print(len(c))
             # print(c[0].item())
-
-            print(class_correct)
-            print(class_total)
                 
             for i in range(len(c)):
                 label = int(labels[i].item())
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
         
+
+        print(class_correct)
+        print(class_total)
         print('Model Name:', self.name)
         for i in range(2):
             print('Accuracy of %5s : %3.2d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 

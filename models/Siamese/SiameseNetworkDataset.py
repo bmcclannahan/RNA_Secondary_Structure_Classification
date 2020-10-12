@@ -36,9 +36,9 @@ class SiameseNetworkDataset(Dataset):
             same_images = []
             different_images = []
             family_size = len(image_dict[key])
-            # for i in range(family_size):
-            #     for j in range(i,family_size):
-            #         same_images.append([image_dict[key][i],image_dict[key][j],False])
+            for i in range(family_size):
+                for j in range(i,family_size):
+                    same_images.append([image_dict[key][i],image_dict[key][j],False])
             for i in range(current_key+1,len(keys)):
                 new_key = keys[i]
                 for j in range(family_size):
