@@ -1,4 +1,3 @@
-from Siamese import Siamese_Network
 import torch.nn as nn
 from torchvision import models
 from siamese_model import Siamese_Model
