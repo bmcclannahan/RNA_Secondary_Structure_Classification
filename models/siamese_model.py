@@ -126,6 +126,7 @@ class Siamese_Model(Model):
         class_total = list(0. for i in range(2))
         
         print(time.ctime())
+        print(int(Siamese_Model.iteration_size['test']/Model.batch_size))
 
         for _ in range(int(Siamese_Model.iteration_size['test']/Model.batch_size)):
             inputs1, inputs2, labels = next(iter(self.dataloaders['test']))
