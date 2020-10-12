@@ -119,7 +119,6 @@ class Siamese_Model(Model):
         return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase],phase)
 
     def _test_model(self,model):
-        print(model)
         self.model.load_state_dict(model)
         self.model.eval()
         
@@ -165,7 +164,7 @@ class Siamese_Model(Model):
                 
             for i in range(32):
                 label = labels[i]
-                class_correct[label] += int(c[i].item())
+                class_correct[label] += c[i]
                 class_total[label] += 1
             
         #fs.close()
