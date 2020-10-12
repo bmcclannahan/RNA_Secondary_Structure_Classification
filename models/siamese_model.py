@@ -12,10 +12,10 @@ import time
 
 class Siamese_Model(Model):
 
-    data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
-    #data_dir = "/data/Siamese/"
+    #data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
+    data_dir = "/data/Siamese/"
 
-    iteration_size = {'train': 32000, 'val': 16000, 'test':32385}
+    iteration_size = {'train': 32000, 'val': 16000, 'test':3238}
 
     def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.25,lr_step=10,iteration_limit=50,validation_frequency=5,logging=True,starting_weight=.5):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,validation_frequency,logging)
