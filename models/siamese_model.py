@@ -168,5 +168,5 @@ class Siamese_Model(Model):
         data_normalization = transforms.Compose([transforms.Resize([224,224]),transforms.ToTensor(),
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         image_dataset =self._get_rna_dataset('test',data_normalization)
-        dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=Model.batch_size,sampler=torch.utils.data.SequentialSampler, num_workers=1)
+        dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=Model.batch_size,shufle=False, num_workers=1)
         return {x: dataloader for x in ['test']} 
