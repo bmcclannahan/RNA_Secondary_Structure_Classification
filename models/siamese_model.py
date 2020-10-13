@@ -130,7 +130,7 @@ class Siamese_Model(Model):
         
         print(time.ctime())
 
-        for inputs1, inputs2, labels in next(iter(self.dataloaders['test'])):
+        for inputs1, inputs2, labels, path in next(iter(self.dataloaders['test'])):
             
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
