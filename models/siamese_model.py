@@ -132,6 +132,7 @@ class Siamese_Model(Model):
 
         for values in next(iter(self.dataloaders['test'])):
             print("# of values:",len(values))
+            print("Values:",values)
 
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
