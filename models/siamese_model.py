@@ -130,10 +130,8 @@ class Siamese_Model(Model):
         
         print(time.ctime())
 
-        for values in next(iter(self.dataloaders['test'])):
-            print("# of values:",len(values))
-            print("Values:",values)
-
+        for inputs1, inputs2, labels in self.dataloaders['test']:
+            
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
