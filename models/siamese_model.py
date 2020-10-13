@@ -15,6 +15,9 @@ class Siamese_Model(Model):
     #data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
     data_dir = "/data/Siamese/"
 
+    validation_count = 0
+    test_count = 0
+
     iteration_size = {'train': 32000, 'val': 16000, 'test':3238}
 
     def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.25,lr_step=10,iteration_limit=50,validation_frequency=5,logging=True,starting_weight=.5):
@@ -126,17 +129,18 @@ class Siamese_Model(Model):
         class_total = list(0. for i in range(2))
         
         print(time.ctime())
-        for i in range(Siamese_Model.iteration_size['test']):
-            
-            inputs1, inputs2, labels = self.dataloaders['test'].dataset[i]
+
+        for inputs1, inputs2, labels in self.dataloaders['test']:
             
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
+            labels,_ = torch.max(labels,1)
             print('labels:',labels)
             # print(len(labels))
             outputs = self.model(inputs1,inputs2)
-            preds = torch.round(outputs)
+            preds,_ = torch.max(outputs,1)
+            preds = torch.round(preds)
             print('preds:',preds)
             # print(len(preds))
             c = (preds == labels).squeeze()
@@ -144,9 +148,10 @@ class Siamese_Model(Model):
             # print(len(c))
             # print(c[0].item())
                 
-            label = int(labels[i].item())
-            class_correct[label] += c[i].item()
-            class_total[label] += 1
+            for i in range(len(c)):
+                label = int(labels[i].item())
+                class_correct[label] += c[i].item()
+                class_total[label] += 1
         
 
         print(class_correct)
@@ -157,51 +162,10 @@ class Siamese_Model(Model):
         print('Total accuracy is %3.2d %%' % (100.0 * sum(class_correct) / sum(class_total)))
         print(time.ctime())
 
-    # def _test_model(self,model):
-    #     self.model.load_state_dict(model)
-    #     self.model.eval()
-        
-    #     class_correct = list(0. for i in range(2))
-    #     class_total = list(0. for i in range(2))
-        
-    #     print(time.ctime())
-
-    #     for inputs1, inputs2, labels in self.dataloaders['test']:
-            
-    #         inputs1 = inputs1.to(self.device)
-    #         inputs2 = inputs2.to(self.device)
-    #         labels = labels.to(self.device)
-    #         labels,_ = torch.max(labels,1)
-    #         print('labels:',labels)
-    #         # print(len(labels))
-    #         outputs = self.model(inputs1,inputs2)
-    #         preds,_ = torch.max(outputs,1)
-    #         preds = torch.round(preds)
-    #         print('preds:',preds)
-    #         # print(len(preds))
-    #         c = (preds == labels).squeeze()
-    #         print("c:",c)
-    #         # print(len(c))
-    #         # print(c[0].item())
-                
-    #         for i in range(len(c)):
-    #             label = int(labels[i].item())
-    #             class_correct[label] += c[i].item()
-    #             class_total[label] += 1
-        
-
-    #     print(class_correct)
-    #     print(class_total)
-    #     print('Model Name:', self.name)
-    #     for i in range(2):
-    #         print('Accuracy of %5s : %3.2d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
-    #     print('Total accuracy is %3.2d %%' % (100.0 * sum(class_correct) / sum(class_total)))
-    #     print(time.ctime())
-
         
     def _build_test_dataloader(self):
         data_normalization = transforms.Compose([transforms.Resize([224,224]),transforms.ToTensor(),
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         image_dataset =self._get_rna_dataset('test',data_normalization)
-        dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=Model.batch_size,sampler=torch.utils.data.SequentialSampler, num_workers=4)
+        dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=Model.batch_size,sampler=torch.utils.data.SequentialSampler, num_workers=1)
         return {x: dataloader for x in ['test']} 
