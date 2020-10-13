@@ -83,7 +83,7 @@ class SiameseNetworkDataset(Dataset):
             img0 = self.transforms(img0)
             img1 = self.transforms(img1)
         
-        return img0, img1, torch.from_numpy(np.array([label],dtype=np.bool_))
+        return img0, img1, torch.from_numpy(np.array([label],dtype=np.float32))
     
     def __len__(self):
         return len(self.imageFolderDataset.imgs)
