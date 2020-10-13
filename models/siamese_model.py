@@ -12,11 +12,8 @@ import time
 
 class Siamese_Model(Model):
 
-    #data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
-    data_dir = "/data/Siamese/"
-
-    validation_count = 0
-    test_count = 0
+    data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
+    # data_dir = "/data/Siamese/"
 
     iteration_size = {'train': 32000, 'val': 16000, 'test':3238}
 
@@ -136,15 +133,15 @@ class Siamese_Model(Model):
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
             labels,_ = torch.max(labels,1)
-            print('labels:',labels)
+            # print('labels:',labels)
             # print(len(labels))
             outputs = self.model(inputs1,inputs2)
             preds,_ = torch.max(outputs,1)
             preds = torch.round(preds)
-            print('preds:',preds)
+            # print('preds:',preds)
             # print(len(preds))
             c = (preds == labels).squeeze()
-            print("c:",c)
+            # print("c:",c)
             # print(len(c))
             # print(c[0].item())
                 
@@ -154,8 +151,8 @@ class Siamese_Model(Model):
                 class_total[label] += 1
         
 
-        print(class_correct)
-        print(class_total)
+        # print(class_correct)
+        # print(class_total)
         print('Model Name:', self.name)
         for i in range(2):
             print('Accuracy of %5s : %3.2d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
