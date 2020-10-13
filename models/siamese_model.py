@@ -127,8 +127,8 @@ class Siamese_Model(Model):
         
         print(time.ctime())
 
-        for _ in range(int(Siamese_Model.iteration_size['test']/Model.batch_size)):
-            inputs1, inputs2, labels = next(iter(self.dataloaders['test']))
+        for i in range(int(Siamese_Model.iteration_size['test']/Model.batch_size)):
+            inputs1, inputs2, labels = self.dataloaders['test'][i*32:(i+1)*32]
 
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
