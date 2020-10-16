@@ -15,9 +15,9 @@ class Siamese_Model(Model):
     data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
     # data_dir = "/data/Siamese/"
 
-    iteration_size = {'train': 3200, 'val': 8000, 'test': 16000}
+    iteration_size = {'train': 16000, 'val': 8000, 'test': 16000}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=10,iteration_limit=100,validation_frequency=3,logging=True,starting_weight=.5):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.1,lr_step=20,iteration_limit=100,validation_frequency=3,logging=True,starting_weight=.5):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,validation_frequency,logging)
         self.starting_weights = {'train':starting_weight, 'val':0.5, 'test':0.5}
 
