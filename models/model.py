@@ -65,6 +65,11 @@ class Model:
         self.class_weights = class_weights
         self.iteration_validation_frequency = validation_frequency
         self.logging = logging
+        print("Model:", model_name)
+        print("Learning Rate:",learning_rate)
+        print("LR Gamma:",lr_gamma)
+        print("LR Step:",lr_step)
+        print("Iteration Limit:",iteration_limit)
 
     def train_model(self):
         since = time.time()
