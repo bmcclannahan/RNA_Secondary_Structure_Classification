@@ -55,6 +55,7 @@ class Model:
     iteration_size = {'train': 320, 'val': 12800}
 
     def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],validation_frequency=50,logging=True):
+        print(time.ctime())
         self.model_func = model_func
         self.name = model_name
         self.is_inception = False
