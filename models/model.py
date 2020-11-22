@@ -65,11 +65,7 @@ class Model:
         self.class_weights = class_weights
         self.iteration_validation_frequency = validation_frequency
         self.logging = logging
-        print("Model:", model_name)
-        print("Learning Rate:",learning_rate)
-        print("LR Gamma:",lr_gamma)
-        print("LR Step:",lr_step)
-        print("Iteration Limit:",iteration_limit)
+        self.print_model_info()
 
     def train_model(self):
         since = time.time()
@@ -405,8 +401,16 @@ class Model:
                 self._test_iteration_model(iteration)
 
         print("Finished testing " + self.name)
+        self.print_model_info()
 
     def _build_test_dataloader(self):
         data_transforms = transforms.Compose([transforms.ToTensor(),transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
         image_datasets = ImageFolderWithPaths(os.path.join(Model.data_dir,'test'), data_transforms)
         return {x: torch.utils.data.DataLoader(image_datasets, batch_size=Model.batch_size, shuffle=True, num_workers=4) for x in ['test']} 
+
+    def print_model_info(self):
+        print("Model:", self.name)
+        print("Learning Rate:",self.learning_rate)
+        print("LR Gamma:",self.lr_gamma)
+        print("LR Step:",self.lr_step)
+        print("Iteration Limit:",self.iteration_limit)
