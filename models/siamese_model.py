@@ -129,8 +129,10 @@ class Siamese_Model(Model):
         print(time.ctime())
         print("Testing model on",self.dataloaders['test'].get_dataset_size(),"images")
 
-        for index in range(self.dataloaders['test'].get_dataset_size()):
-            inputs1, inputs2, labels = self.dataloaders['test'].load_images_directly(index,self.batch_size)
+        range_length = self.dataloaders['test'].get_dataset_size()//self.batch_size
+
+        for index in range(range_length):
+            inputs1, inputs2, labels = self.dataloaders['test'].load_images_directly(index*self.batch_size,self.batch_size)
             
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
@@ -152,6 +154,7 @@ class Siamese_Model(Model):
                 label = int(labels[i].item())
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
+            print("Tested ", index,"/",range_length,"batches", end='\r',flush=True)
         
 
         # print(class_correct)
