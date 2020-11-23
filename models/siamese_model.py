@@ -66,14 +66,13 @@ class Siamese_Model(Model):
         return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['train']
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
-        for _ in range(int(Siamese_Model.iteration_size['val']/Model.batch_size)):
-            inputs1, inputs2, labels = next(iter(self.dataloaders['val']))
-
+        for index in range(self.dataloaders['val'].get_dataset_size()):
+            inputs1, inputs2, labels = self.dataloaders['val'].load_images_directly(index,self.batch_size)
+            
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
-
-
+            
             self.optimizer.zero_grad()
             with torch.set_grad_enabled(False):
                 outputs = self.model(inputs1,inputs2)
@@ -87,7 +86,7 @@ class Siamese_Model(Model):
             running_corrects += torch.sum(preds == expected)
 
         return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['val'], None, None
-    
+
     def _build_dataloaders(self):
         phases = ['train', 'val']
 
@@ -118,7 +117,7 @@ class Siamese_Model(Model):
         image_folder = datasets.CIFAR10('/data/test_datasets')
         return SND.SiameseNetworkDataset(image_folder,data_normalization,self.starting_weights[phase],phase)
 
-    def _new_test_model(self,model):
+    def _test_model(self,model):
         self.model.load_state_dict(model)
         self.model.eval()
         
@@ -126,6 +125,7 @@ class Siamese_Model(Model):
         class_total = list(0. for i in range(2))
         
         print(time.ctime())
+        print("Testing model on",self.dataloaders['test'].get_dataset_size(),"images")
 
         for index in range(self.dataloaders['test'].get_dataset_size()):
             inputs1, inputs2, labels = self.dataloaders['test'].load_images_directly(index,self.batch_size)
@@ -159,48 +159,6 @@ class Siamese_Model(Model):
             print('Accuracy of %5s : %3.2f %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
         print('Total accuracy is %3.2f %%' % (100.0 * sum(class_correct) / sum(class_total)))
         print(time.ctime())
-
-    def _test_model(self,model):
-        self.model.load_state_dict(model)
-        self.model.eval()
-        
-        class_correct = list(0. for i in range(2))
-        class_total = list(0. for i in range(2))
-        
-        print(time.ctime())
-
-        for inputs1, inputs2, labels in self.dataloaders['test']:
-            
-            inputs1 = inputs1.to(self.device)
-            inputs2 = inputs2.to(self.device)
-            labels = labels.to(self.device)
-            labels,_ = torch.max(labels,1)
-            # print('labels:',labels)
-            # print(len(labels))
-            outputs = self.model(inputs1,inputs2)
-            preds,_ = torch.max(outputs,1)
-            preds = torch.round(preds)
-            # print('preds:',preds)
-            # print(len(preds))
-            c = (preds == labels).squeeze()
-            # print("c:",c)
-            # print(len(c))
-            # print(c[0].item())
-                
-            for i in range(len(c)):
-                label = int(labels[i].item())
-                class_correct[label] += c[i].item()
-                class_total[label] += 1
-        
-
-        # print(class_correct)
-        # print(class_total)
-        print('Model Name:', self.name)
-        for i in range(2):
-            print('Accuracy of %5s : %3.2f %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
-        print('Total accuracy is %3.2f %%' % (100.0 * sum(class_correct) / sum(class_total)))
-        print(time.ctime())
-
         
     def _build_test_dataloader(self):
         data_normalization = transforms.Compose([transforms.Resize([224,224]),transforms.ToTensor(),
