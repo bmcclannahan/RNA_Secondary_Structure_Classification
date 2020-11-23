@@ -71,7 +71,7 @@ class SiameseNetworkDataset(Dataset):
             img1_list[i] = img1
             label_list[i] = torch.from_numpy(np.array([label],dtype=np.float32))
 
-        return torch.Tensor(img0_list), torch.Tensor(img1_list), torch.Tensor(label_list)
+        return torch.cat(img0_list), torch.cat(img1_list), torch.cat(label_list)
 
     def __getitem__(self,index):
         if self.mode:
