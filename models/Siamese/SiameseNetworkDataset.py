@@ -14,12 +14,11 @@ class SiameseNetworkDataset(Dataset):
         self.seed = datetime.datetime.utcnow().second
         self.image_count = 0
         print("Building dataset for", mode)
-        # if mode == 'train':
-        #     self.mode = False
-        # else:
-        #     self.mode = True
-        #     self._intialize_dataset()
-        self.mode = False
+        if mode == 'train':
+            self.mode = False
+        else:
+            self.mode = True
+            self._intialize_dataset()
 
     def _intialize_dataset(self):
         image_dict = {}
