@@ -31,22 +31,27 @@ class SiameseNetworkDataset(Dataset):
         keys = list(image_dict.keys())
         self.image_list = []
 
-        for current_key in range(len(keys)):
-            key = keys[current_key]
+        for f in range(len(keys)):
             same_images = []
             different_images = []
-            family_size = len(image_dict[key])
+
+            family = keys[f]
+            family_size = len(image_dict[family])
             for i in range(family_size):
-                for j in range(i,family_size):
-                    same_images.append([image_dict[key][i],image_dict[key][j],False])
-            for i in range(current_key+1,len(keys)):
-                new_key = keys[i]
-                for j in range(family_size):
-                    new_family_size = len(image_dict[new_key])
-                    for k in range(new_family_size):
-                        different_images.append([image_dict[key][j],image_dict[new_key][k],True])
-            self.image_list.extend(different_images)
-            self.image_list.extend(same_images)
+                #same families
+                for j in range(i+1,family_size):
+                    same_images.append([image_dict[family][i],image_dict[family][j],False])
+                #different families
+                for j in range(f+1,len(keys)):
+                    family2 = keys[j]
+                    family2_size = len(image_dict[family2])
+                    for k in range(family2_size):
+                        different_images.append([image_dict[family][i],image_dict[family2][k],True])
+        self.image_list.extend(different_images)
+        self.image_list.extend(same_images)
+        print("Same image count:",len(same_images))
+        print("Different image count:",len(different_images))
+                            
         print("Dataset Size:", len(self.image_list))
 
     def get_dataset_size(self):
