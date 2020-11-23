@@ -55,6 +55,7 @@ class SiameseNetworkDataset(Dataset):
                     print("Family2_size:",family2_size)
                     for k in range(family2_size):
                         different_images.append([image_dict[family][i],image_dict[family2][k],True])
+            print("Different image count:",len(different_images))
         self.image_list.extend(different_images)
         self.image_list.extend(same_images)
         print("Same image count:",len(same_images))
