@@ -72,7 +72,7 @@ class SiameseNetworkDataset(Dataset):
         label_tensor = torch.Tensor(batch_size,1)
 
         for i in range(batch_size):
-            img0_path, img1_path, label = self.image_list[index]
+            img0_path, img1_path, label = self.image_list[index+i]
             img0 = Image.open(img0_path).convert('RGB')
             img1 = Image.open(img1_path).convert('RGB')
 

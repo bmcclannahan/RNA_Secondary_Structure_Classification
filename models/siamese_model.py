@@ -154,7 +154,7 @@ class Siamese_Model(Model):
                 label = int(labels[i].item())
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
-            print("Tested ", index,"/",range_length,"batches", end='\r',flush=True)
+            print("Tested ", index+1,"/",range_length,"batches", end='\r',flush=True)
         
 
         # print(class_correct)
