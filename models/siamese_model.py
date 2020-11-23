@@ -104,7 +104,9 @@ class Siamese_Model(Model):
 
         print('Initializing Dataloader')
 
-        dataloaders_dict = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=Model.batch_size, shuffle=True, num_workers=4) for x in ['train', 'val']}
+        dataloaders_dict = dict()
+        dataloaders_dict['train'] = torch.utils.data.DataLoader(image_datasets['train'], batch_size=Model.batch_size, shuffle=True, num_workers=4)
+        dataloaders_dict['val'] = image_datasets['val']
 
         self.dataloaders = dataloaders_dict
 
@@ -163,6 +165,5 @@ class Siamese_Model(Model):
     def _build_test_dataloader(self):
         data_normalization = transforms.Compose([transforms.Resize([224,224]),transforms.ToTensor(),
                                     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
-        image_dataset =self._get_rna_dataset('test',data_normalization)
-        dataloader = torch.utils.data.DataLoader(image_dataset, batch_size=Model.batch_size,shuffle=False, num_workers=1)
-        return {x: dataloader for x in ['test']} 
+        image_dataset = self._get_rna_dataset('test',data_normalization)
+        return {x: image_dataset for x in ['test']} 
