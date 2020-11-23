@@ -53,9 +53,9 @@ class SiameseNetworkDataset(Dataset):
         return len(self.image_list)
 
     def load_images_directly(self,index,batch_size):
-        img0_list = [0]*batch_size
-        img1_list = [0]*batch_size
-        label_list = [0]*batch_size
+        img0_tensor = torch.Tensor(batch_size,3,224,224)
+        img1_tensor = torch.Tensor(batch_size,3,224,224)
+        label_tensor = torch.Tensor(batch_size,1)
 
         for i in range(batch_size):
             img0_path, img1_path, label = self.image_list[index]
@@ -67,11 +67,11 @@ class SiameseNetworkDataset(Dataset):
                 img0 = self.transforms(img0)
                 img1 = self.transforms(img1)
             
-            img0_list[i] = img0
-            img1_list[i] = img1
-            label_list[i] = torch.from_numpy(np.array([label],dtype=np.float32))
+            img0_tensor[i] = img0
+            img1_tensor[i] = img1
+            label_tensor[i] = torch.from_numpy(np.array([label],dtype=np.float32))
 
-        return torch.cat(img0_list), torch.cat(img1_list), torch.cat(label_list)
+        return img0_tensor,img1_tensor,label_tensor
 
     def __getitem__(self,index):
         if self.mode:
