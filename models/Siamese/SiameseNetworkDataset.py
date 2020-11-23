@@ -59,15 +59,15 @@ class SiameseNetworkDataset(Dataset):
         label_list = [0]*batch_size
 
         for i in range(batch_size):
-        img0_path, img1_path, label = self.image_list[index]
-        img0 = Image.open(img0_path).convert('RGB')
-        img1 = Image.open(img1_path).convert('RGB')
+            img0_path, img1_path, label = self.image_list[index]
+            img0 = Image.open(img0_path).convert('RGB')
+            img1 = Image.open(img1_path).convert('RGB')
 
-        
-        if self.transforms is not None:#I think the transform is essential if you want to use GPU, because you have to trans data to tensor first.
-            img0 = self.transforms(img0)
-            img1 = self.transforms(img1)
-        
+            
+            if self.transforms is not None:#I think the transform is essential if you want to use GPU, because you have to trans data to tensor first.
+                img0 = self.transforms(img0)
+                img1 = self.transforms(img1)
+            
             img0_list[i] = img0
             img1_list[i] = img1
             label_list[i] = torch.from_numpy(np.array([label],dtype=np.float32))
