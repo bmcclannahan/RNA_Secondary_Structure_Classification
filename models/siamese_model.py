@@ -66,8 +66,10 @@ class Siamese_Model(Model):
         return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['train']
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
-        for index in range(self.dataloaders['val'].get_dataset_size()):
-            inputs1, inputs2, labels = self.dataloaders['val'].load_images_directly(index,self.batch_size)
+        range_length = self.dataloaders['val'].get_dataset_size()//self.batch_size
+
+        for index in range(range_length):
+            inputs1, inputs2, labels = self.dataloaders['val'].load_images_directly(index*self.batch_size,self.batch_size)
             
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
