@@ -63,7 +63,7 @@ class Siamese_Model(Model):
             #print("Number of labels:", len(labels))
             #print("Running corrects:", running_corrects)
 
-        return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['train']
+        return running_loss, running_corrects.int().item(), self.dataloaders['val'].get_dataset_size()
 
     def _val_phase(self,running_loss,running_corrects,class_correct,class_total):
         range_length = self.dataloaders['val'].get_dataset_size()//self.batch_size
@@ -87,8 +87,8 @@ class Siamese_Model(Model):
             expected = torch.reshape(labels.data,(Model.batch_size,))
             correct = torch.sum(preds == expected)
             running_corrects += correct
-            print("Correct:", correct, "Total:", len(preds))
-            print("Running Correct:", running_corrects)
+            #print("Correct:", correct, "Total:", len(preds))
+            #print("Running Correct:", running_corrects)
 
         return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['val'], None, None
 
