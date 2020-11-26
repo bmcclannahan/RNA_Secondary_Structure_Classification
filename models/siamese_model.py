@@ -88,6 +88,7 @@ class Siamese_Model(Model):
             correct = torch.sum(preds == expected)
             running_corrects += correct
             print("Correct:", correct, "Total:", len(preds))
+            print("Running Correct:", running_corrects)
 
         return running_loss, running_corrects.int().item(), Siamese_Model.iteration_size['val'], None, None
 
