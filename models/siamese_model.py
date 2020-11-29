@@ -12,7 +12,7 @@ import time
 
 class Siamese_Model(Model):
 
-    data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese"
+    data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets/Siamese/Full_Data"
     # data_dir = "/data/Siamese/"
 
     iteration_size = {'train': 3200, 'val': 16000, 'test': 64000}
