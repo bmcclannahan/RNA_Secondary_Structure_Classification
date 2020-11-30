@@ -21,6 +21,7 @@ class SiameseNetwork(nn.Module):
         nn.ReLU(inplace=True))
         self.euclidean = EuclidianDistance()
         self.fc = nn.Sequential(
+            nn.Linear(1024,1024),
             nn.Linear(1024,1)#,
             #nn.Sigmoid()
         )
