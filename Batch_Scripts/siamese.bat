@@ -4,7 +4,7 @@
 #SBATCH -c 1
 #SBATCH --mem=16GB
 #SBATCH -p gpu
-#SBATCH --gres="gpu:p100:1"
+#SBATCH --gres="gpu:k:40:1"
 #SBATCH -J RNA-Resnet50
 
 model="siamese"
