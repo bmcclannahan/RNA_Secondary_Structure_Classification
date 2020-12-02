@@ -29,7 +29,7 @@ class SiameseNetwork(nn.Module):
             )
             self.fc2 = nn.Sequential(nn.Sigmoid())
         
-        elif model_type = 'vggnet':
+        elif model_type == 'vggnet':
             self.cnn1 = self.create_cnn(model_func)
 
             # Defining the fully connected layers
