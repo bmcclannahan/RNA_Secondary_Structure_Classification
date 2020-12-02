@@ -54,7 +54,7 @@ class Model:
     batch_size = 32
     iteration_size = {'train': 320, 'val': 12800}
 
-    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],validation_frequency=50,logging=True):
+    def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],validation_frequency=50,logging=True,model_type=None):
         print(time.ctime())
         self.model_func = model_func
         self.name = model_name
@@ -66,6 +66,7 @@ class Model:
         self.class_weights = class_weights
         self.iteration_validation_frequency = validation_frequency
         self.logging = logging
+        self.model_type = model_type
         self.print_model_info()
 
     def train_model(self):
@@ -240,7 +241,7 @@ class Model:
             model_ft.classifier = nn.Linear(num_ftrs, final_layer_size)
         elif self.name.split('_')[0] == 'siamese':
             print("Detected siamese model")
-            model_ft = Siamese_Network.SiameseNetwork(self.model_func)
+            model_ft = Siamese_Network.SiameseNetwork(self.model_func,model_type=self.model_type)
 
         return model_ft
 

@@ -9,23 +9,41 @@ class EuclidianDistance(nn.Module):
         return torch.abs(x1-x2)
 
 class SiameseNetwork(nn.Module):
-    def __init__(self,model_func):
+    def __init__(self,model_func,model_type='resnet'):
         super(SiameseNetwork, self).__init__()
         # Setting up the Sequential of CNN Layers
-        self.cnn1 = self.create_cnn(model_func)
 
-        # Defining the fully connected layers
-        self.flatten = nn.Sequential(
-        # First Dense Layer
-        nn.Linear(2048, 1024),
-        nn.ReLU(inplace=True))
-        self.euclidean = EuclidianDistance()
-        self.fc = nn.Sequential(
-            nn.Linear(1024,1024),
-            nn.Linear(1024,1)#,
-            #nn.Sigmoid()
-        )
-        self.fc2 = nn.Sequential(nn.Sigmoid())
+        if model_type == 'resnet':
+            self.cnn1 = self.create_cnn(model_func)
+
+            # Defining the fully connected layers
+            self.flatten = nn.Sequential(
+            # First Dense Layer
+            nn.Linear(2048, 1024),
+            nn.ReLU(inplace=True))
+            self.euclidean = EuclidianDistance()
+            self.fc = nn.Sequential(
+                nn.Linear(1024,1024),
+                nn.Linear(1024,1)#,
+                #nn.Sigmoid()
+            )
+            self.fc2 = nn.Sequential(nn.Sigmoid())
+        
+        elif model_type = 'vggnet':
+            self.cnn1 = self.create_cnn(model_func)
+
+            # Defining the fully connected layers
+            self.flatten = nn.Sequential(
+            # First Dense Layer
+            nn.Linear(512, 256),
+            nn.ReLU(inplace=True))
+            self.euclidean = EuclidianDistance()
+            self.fc = nn.Sequential(
+                nn.Linear(256,256),
+                nn.Linear(256,1)#,
+                #nn.Sigmoid()
+            )
+            self.fc2 = nn.Sequential(nn.Sigmoid())
 
     def load_state_dict(self, state_dict,strict = True):
         super(SiameseNetwork, self).load_state_dict(state_dict,strict)
