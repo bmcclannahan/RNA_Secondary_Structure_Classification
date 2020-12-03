@@ -8,7 +8,7 @@
 #SBATCH -J RNA-Siamese
 #SBATCH -t 48:00:00
 
-model="siamese"
+model="siamese_r50"
 
 module load Python/3.5.2
 module load slurm-torque/14.11.8
@@ -23,7 +23,7 @@ source activate
 rm /scratch/b523m844/RNA_Secondary_Structure_Classification/$model/train_loss.txt
 rm /scratch/b523m844/RNA_Secondary_Structure_Classification/$model/val_loss.txt
 
-python ~/RNA_Secondary_Structure_Classification/models/siamese.py
+python ~/RNA_Secondary_Structure_Classification/models/siamese_r50.py
 
 cp /scratch/b523m844/RNA_Secondary_Structure_Classification/$model/train_loss.txt ~/RNA_Secondary_Structure_Classification/utils/siamese_train_loss.txt
 cp /scratch/b523m844/RNA_Secondary_Structure_Classification/$model/val_loss.txt ~/RNA_Secondary_Structure_Classification/utils/siamese_val_loss.txt
