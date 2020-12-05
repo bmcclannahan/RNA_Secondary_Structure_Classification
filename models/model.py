@@ -372,8 +372,8 @@ class Model:
         print(time.ctime())
 
     def _test_best_model(self):
-        #best_model = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt",,map_location=self.device)
-        best_model = torch.load("/nfs/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/best.pt",map_location=self.device)
+        best_model = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt",map_location=self.device)
+        #best_model = torch.load("/nfs/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/best.pt",map_location=self.device)
         self._test_model(best_model)
 
     
