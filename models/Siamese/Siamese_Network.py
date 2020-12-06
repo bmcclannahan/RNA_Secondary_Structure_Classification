@@ -19,12 +19,12 @@ class SiameseNetwork(nn.Module):
             # Defining the fully connected layers
             self.flatten = nn.Sequential(
             # First Dense Layer
-            nn.Linear(2048, 1024),
+            nn.Linear(2048, 256),
             nn.ReLU(inplace=True))
             self.euclidean = EuclidianDistance()
             self.fc = nn.Sequential(
-                nn.Linear(1024,1024),
-                nn.Linear(1024,1)#,
+                nn.Linear(256,256),
+                nn.Linear(256,1)#,
                 #nn.Sigmoid()
             )
             self.fc2 = nn.Sequential(nn.Sigmoid())
