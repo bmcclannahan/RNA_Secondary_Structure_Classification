@@ -17,7 +17,7 @@ class Siamese_Model(Model):
 
     iteration_size = {'train': 3200, 'val': 16000, 'test': 64000}
 
-    def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.1,lr_step=200,iteration_limit=300,validation_frequency=25,logging=True,starting_weight=.5,model_type='resnet'):
+    def __init__(self,model_func,model_name,learning_rate=0.001,lr_gamma=0.1,lr_step=200,iteration_limit=300,validation_frequency=1,logging=True,starting_weight=.5,model_type='resnet'):
         super().__init__(model_func,model_name,learning_rate,lr_gamma,lr_step,iteration_limit,None,validation_frequency,logging,model_type)
         self.starting_weights = {'train':starting_weight, 'val':0.5, 'test':0.5}
 
@@ -89,7 +89,8 @@ class Siamese_Model(Model):
             running_corrects += correct
             #print("Correct:", correct, "Total:", len(preds))
             #print("Running Correct:", running_corrects)
-            labels = correct.squeeze()
+            labels = (preds == expected).squeeze()
+            print(type(labels))
             for i in range(len(labels)):
                 label = int(expected[i].item())
                 class_correct[label] += labels[i].item()
