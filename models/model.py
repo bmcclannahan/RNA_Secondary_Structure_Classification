@@ -129,7 +129,7 @@ class Model:
                     iteration_loss = running_loss / running_total
                     iteration_acc = running_corrects / running_total
                 else:
-                    iteration_loss = running_loss / len(self.dataloaders[phase].dataset)
+                    iteration_loss = running_loss / running_total
                     accuracy = list(0. for i in range(2))
                     for i in range(len(accuracy)):
                         accuracy[i] = class_correct[i]/class_total[i]

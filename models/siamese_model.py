@@ -90,7 +90,6 @@ class Siamese_Model(Model):
             #print("Correct:", correct, "Total:", len(preds))
             #print("Running Correct:", running_corrects)
             labels = (preds == expected).squeeze()
-            print(type(labels))
             for i in range(len(labels)):
                 label = int(expected[i].item())
                 class_correct[label] += labels[i].item()
