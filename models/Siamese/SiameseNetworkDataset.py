@@ -7,7 +7,7 @@ import datetime
 
 class SiameseNetworkDataset(Dataset):
     
-    def __init__(self,imageFolderDataset,transforms=None,weight=0.5,mode='train'):
+    def __init__(self,imageFolderDataset,transforms=None,weight=0.9,mode='train'):
         self.imageFolderDataset = imageFolderDataset
         self.transforms = transforms
         self.weight = weight
