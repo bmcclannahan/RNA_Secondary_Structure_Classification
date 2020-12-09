@@ -7,7 +7,7 @@ import datetime
 
 class SiameseNetworkDataset(Dataset):
     
-    def __init__(self,imageFolderDataset,transforms=None,weight=0.9,mode='train'):
+    def __init__(self,imageFolderDataset,transforms=None,weight=None,mode='train'):
         self.imageFolderDataset = imageFolderDataset
         self.transforms = transforms
         self.weight = weight
@@ -93,20 +93,26 @@ class SiameseNetworkDataset(Dataset):
 
         else:
             img0_tuple = random.choice(self.imageFolderDataset.imgs)
-            #we need to make sure approx 50% of images are in the same class
-            should_get_same_class = random.random()
-            if should_get_same_class < self.weight:
-                while True:
-                    #keep looping till the same class image is found
-                    img1_tuple = random.choice(self.imageFolderDataset.imgs) 
-                    if img0_tuple[1]==img1_tuple[1]:
-                        break
+            #not going to account for images being the same
+            #this will reduce each execution time at the cost of every 300,000th training
+            #being redundant, good tradeoff
+            if self.weight == None:
+                img1_tuple = random.choice(self.imageFolderDataset.imgs)
             else:
-                while True:
-                    #keep looping till the same class image is found
-                    img1_tuple = random.choice(self.imageFolderDataset.imgs) 
-                    if not img0_tuple[1]==img1_tuple[1]:
-                        break
+                #we need to make sure approx self.weight% of images are in the same class
+                should_get_same_class = random.random()
+                if should_get_same_class < self.weight:
+                    while True:
+                        #keep looping till the same class image is found
+                        img1_tuple = random.choice(self.imageFolderDataset.imgs) 
+                        if img0_tuple[1]==img1_tuple[1]:
+                            break
+                else:
+                    while True:
+                        #keep looping till the same class image is found
+                        img1_tuple = random.choice(self.imageFolderDataset.imgs) 
+                        if not img0_tuple[1]==img1_tuple[1]:
+                            break
 
             img0_path = img0_tuple[0]
             img1_path = img1_tuple[0]
