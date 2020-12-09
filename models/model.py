@@ -67,6 +67,7 @@ class Model:
         self.iteration_validation_frequency = validation_frequency
         self.logging = logging
         self.model_type = model_type
+        self.best_model = None
         self.print_model_info()
 
     def train_model(self):
@@ -174,7 +175,7 @@ class Model:
         print('Best val Acc: {:4f}'.format(best_acc))
         print('Best train acc: {:4f}'.format(best_train_acc))
 
-        self.model.load_state_dict(best_model_wts)
+        self.best_model = best_model_wts
 
         if self.logging:
             torch.save(best_model_wts,'/scratch/b523m844/RNA_Secondary_Structure_Classification/' + self.name + '/checkpoints/best.pt')
@@ -372,9 +373,10 @@ class Model:
         print(time.ctime())
 
     def _test_best_model(self):
-        best_model = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt",map_location=self.device)
-        #best_model = torch.load("/nfs/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/best.pt",map_location=self.device)
-        self._test_model(best_model)
+        if self.best_model == None:
+            self.best_model = torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/checkpoints/best.pt",map_location=self.device)
+            #best_model = torch.load("/nfs/users/b523m844/RNA_Secondary_Structure_Classification/Resnet_50/best.pt",map_location=self.device)
+        self._test_model(self.best_model)
 
     
     def _test_iteration_model(self,iteration):
