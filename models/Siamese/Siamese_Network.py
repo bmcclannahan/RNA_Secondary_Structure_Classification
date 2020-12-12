@@ -17,14 +17,14 @@ class SiameseNetwork(nn.Module):
             self.cnn1 = self.create_cnn(model_func)
 
             # Defining the fully connected layers
-            self.flatten = nn.Sequential(
-            # First Dense Layer
-            nn.Linear(2048, 256),
-            nn.ReLU(inplace=True))
+            # self.flatten = nn.Sequential(
+            # # First Dense Layer
+            #     #nn.Linear(2048, 256),
+            #     nn.ReLU(inplace=True))
             self.euclidean = EuclidianDistance()
             self.fc = nn.Sequential(
-                nn.Linear(256,256),
-                nn.Linear(256,1)#,
+                # nn.Linear(2048,2048),
+                nn.Linear(2048,1)#,
                 #nn.Sigmoid()
             )
             self.fc2 = nn.Sequential(nn.Sigmoid())
@@ -33,12 +33,13 @@ class SiameseNetwork(nn.Module):
             self.cnn1 = self.create_cnn(model_func)
 
             # Defining the fully connected layers
-            self.flatten = nn.Sequential(
-            # First Dense Layer
-            nn.Linear(25088, 256),
-            nn.ReLU(inplace=True))
+            # self.flatten = nn.Sequential(
+            # # First Dense Layer
+            #     #nn.Linear(25088, 256),
+            #     nn.ReLU(inplace=True))
             self.euclidean = EuclidianDistance()
             self.fc = nn.Sequential(
+                nn.Linear(25088, 256),
                 nn.Linear(256,256),
                 nn.Linear(256,1)#,
                 #nn.Sigmoid()
@@ -59,7 +60,7 @@ class SiameseNetwork(nn.Module):
         # Forward pass 
         output = self.cnn1(x)
         output = output.view(output.size()[0], -1)
-        output = self.flatten(output)
+        # output = self.flatten(output)
         return output
 
     def forward(self, input1, input2):
