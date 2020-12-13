@@ -377,7 +377,7 @@ class Model:
             print('Accuracy of %5s : %3.1d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
         print('Total accuracy is %3.1d %%' % (100.0 * sum(class_correct) / sum(class_total)))
         print(time.ctime())
-        self.save_roc_curve_data()
+        self.save_roc_curve_data(roc_preds,roc_labels)
 
     def _test_best_model(self):
         if self.best_model == None:

@@ -141,9 +141,14 @@ class Siamese_Model(Model):
 
         range_length = self.dataloaders['test'].get_dataset_size()//self.batch_size
 
+        roc_preds = []
+        roc_labels = []
+
         for index in range(range_length):
             inputs1, inputs2, labels = self.dataloaders['test'].load_images_directly(index*self.batch_size,self.batch_size)
             
+            roc_labels.append(labels.tolist())
+
             inputs1 = inputs1.to(self.device)
             inputs2 = inputs2.to(self.device)
             labels = labels.to(self.device)
@@ -152,6 +157,9 @@ class Siamese_Model(Model):
             # print(len(labels))
             outputs = self.model(inputs1,inputs2)
             preds,_ = torch.max(outputs,1)
+
+            roc_preds.append(preds.tolist())
+
             preds = torch.round(preds)
             # print('preds:',preds)
             # print(len(preds))
@@ -174,6 +182,7 @@ class Siamese_Model(Model):
             print('Accuracy of %5s : %3.2f %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
         print('Total accuracy is %3.2f %%' % (100.0 * sum(class_correct) / sum(class_total)))
         print(time.ctime())
+        self.save_roc_curve_data(roc_preds,roc_labels)
         
     def _build_test_dataloader(self):
         data_normalization = transforms.Compose([transforms.Resize([224,224]),transforms.ToTensor(),
