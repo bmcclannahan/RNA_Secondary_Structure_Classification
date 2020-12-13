@@ -332,13 +332,19 @@ class Model:
         
         print(time.ctime())
 
+        roc_preds = []
+        roc_labels = []
+
         for inputs, labels, path in self.dataloaders['test']:
-            
+            roc_labels.append(labels.tolist())
         
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
             outputs = self.model(inputs)
             _,preds = torch.max(outputs,1)
+
+            roc_preds.append(preds.tolist())
+
             c = (preds == labels).squeeze()
             path_list = list(path)
             l = 0
@@ -359,7 +365,7 @@ class Model:
                 l = l + 1
                 fs.write(pt + " " + sn + " " + ls + " " + a1 + " " + a2 + "\n")
                 
-            for i in range(4):
+            for i in range(len(c)):
                 label = labels[i]
                 class_correct[label] += c[i].item()
                 class_total[label] += 1
@@ -371,6 +377,7 @@ class Model:
             print('Accuracy of %5s : %3.1d %%' % (str(i), 100.0 * class_correct[i] / class_total[i])) 
         print('Total accuracy is %3.1d %%' % (100.0 * sum(class_correct) / sum(class_total)))
         print(time.ctime())
+        self.save_roc_curve_data()
 
     def _test_best_model(self):
         if self.best_model == None:
@@ -418,3 +425,8 @@ class Model:
         print("LR Gamma:",self.lr_gamma)
         print("LR Step:",self.lr_step)
         print("Iteration Limit:",self.iteration_limit)
+
+    def save_roc_curve_data(self, preds, labels):
+        roc_file = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/roc_curve.csv","w")
+        for i in range(len(labels)):
+            roc_file.write(preds[i] + "," + labels[i])
