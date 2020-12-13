@@ -431,4 +431,4 @@ class Model:
     def save_roc_curve_data(self, preds, labels):
         roc_file = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/roc_curve.csv","w")
         for i in range(len(labels)):
-            roc_file.write(preds[i] + "," + labels[i])
+            roc_file.write(str(preds[i]) + "," + str(labels[i]))

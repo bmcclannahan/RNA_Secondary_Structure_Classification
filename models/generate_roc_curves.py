@@ -1,4 +1,5 @@
 from model import Model
+from siamese_model import Siamese_Model
 import torch.nn as nn
 from torchvision import models
 
