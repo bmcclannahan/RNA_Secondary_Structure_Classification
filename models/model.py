@@ -332,18 +332,20 @@ class Model:
         
         print(time.ctime())
 
-        roc_preds = []
-        roc_labels = []
+        roc_preds = [0.0]*187922
+        roc_labels = [0.0]*187922
+        roc_index = 0
 
         for inputs, labels, path in self.dataloaders['test']:
-            roc_labels.append(labels.tolist())
+            label_length = len(labels)
+            roc_labels[roc_index:roc_index+label_length] = labels
         
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
             outputs = self.model(inputs)
             _,preds = torch.max(outputs,1)
 
-            roc_preds.append(preds.tolist())
+            roc_preds[roc_index:roc_index+label_length] = preds.tolist()
 
             c = (preds == labels).squeeze()
             path_list = list(path)
