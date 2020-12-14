@@ -429,6 +429,8 @@ class Model:
         print("Iteration Limit:",self.iteration_limit)
 
     def save_roc_curve_data(self, preds, labels):
+        print(preds)
+        print(labels)
         roc_file = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/roc_curve.csv","w")
         for i in range(len(labels)):
             line = str(preds[i]) + "," + str(labels[i]) + '\n'
