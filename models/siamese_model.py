@@ -149,6 +149,7 @@ class Siamese_Model(Model):
             inputs1, inputs2, labels = self.dataloaders['test'].load_images_directly(index*self.batch_size,self.batch_size)
             
             label_length = len(labels)
+            print("labels:", labels)
             roc_labels[roc_index:roc_index+label_length] = [x.item() for x in labels]
 
             inputs1 = inputs1.to(self.device)
@@ -161,6 +162,8 @@ class Siamese_Model(Model):
             preds,_ = torch.max(outputs,1)
 
             roc_preds[roc_index:roc_index+label_length] = [x.item() for x in preds]
+            print("preds:", [x.item() for x in preds])
+            roc_index+= label_length
 
             preds = torch.round(preds)
             # print('preds:',preds)
