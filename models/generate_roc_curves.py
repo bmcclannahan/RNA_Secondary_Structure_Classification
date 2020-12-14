@@ -17,11 +17,11 @@ weights = [.5,.5]
 # model.build_model()
 # model.test_model(iterations_to_test=[])
 
-model_name = "vgg_19"
-print(model_name, weights)
-model = Model(models.vgg19,model_name,class_weights=weights)
-model.build_model()
-model.test_model(iterations_to_test=[])
+# model_name = "vgg_19"
+# print(model_name, weights)
+# model = Model(models.vgg19,model_name,class_weights=weights)
+# model.build_model()
+# model.test_model(iterations_to_test=[])
 
 model_name = "siamese_r50"
 print(model_name, weights)
