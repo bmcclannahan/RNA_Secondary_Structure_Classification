@@ -339,7 +339,7 @@ class Model:
         for inputs, labels, path in self.dataloaders['test']:
             label_length = len(labels)
             roc_labels[roc_index:roc_index+label_length] = [x.item() for x in labels]
-            print(roc_labels[:roc_index])
+            print(roc_labels[:roc_index+self.batch_size])
 
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
