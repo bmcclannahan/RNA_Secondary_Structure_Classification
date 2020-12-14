@@ -339,18 +339,14 @@ class Model:
         for inputs, labels, path in self.dataloaders['test']:
             label_length = len(labels)
             roc_labels[roc_index:roc_index+label_length] = [x.item() for x in labels]
-            print(roc_labels[:roc_index+self.batch_size])
+            # print(roc_labels[:roc_index+self.batch_size])
 
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
             outputs = self.model(inputs)
             _,preds = torch.max(outputs,1)
 
-            print(type(outputs))
-            print(type(outputs.detach().numpy()))
-            print(outputs.detach().numpy())
             for i in range(self.batch_size):
-                print(outputs[i].detach().numpy()[1])
                 x = outputs[i].detach().numpy()[1]
                 y = x
                 if x > 1:
@@ -359,7 +355,7 @@ class Model:
                     y = 0
                 roc_preds[roc_index+i] = y
             roc_index+= label_length
-            print(roc_preds[:roc_index])
+            # print(roc_preds[:roc_index])
 
             c = (preds == labels).squeeze()
             path_list = list(path)
