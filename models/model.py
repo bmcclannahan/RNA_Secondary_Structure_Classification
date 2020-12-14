@@ -346,7 +346,7 @@ class Model:
             _,preds = torch.max(outputs,1)
 
             print(type(outputs))
-            print(type(outputs.numpy()[0]))
+            print(type(outputs.detach().numpy()[0]))
             roc_preds[roc_index:roc_index+label_length] = [x.item() for x in outputs]
             roc_index+= label_length
             print(roc_preds[:roc_index])
