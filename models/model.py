@@ -346,8 +346,9 @@ class Model:
             outputs = self.model(inputs)
             _,preds = torch.max(outputs,1)
 
+            cpu_outputs = outputs.cpu()
             for i in range(self.batch_size):
-                x = outputs[i].detach().numpy()[1]
+                x = cpu_outputs[i].detach().numpy()[1]
                 y = x
                 if x > 1:
                     y = 1

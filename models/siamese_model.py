@@ -161,7 +161,8 @@ class Siamese_Model(Model):
             outputs = self.model(inputs1,inputs2)
             preds,_ = torch.max(outputs,1)
 
-            roc_preds[roc_index:roc_index+label_length] = [x.item() for x in outputs]
+            cpu_outputs = outputs.cpu()
+            roc_preds[roc_index:roc_index+label_length] = [x.detach().numpy()[0] for x in cpu_outputs]
             # print("preds:", [x.item() for x in preds])
             roc_index+= label_length
 
