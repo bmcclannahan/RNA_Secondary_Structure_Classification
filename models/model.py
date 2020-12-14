@@ -432,4 +432,4 @@ class Model:
         roc_file = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/roc_curve.csv","w")
         for i in range(len(labels)):
             line = str(preds[i]) + "," + str(labels[i]) + '\n'
-            roc_file.write()
+            roc_file.write(line)
