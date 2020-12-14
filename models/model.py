@@ -349,7 +349,14 @@ class Model:
             print(type(outputs))
             print(type(outputs.detach().numpy()))
             print(outputs.detach().numpy())
-            roc_preds[roc_index:roc_index+label_length] = [x.item() for x in outputs]
+            for i in range(self.batch_size):
+                x = outputs[i].detach().numpy()[0][1]
+                y = x
+                if x > 1:
+                    y = 1
+                elif x < 0:
+                    y = 0
+                roc_preds[roc_index+i] = y
             roc_index+= label_length
             print(roc_preds[:roc_index])
 
