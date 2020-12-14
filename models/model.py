@@ -339,15 +339,16 @@ class Model:
         for inputs, labels, path in self.dataloaders['test']:
             label_length = len(labels)
             roc_labels[roc_index:roc_index+label_length] = [x.item() for x in labels]
-        
+            print(roc_labels[:roc_index])
+
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
             outputs = self.model(inputs)
             _,preds = torch.max(outputs,1)
 
             print(type(outputs))
-            print(type(outputs.detach().numpy()[0]))
-            print(outputs.detach().numpy()[0])
+            print(type(outputs.detach().numpy()))
+            print(outputs.detach().numpy())
             roc_preds[roc_index:roc_index+label_length] = [x.item() for x in outputs]
             roc_index+= label_length
             print(roc_preds[:roc_index])
