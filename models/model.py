@@ -346,7 +346,9 @@ class Model:
             _,preds = torch.max(outputs,1)
 
             roc_preds[roc_index:roc_index+label_length] = [x.item() for x in preds]
+            print(roc_preds[:roc_index])
             roc_index+= label_length
+            print(roc_preds[:roc_index])
 
             c = (preds == labels).squeeze()
             path_list = list(path)
