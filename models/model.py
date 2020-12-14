@@ -350,7 +350,8 @@ class Model:
             print(type(outputs.detach().numpy()))
             print(outputs.detach().numpy())
             for i in range(self.batch_size):
-                x = outputs[i].detach().numpy()[0][1]
+                print(outputs[i].detach().numpy()[1])
+                x = outputs[i].detach().numpy()[1]
                 y = x
                 if x > 1:
                     y = 1
