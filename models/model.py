@@ -338,14 +338,14 @@ class Model:
 
         for inputs, labels, path in self.dataloaders['test']:
             label_length = len(labels)
-            roc_labels[roc_index:roc_index+label_length] = labels
+            roc_labels[roc_index:roc_index+label_length] = [x.item() for x in labels]
         
             inputs = inputs.to(self.device)
             labels = labels.to(self.device)
             outputs = self.model(inputs)
             _,preds = torch.max(outputs,1)
 
-            roc_preds[roc_index:roc_index+label_length] = preds.tolist()
+            roc_preds[roc_index:roc_index+label_length] = [x.item() for x in preds]
 
             c = (preds == labels).squeeze()
             path_list = list(path)
@@ -431,4 +431,5 @@ class Model:
     def save_roc_curve_data(self, preds, labels):
         roc_file = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/roc_curve.csv","w")
         for i in range(len(labels)):
-            roc_file.write(str(preds[i]) + "," + str(labels[i]))
+            line = str(preds[i]) + "," + str(labels[i]) + '\n'
+            roc_file.write()
