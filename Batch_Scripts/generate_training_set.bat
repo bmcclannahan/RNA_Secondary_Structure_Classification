@@ -12,4 +12,4 @@ sshfs b523m844@deadpool.ittc.ku.edu:/data/mount_data /scratch/b523m844/RNA_Secon
 cd /users/b523m844/RNA_Secondary_Structure_Classification/Image_Processing
 cp -rf *.m /home/b523m844/data/rna_classification/val
 cd /home/b523m844/data/rna_classification/val
-matlab -nodisplay -nosplash -nodesktop -r "run ('/home/b523m844/data/rna_classification/generate_data_set.m');exit;"
+matlab -nodisplay -nosplash -nodesktop -r "run ('/home/b523m844/data/rna_classification/val/generate_data_set.m');exit;"
