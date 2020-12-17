@@ -2,7 +2,7 @@ function build_data_set(folder_location,prefix)
     map = build_image_map(folder_location);
     num_keys = length(map.keys)
     keys = map.keys;
-    for k = 40:num_keys
+    for k = 1:num_keys
         k
         key = cell2mat(keys(k));
         family = key(1)
