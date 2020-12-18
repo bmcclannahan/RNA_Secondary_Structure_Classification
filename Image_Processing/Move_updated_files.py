@@ -6,7 +6,7 @@ file_dir = "/data/rna_classification/val/Diff_Family/"
 current_dir = "/home/b523m844/data/rna_classification/val/Diff_Family"
 files = glob(current_dir+"*.jpg")
 
-old_files = glob(file_dir+*".jpg")
+old_files = glob(file_dir+"*.jpg")
 
 for f in files:
     file_name = f.split['/'][-1]
