@@ -13,3 +13,5 @@ for f in files:
     old_name = file_dir+file_name
     if old_name in old_files:
         #os.replace(f,old_name)
+        print(old_name)
+        print(f)
