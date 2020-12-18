@@ -8,6 +8,9 @@ files = glob(current_dir+"*.jpg")
 
 old_files = glob(file_dir+"*.jpg")
 
+print("New files detected:", len(files))
+print("Old files detected:", len(old_files))
+
 for f in files:
     file_name = f.split['/'][-1]
     old_name = file_dir+file_name
