@@ -52,7 +52,7 @@ class Model:
     data_dir = "/scratch/b523m844/RNA_Secondary_Structure_Classification/final_datasets"
 
     batch_size = 32
-    iteration_size = {'train': 320, 'val': 12800}
+    iteration_size = {'train': 320, 'val': 74256}
 
     def __init__(self,model_func,model_name,learning_rate=0.01,lr_gamma=0.25,lr_step=50,iteration_limit=600,class_weights=[.67,.33],validation_frequency=50,logging=True,model_type=None):
         print(time.ctime())
