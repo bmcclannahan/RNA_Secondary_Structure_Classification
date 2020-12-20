@@ -402,7 +402,7 @@ class Model:
     def _test_iteration_model(self,iteration):
         self._test_model(torch.load("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/chekers/iter" + str(iteration) +".pt"))
 
-    def test_model(self,iterations_to_test=[199,299,399,499,599]):
+    def test_model(self,iterations_to_test=[]):
         print('Initializing dataset and dataloader')
 
         self.dataloaders = self._build_test_dataloader()
@@ -440,8 +440,6 @@ class Model:
         print("Iteration Limit:",self.iteration_limit)
 
     def save_roc_curve_data(self, preds, labels):
-        print(preds)
-        print(labels)
         roc_file = open("/scratch/b523m844/RNA_Secondary_Structure_Classification/" + self.name + "/roc_curve.csv","w")
         for i in range(len(labels)):
             line = "{:.3f}".format(preds[i]) + "," + str(labels[i]) + '\n'
